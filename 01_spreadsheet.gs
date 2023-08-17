@@ -1086,11 +1086,11 @@ function buildObjectFromPairs(header, keys, values){
  * @returns {Object.<string>} - 構築されたオブジェクト
  */
 function buildObjectFromArray(header, keys) {
-  const object = keys.reduce((accumulator, current, index) => {
-      accumulator[current] = header[index];
-      return accumulator;
+  const result = keys.reduce((object, key, index) => {
+      object[key] = header.indexOf(header[index]);
+      return object;
   }, {});
 
-  console.log(object);
-  return object;
+  console.log(result);
+  return reslut
 }
