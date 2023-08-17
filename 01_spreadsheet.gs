@@ -1065,12 +1065,32 @@ function buildObjectFromPairs(header, keys, values){
   console.log(`buildObjectFromPairs()を実行中`);
   console.log(`01_spreadsheetに記載`);
 
-  const result = keys.reduce((obj, key, index) => {
-    obj[key] = header.indexOf(values[index]);
-    return obj;
+  const result = keys.reduce((object, key, index) => {
+    object[key] = header.indexOf(values[index]);
+    return object;
   }, {});
 
   console.log(result);
   return result
   
+}
+
+
+
+/**
+ * 配列からオブジェクトを構築する関数
+ * FIXME: 余計な列がある場合は不具合が起きかねないので使用不可
+ * 
+ * @param {Array.<string>} header - オブジェクトの値となる文字列が格納された配列 ['ID', '氏名', 'URL']
+ * @param {Array.<string>} keys - オブジェクトのキーとなる文字列が格納された配列 ['id', 'name', 'url']
+ * @returns {Object.<string>} - 構築されたオブジェクト
+ */
+function buildObjectFromArray(header, keys) {
+  const object = keys.reduce((accumulator, current, index) => {
+      accumulator[current] = header[index];
+      return accumulator;
+  }, {});
+
+  console.log(object);
+  return object;
 }
