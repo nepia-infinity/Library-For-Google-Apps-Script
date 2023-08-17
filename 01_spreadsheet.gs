@@ -1048,3 +1048,26 @@ function rotateValues(values) {
   return rotated
 
 }
+
+
+
+/**
+ * 対となる配列を用意して、それぞれkeyとvalueを格納したオブジェクトを作成する
+ * 
+ * @param  {Array.<string>} header - スプレッドシートのヘッダー行 ex: values[0], values.shift()
+ * @param  {Array.<string>} keys - オブジェクトのkeyを格納した1次元配列
+ * @param  {Array.<string>} values - オブジェクトのvalueを格納した1次元配列
+ * @return {Object.<number>}
+ * 
+ */
+function buildObjectFromPairs(header, keys, values){
+
+  const result = keys.reduce((obj, key, index) => {
+    obj[key] = header.indexOf(values[index]);
+    return obj;
+  }, {});
+
+  console.log(result);
+  return result
+  
+}

@@ -160,7 +160,7 @@ function getCalAllEvents(string, offset, calId) {
  * 
  * @param  {Array.<string>} guests - 出席者を格納した配列
  * @param  {Array.<string>} creators - 予定の作成者を格納した配列
- * @return {Array.<Array.<string>>} 
+ * @return {string} 
  * 
  */
 function guestList_(guests, creators){
