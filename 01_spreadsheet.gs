@@ -752,6 +752,7 @@ function isNewValue(recordExists, values, columnIndex){
   });
 
   console.log(newValues);
+  return newValues
 }
 
 
