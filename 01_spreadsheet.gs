@@ -1062,6 +1062,9 @@ function rotateValues(values) {
  */
 function buildObjectFromPairs(header, keys, values){
 
+  console.log(`buildObjectFromPairs()を実行中`);
+  console.log(`01_spreadsheetに記載`);
+
   const result = keys.reduce((obj, key, index) => {
     obj[key] = header.indexOf(values[index]);
     return obj;
