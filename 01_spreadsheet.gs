@@ -1029,7 +1029,7 @@ function setRules(sourceSheetUrl, columnIndex, cell){
  * 
  * 2次元配列を回転させる
  * 
- * @param  {Array.<Array.<string>>}
+ * @param  {Array.<Array.<string>>} values - 2次元配列
  * @return {Array.<Array.<string>>}
  * 
  */
