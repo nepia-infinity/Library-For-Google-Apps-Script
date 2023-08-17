@@ -455,7 +455,7 @@ function reduceObjectKeys(values, ...theArgs){
   console.log(values);
 
   const reduced = values.reduce((accumulator, current) => {
-    const obj   = {};
+    const obj = {};
     theArgs.map(arg => {
       obj[`${arg}`] = current[arg];
 
@@ -723,37 +723,38 @@ function modifyObject(original) {
 
 /**
  * 
- * 1次元配列内に値が存在するか、つまり転記対象かどうかを調べる
+ * 新しい値かどうかを確認し転記対象の場合、配列に加える。
  * 
- * @param  {Array.<string|number>} recordExists - シートなどに転記済みのID,URLなどを格納した1次元配列
- * @param  {Array.<Array.<string|number>>} values - Gmailなどから取得した2次元配列
- * @param  {number} columnIndex - valuesからIDやURLなどを取り出すindex番号
- * @return {Array.<Array.<string|number>>} columnIndex - newValuesからIDやURLなどを取り出すindex番号
+ * @param  {Array.<string|number>} existingValues - 既に存在する値が格納された1次元配列（例：シートなどに転記済みのID, URLなど）
+ * @param  {Array.<Array.<string|number>>} newValues - 全ての値が格納された2次元配列（例：Gmailなどから取得したデータ）
+ * @param  {number} columnIndex - newValues内の列インデックス（例：IDやURLなどを取り出す列番号）
+ * @return {Array.<Array.<string|number>>} - 新たに転記する対象となる値を含む2次元配列
  * 
  */
 
-function isNewValue(recordExists, values, columnIndex){
+function selectNewValues(existingRecords, newValues, columnIndex){
 
-  console.log(`isNewValue()を実行中`);
-  console.log(`01_spreadsheetに記載`);
+  console.log(`selectNewValues() 関数を実行中`);
+  console.log(`01_spreadsheet に記載中`);
 
-  values.shift();
+  newValues.shift();
 
-  console.log('values ヘッダー行削除後');
-  console.log(values);
+  console.log('newValues ヘッダー行削除後');
+  console.log(newValues);
 
-  let newValues = [];
+  let result = [];
 
-  values.map(row => {
-    if(recordExists.indexOf(row[columnIndex]) === -1){
-      console.log(`${row[columnIndex]} は、転記対象です`);
-      newValues.push(row);
+  newValues.map(row => {
+    if(existingRecords.indexOf(row[columnIndex]) === -1){
+      console.log(`${row[columnIndex]} は新しい値です。転記対象です。`);
+      result.push(row);
     }
   });
 
-  console.log(newValues);
-  return newValues
+  console.log(result);
+  return result;
 }
+
 
 
 /**
