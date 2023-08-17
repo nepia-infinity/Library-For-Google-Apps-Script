@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+        .wrapper {
+          max-width: 600px;
+          max-height: 350px;
+          margin: auto;
+        }
+        select {
+          width: 300px;
+          height: auto;
+          padding: 10px 5px;
+          margin: 10px 0;
+        }
+
+        button {
+          width: 100px;
+          height: auto;
+          padding: 8px 0;
+          margin: 10px 0;
+          float: right;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <label for="pet-select"></label>
+      <form id="pet-select">
+        <select>
+          <option value="" name="placeholder">--Please choose an option--</option>
+          <script>
+            const array = ['予定名を編集する', '詳細欄を編集する', '日時を編集する', '出席者を追加する'];
+            for(let i = 0; i < array.length; i++){
+              document.write('<option value="' + array[i] + '">' + array[i] + '</option>');
+            }
+          </script>
+        </select>
+        <button type="submit" onclick="google.script.run.editEvents(this.parentNode)">確定する</button>
+      </form>
+    </div>
+  </body>
+</html>
