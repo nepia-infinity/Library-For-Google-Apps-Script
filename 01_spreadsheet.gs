@@ -1092,5 +1092,5 @@ function buildObjectFromArray(header, keys) {
   }, {});
 
   console.log(result);
-  return reslut
+  return result
 }
