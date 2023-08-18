@@ -1187,7 +1187,7 @@ function replacePlaceholders_(values, keys, fileName, templateFileId, folderId){
 
     // テンプレートのプレイスホルダーを置き換える
     lists.reduce((accumulator, list) => accumulator.replaceText(...list), targetDocument.getBody());
-    newValues.push([replacedFileName, generatedUrl]);
+    newValues.push([replacedFileName, duplicatedDocumentId, generatedUrl]);
     
   }
   console.log(newValues);
