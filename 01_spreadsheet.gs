@@ -509,7 +509,7 @@ function showHtmlSentence(file, title){
  */
 function splice(array, start, quantity, query){
 
-  console.info(`reduceObjectKeys()を実行中`);
+  console.info(`splice()を実行中`);
   console.info(`01_spreadsheetに記載`);
   
   if(!query){
@@ -1250,7 +1250,7 @@ function generateMultipleSheets(sheetNames){
 
 
 /**
- * オブジェクト内の値を昇順に並び替え、それに対応するインデックスで置き換えます。
+ * オブジェクト内の値を昇順に並び替え、それに対応するインデックスで置換する
  *
  * @param  {Object.<number>} object - 値を並び替えて置き換える対象のオブジェクト
  * @return {Object.<number>} 値が昇順のインデックスで置き換えられたオブジェクト
