@@ -1204,3 +1204,45 @@ function replacePlaceholders_(values, keys, fileName, templateFileId, folderId){
   console.log(newValues);
   return newValues
 }
+
+
+
+/**
+ * 削除したくないシートを指定して、それ以外のシートを全て削除する
+ * 
+ * @param {Array.<string>} excludedSheetNames - 削除したくないシート名を格納した配列
+ * 
+ */
+function deleteSpecificSheets(excludedSheetNames){
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sheets      = spreadsheet.getSheets();
+  let count         = 0;
+
+  sheets.map(sheet => {
+    if(excludedSheetNames.indexOf(sheet.getName())=== -1){
+      console.log(`処理対象のシート：　${sheet.getName()}`);
+      spreadsheet.deleteSheet(sheet);
+      count += 1;
+    };
+  });
+
+  const string = `${count}　件シートを削除しました`;
+  console.log(string);
+
+  SpreadsheetApp.getUi().alert(string);
+
+}
+
+
+
+/**
+ * 配列に指定したシート名に沿ってシートを新規作成する
+ * 
+ * @param {Array.<string>} sheetNames - 作成したいシート名を格納した配列
+ * 
+ */
+function generateMultipleSheets(){
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  array.map(sheetName => spreadsheet.insertSheet(sheetName));
+  SpreadsheetApp.getUi().alert(`${array.length}　件のシートを作成しました`);
+}
