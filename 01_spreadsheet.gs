@@ -1085,9 +1085,13 @@ function buildObjectFromPairs(header, keys, values){
  * 
  * @param {Array.<string>} header - オブジェクトの値となる文字列が格納された配列 ['ID', '氏名', 'URL']
  * @param {Array.<string>} keys - オブジェクトのキーとなる文字列が格納された配列 ['id', 'name', 'url']
- * @returns {Object.<string>} - 構築されたオブジェクト
+ * @return {Object.<string>} - 構築されたオブジェクト
  */
 function buildObjectFromArray(header, keys) {
+
+  console.log(`buildObjectFromArray()を実行中`);
+  console.log(`01_spreadsheetに記載`);
+
   const result = keys.reduce((object, key, index) => {
       object[key] = header.indexOf(header[index]);
       return object;
@@ -1101,13 +1105,17 @@ function buildObjectFromArray(header, keys) {
 
 /**
  * テンプレートの文書にシートの値を差込し、複製するスクリプト
- * 複製後、URLなどを書き出す
+ * 複製後、URLなどを書き出す　PDF化には、43. convertDocToPdf()が便利
  * 
  * @param {Object.<string|Array.<string>>} info - オブジェクトに以下のkeyが必要　　　url, fileName, keys, headerName, templateUrl, folderUrl
  * 
  * 
  */
 function duplicateReplacedTemplate(info){
+
+  console.log(`duplicateReplacedTemplate()を実行中`);
+  console.log(`01_spreadsheetに記載`);
+
   const values  = getValues(info.url);
   const headers = values[0];
   
@@ -1159,6 +1167,9 @@ function duplicateReplacedTemplate(info){
  * 
  */
 function replacePlaceholders_(values, keys, fileName, templateFileId, folderId){
+
+  console.log(`replacePlaceholders_()を実行中`);
+  console.log(`01_spreadsheetに記載`);
   
   const [header, ...records] = values;
   let newValues = [['ファイル名', 'URL']];
