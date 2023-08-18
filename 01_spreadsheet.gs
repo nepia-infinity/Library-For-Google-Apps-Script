@@ -1107,7 +1107,7 @@ function buildObjectFromArray(header, keys) {
  * テンプレートの文書にシートの値を差込し、複製するスクリプト
  * 複製後、URLなどを書き出す　PDF化には、43. convertDocToPdf()が便利
  * 
- * @param {Object.<string|Array.<string>>} info - オブジェクトに以下のkeyが必要　　　url, fileName, keys, headerName, templateUrl, folderUrl
+ * @param {Object.<string|Array.<string>>} info - オブジェクトに以下のkeyが必要　　　sheetUrl, fileName, keys, headerName, templateUrl, folderUrl
  * 
  * 
  */
@@ -1116,7 +1116,7 @@ function duplicateReplacedTemplate(info){
   console.log(`duplicateReplacedTemplate()を実行中`);
   console.log(`01_spreadsheetに記載`);
 
-  const values  = getValues(info.url);
+  const values  = getValues(info.sheetUrl);
   const headers = values[0];
   
   // 2次元配列を必要な値のみに取捨選択する
