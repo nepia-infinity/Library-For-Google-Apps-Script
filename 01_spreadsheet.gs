@@ -1241,8 +1241,8 @@ function deleteSpecificSheets(excludedSheetNames){
  * @param {Array.<string>} sheetNames - 作成したいシート名を格納した配列
  * 
  */
-function generateMultipleSheets(){
+function generateMultipleSheets(sheetNames){
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  array.map(sheetName => spreadsheet.insertSheet(sheetName));
-  SpreadsheetApp.getUi().alert(`${array.length}　件のシートを作成しました`);
+  sheetNames.map(sheetName => spreadsheet.insertSheet(sheetName));
+  SpreadsheetApp.getUi().alert(`${sheetNames.length}　件のシートを作成しました`);
 }
