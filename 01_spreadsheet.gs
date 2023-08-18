@@ -1096,3 +1096,100 @@ function buildObjectFromArray(header, keys) {
   console.log(result);
   return result
 }
+
+
+
+/**
+ * テンプレートの文書にシートの値を差込し、複製するスクリプト
+ * 複製後、URLなどを書き出す
+ * 
+ * @param {Object.<string|Array.<string>>} info - オブジェクトに以下のkeyが必要　　　url, fileName, keys, headerName, templateUrl, folderUrl
+ * 
+ * 
+ */
+function duplicateReplacedTemplate(info){
+  const values  = getValues(info.url);
+  const headers = values[0];
+  
+  // 2次元配列を必要な値のみに取捨選択する
+  const column   = buildObjectFromPairs(headers, info.keys, info.headerNames);
+  const selected = selectColumns(values, column);
+  const folderId = getFolderId(info.folderUrl);
+
+  // Google DocumentのURLからファイルIDを抽出する
+  const templateFileId = extractText(info.templateFileUrl, /\/d\/[a-zA-Z0-9_-].*/, '/d/', '/edit');
+
+  // テンプレートにシートの値を流し込み、
+  const newValues = replacePlaceholders_(selected, info.keys, info.fileName, templateFileId, folderId);
+  const count     = newValues.length -1;
+  console.log(`作成された　${count}　件`);
+
+  const newSheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet();
+  let sheetName  = '差込文書のURL';
+
+  try{
+    newSheet.setName(sheetName);
+
+  }catch{
+    sheetName = showPrompt('新しいシート名を入力してください', `例：${sheetName}`);
+    newSheet.setName(sheetName);
+
+  }
+
+  // 新しいシートに複製した文書のURLなどを転記する
+  newSheet.activate();
+  newSheet.getRange(1, 1, newValues.length, newValues[0].length).setValues(newValues);
+  SpreadsheetApp.getUi().alert(`${count}　件の書類を作成しました`);
+
+}
+  
+
+
+
+/**
+ * 2次元配列の値をテンプレートの文書のプレイスホルダーを置換して複製する
+ * 
+ * @param {Array.<Array.<string>>} values - テンプレートに差込する値
+ * @param {Array.<string>} keys - 1次元配列　 ex. ['id', 'name', 'url', 'cellPhone', 'address']
+ * @param {string} fileName - 差込文書のファイル名
+ * @param {string} templateFileId - テンプレートのファイルID
+ * @param {string} folderId - 作成した文書の保存先
+ * @return {Array.<Array.<string>>} 2次元配列
+ * 
+ * 
+ */
+function replacePlaceholders_(values, keys, fileName, templateFileId, folderId){
+  
+  const [header, ...records] = values;
+  let newValues = [['ファイル名', 'URL']];
+
+  for(const row of records){
+    const lists = row.map((value, index) => [`{${keys[index]}}`, value]);
+    console.log(lists);
+
+    const replacedFileName = lists.reduce((accumulator, list) => accumulator.replace(...list), fileName);
+    console.log(`ファイル名：　${replacedFileName}`);
+
+    // ファイル名、保存場所
+    const template = DriveApp.getFileById(templateFileId); 
+    const folder   = DriveApp.getFolderById(folderId);
+
+    // makeCopy(ファイル名、保存場所)
+    const duplicatedDocument   = template.makeCopy(replacedFileName, folder);
+    const duplicatedDocumentId = duplicatedDocument.getId();
+
+    // 生成されたドキュメントのURL
+    const generatedUrl   = `https://docs.google.com/document/d/${duplicatedDocumentId}/edit`;
+    const targetDocument = DocumentApp.openById(duplicatedDocumentId);
+
+    console.log(`生成されたURL:　${generatedUrl}`);
+    console.log(`生成されたファイル名：　${targetDocument.getName()}`);
+
+    // テンプレートのプレイスホルダーを置き換える
+    lists.reduce((accumulator, list) => accumulator.replaceText(...list), targetDocument.getBody());
+    newValues.push([replacedFileName, generatedUrl]);
+    
+  }
+  console.log(newValues);
+  return newValues
+}
