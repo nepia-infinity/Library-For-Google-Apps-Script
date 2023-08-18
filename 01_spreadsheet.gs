@@ -1194,7 +1194,6 @@ function replacePlaceholders_(values, keys, fileName, templateFileId, folderId){
     const targetDocument = DocumentApp.openById(duplicatedDocumentId);
 
     console.log(`生成されたURL:　${generatedUrl}`);
-    console.log(`生成されたファイル名：　${targetDocument.getName()}`);
 
     // テンプレートのプレイスホルダーを置き換える
     lists.reduce((accumulator, list) => accumulator.replaceText(...list), targetDocument.getBody());
