@@ -1172,7 +1172,7 @@ function replacePlaceholders_(values, keys, fileName, templateFileId, folderId){
   console.log(`01_spreadsheetに記載`);
   
   const [header, ...records] = values;
-  let newValues = [['ファイル名', 'URL']];
+  let newValues = [['ファイル名', 'ファイルID', 'URL']];
 
   for(const row of records){
     const lists = row.map((value, index) => [`{${keys[index]}}`, value]);
