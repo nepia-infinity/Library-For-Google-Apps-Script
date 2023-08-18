@@ -1246,3 +1246,27 @@ function generateMultipleSheets(sheetNames){
   sheetNames.map(sheetName => spreadsheet.insertSheet(sheetName));
   SpreadsheetApp.getUi().alert(`${sheetNames.length}　件のシートを作成しました`);
 }
+
+
+
+/**
+ * オブジェクト内の値を昇順に並び替え、それに対応するインデックスで置き換えます。
+ *
+ * @param  {Object.<number>} object - 値を並び替えて置き換える対象のオブジェクト
+ * @return {Object.<number>} 値が昇順のインデックスで置き換えられたオブジェクト
+ */
+function swapWithAscendingIndex(object){
+  
+  console.log('元のオブジェクト');
+  console.log(object);
+
+  const entries = Object.entries(object).sort((a, b) => a[1] - b[1]);
+  const replaced = entries.map(([key, _], index) => [key, index]);
+  const newObject = Object.fromEntries(replaced);
+
+  console.log(`sortしてindexで置換後`);
+  console.log(newObject);
+
+  return newObject
+
+}
