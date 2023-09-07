@@ -1271,6 +1271,7 @@ function swapWithAscendingIndex(object){
 }
 
 
+
 /**
  * 配列内の指定された項目の出現回数を数える関数、COUNTIFのような挙動する
  * 配列内の要素が日本語の場合、keyも日本語になる点は注意が必要
@@ -1291,5 +1292,6 @@ function getItemCounts(array, items) {
     }
   });
 
+  console.log(counts);
   return counts;
 }
