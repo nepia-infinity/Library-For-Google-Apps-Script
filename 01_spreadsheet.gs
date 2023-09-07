@@ -1269,3 +1269,27 @@ function swapWithAscendingIndex(object){
   return newObject
 
 }
+
+
+/**
+ * 配列内の指定された項目の出現回数を数える関数、COUNTIFのような挙動する
+ * 配列内の要素が日本語の場合、keyも日本語になる点は注意が必要
+ * 文字列に変換する場合、　　　　　Object.keys(counts).map(key => `${key}: ${counts[key]}`).join('\n')
+ * 2次元配列に変換する場合、Object.entries(counts)
+ * 
+ * @param  {Array.<string>} array - 1次元配列
+ * @param  {Array.<string>} items - 1次元配列 (例)　[ 'とても満足', 'やや満足', 'どちらともいえない', 'やや不満', '不満' ]
+ * @return {Object.<number>} オブジェクト　（例）　{ 'とても満足': 3, 'やや不満': 2, 'やや満足': 3, '不満': 1 }
+ * 
+ */
+function getItemCounts(array, items) {
+  const counts = {};
+
+  array.forEach(item => {
+    if (items.includes(item)) {
+      counts[item] = (counts[item] || 0) + 1;
+    }
+  });
+
+  return counts;
+}
