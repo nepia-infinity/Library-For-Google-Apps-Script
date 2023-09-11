@@ -392,9 +392,9 @@ function deleteEvents(query, calId){
  */
 function showEditEventsLauncher() {
   const html = HtmlService.createHtmlOutputFromFile('choice');
-  const response = SpreadsheetApp.getUi().showModalDialog(html, 'どのように編集したいかを選択してください');
-  console.log(`選択内容：　${response}`);
-  return response
+  SpreadsheetApp.getUi().showModalDialog(html, 'どのように編集したいかを選択してください');
+  //choice.htmlでGoogle.script.runが動くはず
+  //返り値などは必要ない
 }
 
 
