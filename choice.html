@@ -26,8 +26,8 @@
   </head>
   <body>
     <div class="wrapper">
-      <label for="pet-select"></label>
-      <form id="pet-select" onsubmit="return handleSubmit(this);">
+      <label for="item-select"></label>
+      <form id="item-select">
         <select>
           <option value="" name="placeholder">--Please choose an option--</option>
           <script>
@@ -37,23 +37,9 @@
             }
           </script>
         </select>
-        <button type="button" onclick="handleSubmit(this.parentNode);">確定する</button>
+        <button type="submit" onclick="google.script.run.editEvents(this.parentNode)">確定する</button>
+
       </form>
     </div>
-
-    <script>
-      function handleSubmit(form) {
-        // フォームの送信を阻止
-        event.preventDefault();
-        
-        // フォームが正常に送信された場合の処理をここに追加
-        google.script.run.editEvents(form);
-        
-        // ポップアップメニューを閉じる
-        google.script.host.close();
-        
-        return false; // ページの再読み込みを阻止
-      }
-    </script>
   </body>
 </html>
