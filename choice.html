@@ -37,7 +37,7 @@
             }
           </script>
         </select>
-        <button type="submit">確定する</button>
+        <button type="button" onclick="handleSubmit(this.parentNode);">確定する</button>
       </form>
     </div>
 
@@ -46,25 +46,11 @@
         // フォームの送信を阻止
         event.preventDefault();
         
-        // フォームデータの取得
-        const selectedChoice = form.querySelector('select').value;
-        
-        // データのバリデーション（例: 必須フィールドが選択されているか確認）
-        if (selectedChoice === "") {
-          alert("選択肢を選択してください。");
-          return false; // ページの再読み込みを阻止
-        }
-        
-        // フォームデータを処理し、他の必要な処理を実行
-        
-        // フォームデータをサーバーサイドの関数に渡す
-        google.script.run.editEvents(selectedChoice); // form を渡すのではなく、選択肢を渡す
+        // フォームが正常に送信された場合の処理をここに追加
+        google.script.run.editEvents(form);
         
         // ポップアップメニューを閉じる
         google.script.host.close();
-        
-        // フォームの送信成功メッセージを表示
-        alert("フォームが正常に送信されました。");
         
         return false; // ページの再読み込みを阻止
       }
