@@ -34,10 +34,6 @@ function getSheetByUrl(url, keyWord) {
 
       return sheetName
 
-    }else{
-      console.warn(`エラーが生じました`);
-      return
-
     }
   });
 }
