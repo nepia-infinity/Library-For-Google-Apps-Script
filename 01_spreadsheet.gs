@@ -1080,17 +1080,17 @@ function rotateValues(values) {
  * 
  * @param  {Array.<string>} header - スプレッドシートのヘッダー行 ex: values[0], values.shift()
  * @param  {Array.<string>} keys - オブジェクトのkeyを格納した1次元配列
- * @param  {Array.<string>} values - オブジェクトのvalueを格納した1次元配列
+ * @param  {Array.<string>} array - オブジェクトのvalueを格納した1次元配列
  * @return {Object.<number>}
  * 
  */
-function buildObjectFromPairs(header, keys, values){
+function buildObjectFromPairs(header, keys, array){
 
   console.log(`buildObjectFromPairs()を実行中`);
   console.log(`01_spreadsheetに記載`);
 
   const result = keys.reduce((object, key, index) => {
-    object[key] = header.indexOf(values[index]);
+    object[key] = header.indexOf(array[index]);
     return object;
   }, {});
 
@@ -1106,10 +1106,10 @@ function buildObjectFromPairs(header, keys, values){
  * 
  * @param {string} url - スプレッドシートのURL
  * @param {Array.<string>} keys - オブジェクトのキーとなる文字列が格納された配列 ['id', 'name', 'url']
- * @param {Array.<string>} targetArray - オブジェクトのキーとなる文字列が格納された配列 ['ID', '名前', 'URL']
+ * @param {Array.<string>} array - オブジェクトのキーとなる文字列が格納された配列 ['ID', '名前', 'URL']
  * @return {Object.<string>} - 構築されたオブジェクト
  */
-function buildObjectFromArray(url, keys, targetArray) {
+function buildObjectFromArray(url, keys, array) {
 
   console.log(`buildObjectFromArray()を実行中`);
   console.log(`01_spreadsheetに記載`);
@@ -1117,7 +1117,7 @@ function buildObjectFromArray(url, keys, targetArray) {
   const sheet  = getActiveSheetByUrl(url);
   const header = sheet.getDataRange().getValues().shift();
   const object = keys.reduce((accumulator, key, index) => {
-    const result = header.indexOf(targetArray[index]);
+    const result = header.indexOf(array[index]);
     result !== -1 ? accumulator[key] = result : false;
     return accumulator;
   }, {});
