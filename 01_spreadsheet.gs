@@ -1216,7 +1216,7 @@ function deleteSpecificSheets(excludedSheetNames){
   const sheets      = spreadsheet.getSheets();
   let count         = 0;
 
-  sheets.map(sheet => {
+  sheets.forEach(sheet => {
     if(excludedSheetNames.indexOf(sheet.getName())=== -1){
       console.log(`処理対象のシート：　${sheet.getName()}`);
       spreadsheet.deleteSheet(sheet);
