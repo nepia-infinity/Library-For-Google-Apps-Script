@@ -2,6 +2,7 @@
  * SpreadsheetのURLからsheetオブジェクトを取得する。
  * シート名が取得したい場合は、2番目の引数に、'sheetName' と指定する
  * トリガー設定可能 getSheets()を使用しているため、実行時間が掛かる。
+ * FIXME: sheet.getLastRow(), sheet.getDataRange().getValues()でエラーが生じる？
  * 
  * @param  {string} url - スプレッドシートのURL
  * @param  {string} keyWord - 引数の省略可。'sheetName' と指定する
@@ -9,32 +10,36 @@
  * 
  */
 function getSheetByUrl(url, keyWord) {
-  const spreadsheet = SpreadsheetApp.openByUrl(url);
-  const sheets      = spreadsheet.getSheets();
+  const spreadsheet    = SpreadsheetApp.openByUrl(url);
+  const sheets         = spreadsheet.getSheets();
+  const sheetInfoArray = url.split('#gid=');
 
-  console.log(`getSheetByUrl()　を実行中`);
+  console.log(`getSheetByUrl()を実行中`);
+  console.log(sheetInfoArray);
 
   //シートIDを、文字列から数値に変換する
-  const sheetId = Number(url.split('#gid=')[1]);
+  const sheetId = Number(sheetInfoArray[1]);
 
-  //前述のsheetIdが、型も含めて完全一致したときに、sheetをオブジェクトとして返す。
-  //keyWord、2番目の引数が省略されており、定義されていない場合
-  for (const sheet of sheets) {
-    if (sheetId === sheet.getSheetId() && !keyWord){
-      console.log(`シート名：　${sheet.getName()} 型：　${typeof sheet}`);
-      return sheet;
+  sheets.map(sheet => {
+    if(sheet.getSheetId() === sheetId && !keyWord){
+      console.log(`sheetId: ${sheetId} typeof: ${typeof sheetId}`);
+      console.log(`sheetName: ${sheet.getName()}`);
 
-    }else if(sheetId === sheet.getSheetId() && keyWord === 'sheetName'){
+      return sheet
+
+    }else if(sheet.getSheetId() === sheetId && keyWord === 'sheetName'){
       const sheetName = sheet.getName();
-      console.warn(`シート名：　${sheetName} 型：　${typeof sheetName}`);
-      return sheetName;
+      console.log(`sheetId: ${sheetId} typeof: ${typeof sheetId}`);
+      console.log(`sheetName: ${sheetName}`);
+
+      return sheetName
 
     }else{
-      console.warn(`処理対象のシートではないため、処理を終了します`);
+      console.warn(`エラーが生じました`);
       return
 
     }
-  }
+  });
 }
 
 
