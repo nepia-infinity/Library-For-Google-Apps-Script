@@ -5,40 +5,32 @@
  * 最終更新日　2023/04/28
  * 
  * @param  {string} url - スプレッドシートのURL
- * @param  {string} query - 引数の省略可。'sheetName' と指定する
+ * @param  {string} string - 引数の省略可　'sheetName' と指定する
  * @return {SpreadsheetApp.Sheet|string} オブジェクトかシート名を返す。
  * 
  */
-function getSheetByUrl(url, query) {
+function getSheetByUrl(targetSheetUrl, string) {
+  const activeSheet    = SpreadsheetApp.getActiveSheet();
+  const sheetInfoArray = targetSheetUrl.split('#gid='); //['https....', 'sheetId(typeof string)'];
 
-  console.info(`getSheetByUrl()を実行中`);
-  console.info(`01_spreadsheetに記載`);
+  console.log(sheetInfoArray);
 
-  const spreadsheet = SpreadsheetApp.openByUrl(url);
-  const sheets      = spreadsheet.getSheets();
+  // 前述のsheetIdが、型も含めて完全一致しない場合は処理を終了する
+  if(activeSheet.getSheetId() !== Number(sheetInfoArray[1])){
+    console.log(`シート名：${activeSheet.getName()}`);
+    console.warn(`処理対象のシートではないため、処理を終了します`);
+    return
 
-  console.log(url.split('#gid='));
+  }else if(string === 'sheetName'){
+    const sheetName = activeSheet.getName();
+    console.warn(`シート名：${sheetName} 型：${typeof sheetName}`);
+    return sheetName;
 
-  //シートIDを、文字列から数値に変換する
-  const sheetId = Number(url.split('#gid=')[1]);
-
-  //前述のsheetIdが、型も含めて完全一致したときに、sheetをオブジェクトとして返す。
-  //query、2番目の引数が省略されており、定義されていない場合
-  for (const sheet of sheets) {
-    if (sheetId === sheet.getSheetId() && !query){
-
-      console.log(`シート名：　${sheet.getName()}　型：　${typeof sheet}`);
-      return sheet
-
-    }else if(sheetId === sheet.getSheetId() && query === 'sheetName'){
-      
-      const sheetName = sheet.getName();
-      console.log(`シート名：　${sheetName}　型：　${typeof sheetName}`);
-      return sheetName
-
-    }
-  }//for
-}//end
+  }else{
+    console.log(`シート名：${activeSheet.getName()} 型：${typeof activeSheet}`);
+    return activeSheet
+  }
+}
 
 
 
