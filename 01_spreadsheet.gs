@@ -1076,40 +1076,14 @@ function rotateValues(values) {
 
 
 /**
- * 対となる配列を用意して、それぞれkeyとvalueを格納したオブジェクトを作成する
- * 
- * @param  {Array.<string>} header - スプレッドシートのヘッダー行 ex: values[0], values.shift()
- * @param  {Array.<string>} keys - オブジェクトのkeyを格納した1次元配列
- * @param  {Array.<string>} array - オブジェクトのvalueを格納した1次元配列
- * @return {Object.<number>}
- * 
- */
-function buildObjectFromPairs(header, keys, array){
-
-  console.log(`buildObjectFromPairs()を実行中`);
-  console.log(`01_spreadsheetに記載`);
-
-  const result = keys.reduce((object, key, index) => {
-    object[key] = header.indexOf(array[index]);
-    return object;
-  }, {});
-
-  console.log(result);
-  return result
-  
-}
-
-
-
-/**
- * 欲しい列のみのcolumnIndexを取得する関数
+ * ペアとなるkeyとvalueの配列のペアから、欲しい列のみのcolumnIndexを取得する関数
  * 
  * @param {string} url - スプレッドシートのURL
  * @param {Array.<string>} keys - オブジェクトのキーとなる文字列が格納された配列 ['id', 'name', 'url']
  * @param {Array.<string>} array - オブジェクトのキーとなる文字列が格納された配列 ['ID', '名前', 'URL']
  * @return {Object.<string>} - 構築されたオブジェクト
  */
-function buildObjectFromArray(url, keys, array) {
+function buildObjectFromPairs(url, keys, array) {
 
   console.log(`buildObjectFromArray()を実行中`);
   console.log(`01_spreadsheetに記載`);
@@ -1267,7 +1241,7 @@ function deleteSpecificSheets(excludedSheetNames){
  */
 function generateMultipleSheets(sheetNames){
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  sheetNames.map(sheetName => spreadsheet.insertSheet(sheetName));
+  sheetNames.forEach(sheetName => spreadsheet.insertSheet(sheetName));
   SpreadsheetApp.getUi().alert(`${sheetNames.length}　件のシートを作成しました`);
 }
 
