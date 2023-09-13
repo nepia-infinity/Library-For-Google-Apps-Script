@@ -2,7 +2,6 @@
  * SpreadsheetのURLからsheetオブジェクトを取得する。
  * シート名が取得したい場合は、2番目の引数に、'sheetName' と指定する
  * トリガー設定可能 getSheets()を使用しているため、実行時間が掛かる。
- * FIXME: sheet.getLastRow(), sheet.getDataRange().getValues()でエラーが生じる？
  * 
  * @param  {string} url - スプレッドシートのURL
  * @param  {string} keyWord - 引数の省略可。'sheetName' と指定する
