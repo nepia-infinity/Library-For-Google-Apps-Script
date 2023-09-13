@@ -24,14 +24,11 @@ function getSheetByUrl(url, keyWord) {
     if(sheet.getSheetId() === sheetId && !keyWord){
       console.log(`sheetId: ${sheetId} typeof: ${typeof sheetId}`);
       console.log(`sheetName: ${sheet.getName()}`);
-
       return sheet
 
     }else if(sheet.getSheetId() === sheetId && keyWord === 'sheetName'){
       const sheetName = sheet.getName();
-      console.log(`sheetId: ${sheetId} typeof: ${typeof sheetId}`);
-      console.log(`sheetName: ${sheetName}`);
-
+      console.log(`sheetName: ${sheetName} typeof: ${typeof sheetId}`);
       return sheetName
 
     }
