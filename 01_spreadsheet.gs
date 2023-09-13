@@ -13,7 +13,7 @@ function getSheetByUrl(url, keyWord) {
   const sheets         = spreadsheet.getSheets();
   const sheetInfoArray = url.split('#gid=');
 
-  console.log(`getSheetByUrl_()　を実行中`);
+  console.log(`getSheetByUrl()　を実行中`);
   console.log(sheetInfoArray);
 
   //シートIDを、文字列から数値に変換する
@@ -23,18 +23,15 @@ function getSheetByUrl(url, keyWord) {
   //keyWord、2番目の引数が省略されており、定義されていない場合
   for (const sheet of sheets) {
     if (sheetId === sheet.getSheetId() && !keyWord){
-
       console.log(`シート名：　${sheet.getName()} 型：　${typeof sheet}`);
       return sheet;
 
     }else if(sheetId === sheet.getSheetId() && keyWord === 'sheetName'){
-      
       const sheetName = sheet.getName();
       console.warn(`シート名：　${sheetName} 型：　${typeof sheetName}`);
       return sheetName;
 
     }else{
-
       console.warn(`処理対象のシートではないため、処理を終了します`);
       return
 

@@ -17,8 +17,8 @@
  */
 function test_getSheetByUrl() {
   const url = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=0';
-  // getSheetByUrl(url);
-  getSheetByUrl(url, 'sheetName');
+  getSheetByUrl(url);
+  // getSheetByUrl(url, 'sheetName');
 }
 
 /**
