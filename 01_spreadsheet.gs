@@ -1,15 +1,65 @@
 /**
  * SpreadsheetのURLからsheetオブジェクトを取得する。
- * シート名を取得したい場合は、2番目の引数に、'sheetName' と指定する
+ * シート名が取得したい場合は、2番目の引数に、'sheetName' と指定する
+ * トリガー設定可能 getSheets()を使用しているため、実行時間が掛かる。
  * 
- * 最終更新日　2023/04/28
+ * @param  {string} url - スプレッドシートのURL
+ * @param  {string} keyWord - 引数の省略可。'sheetName' と指定する
+ * @return {SpreadsheetApp.Sheet|string} オブジェクトかシート名を返す。
+ * 
+ */
+function getSheetByUrl(url, keyWord) {
+  const spreadsheet    = SpreadsheetApp.openByUrl(url);
+  const sheets         = spreadsheet.getSheets();
+  const sheetInfoArray = url.split('#gid=');
+
+  console.log(`getSheetByUrl_()　を実行中`);
+  console.log(sheetInfoArray);
+
+  //シートIDを、文字列から数値に変換する
+  const sheetId = Number(sheetInfoArray[1]);
+
+  //前述のsheetIdが、型も含めて完全一致したときに、sheetをオブジェクトとして返す。
+  //keyWord、2番目の引数が省略されており、定義されていない場合
+  for (const sheet of sheets) {
+    if (sheetId === sheet.getSheetId() && !keyWord){
+
+      console.log(`シート名：　${sheet.getName()} 型：　${typeof sheet}`);
+      return sheet;
+
+    }else if(sheetId === sheet.getSheetId() && keyWord === 'sheetName'){
+      
+      const sheetName = sheet.getName();
+      console.warn(`シート名：　${sheetName} 型：　${typeof sheetName}`);
+      return sheetName;
+
+    }else{
+
+      console.warn(`処理対象のシートではないため、処理を終了します`);
+      return
+
+    }
+  }
+}
+
+
+
+
+
+
+/**
+ * SpreadsheetのURLからsheetオブジェクトを取得する。
+ * シート名を取得したい場合は、2番目の引数に、'sheetName' と指定する
+ * アクティブなシートを元に処理をするため、トリガー設定は不向き
+ * 
+ * 最終更新日　2023/09/13
  * 
  * @param  {string} targetSheetUrl - スプレッドシートのURL
  * @param  {string} string - 引数の省略可　'sheetName' と指定する
  * @return {SpreadsheetApp.Sheet|string} オブジェクトかシート名を返す。
  * 
  */
-function getSheetByUrl(targetSheetUrl, string) {
+function getActiveSheetByUrl(targetSheetUrl, string) {
   const activeSheet    = SpreadsheetApp.getActiveSheet();
   const sheetInfoArray = targetSheetUrl.split('#gid='); //['https....', 'sheetId(typeof string)'];
 
