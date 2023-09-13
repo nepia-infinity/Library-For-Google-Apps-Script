@@ -4,7 +4,7 @@
  * 
  * 最終更新日　2023/04/28
  * 
- * @param  {string} url - スプレッドシートのURL
+ * @param  {string} targetSheetUrl - スプレッドシートのURL
  * @param  {string} string - 引数の省略可　'sheetName' と指定する
  * @return {SpreadsheetApp.Sheet|string} オブジェクトかシート名を返す。
  * 
