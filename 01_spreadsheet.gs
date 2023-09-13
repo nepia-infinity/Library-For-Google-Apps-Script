@@ -20,7 +20,7 @@ function getSheetByUrl(url, keyWord) {
   //シートIDを、文字列から数値に変換する
   const sheetId = Number(sheetInfoArray[1]);
 
-  sheets.map(sheet => {
+  for(const sheet of sheets){
     if(sheet.getSheetId() === sheetId && !keyWord){
       console.log(`sheetId: ${sheetId} typeof: ${typeof sheetId}`);
       console.log(`sheetName: ${sheet.getName()}`);
@@ -32,7 +32,7 @@ function getSheetByUrl(url, keyWord) {
       return sheetName
 
     }
-  });
+  }
 }
 
 
