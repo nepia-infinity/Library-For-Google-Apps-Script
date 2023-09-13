@@ -37,14 +37,10 @@ function getSheetByUrl(url, keyWord) {
 
 
 
-
-
 /**
  * SpreadsheetのURLからsheetオブジェクトを取得する。
  * シート名を取得したい場合は、2番目の引数に、'sheetName' と指定する
  * アクティブなシートを元に処理をするため、トリガー設定は不向き
- * 
- * 最終更新日　2023/09/13
  * 
  * @param  {string} targetSheetUrl - スプレッドシートのURL
  * @param  {string} string - 引数の省略可　'sheetName' と指定する
@@ -79,8 +75,6 @@ function getActiveSheetByUrl(targetSheetUrl, string) {
 
 /**
  * 指定したシートの範囲を取得する。
- * 
- * 最終更新日　2023/04/28
  * 
  * @param  {SpreadsheetApp.Sheet} sheet - シートオブジェクト
  * @param  {Object.<number>|string} info - 取得開始行と取得開始列 {row: 1, column: 2}　もしくは 'A2:F4' のように指定する
@@ -127,8 +121,6 @@ function getRange(sheet, info){
 /**
  * 指定した列の文字が入力されている最終行を取得する
  * 
- * 最終更新日　2023/06/16
- * 
  * @param  {Array.<Array.<string|number>>} values - 2次元配列
  * @param  {number} columnIndex - 2列目が欲しい場合は1と指定
  * @return {number}
@@ -164,8 +156,6 @@ function getLastRowWithText(values, columnIndex){
 /**
  * 2次元配列の特定の列のみを抽出する
  * 
- * 最終更新日　2023/04/28
- * 
  * @param  {Array.<Array.<string|number>>} values - 2次元配列
  * @param  {number} columnIndex - 数字で指定、0始まりなので2列目の場合は1と指定
  * @return {Array.<string|number>} 1次元配列
@@ -184,8 +174,6 @@ function generateArray(values, columnIndex){
 
 /**
  * シートオブジェクトを引数にアクティブなセルの値、行、列などの情報を取得する
- * 
- * 最終更新日　2023/04/28
  * 
  * @param  {SpreadsheetApp.Sheet} sheet - シートオブジェクト
  * @return {Object.<number|string>}
@@ -301,7 +289,7 @@ function generateHeaderIndex(values){
  * FIXME: ヘッダー行が1行目にない非構造化データの処理には向かない
  * 
  * NOTES: https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries
- * Object.fromEntries() メソッドは、キーと値の組み合わせのリストをオブジェクトに変換します。
+ * Object.fromEntries() メソッドは、キーと値の組み合わせの配列をオブジェクトに変換する。
  * 
  * 
  * @param  {Array.<Array.<string|number>>} values - 2次元配列
@@ -1114,25 +1102,28 @@ function buildObjectFromPairs(header, keys, values){
 
 
 /**
- * 配列からオブジェクトを構築する関数
- * FIXME: 余計な列がある場合は不具合が起きかねないので使用不可
+ * 欲しい列のみのcolumnIndexを取得する関数
  * 
- * @param {Array.<string>} header - オブジェクトの値となる文字列が格納された配列 ['ID', '氏名', 'URL']
+ * @param {string} url - スプレッドシートのURL
  * @param {Array.<string>} keys - オブジェクトのキーとなる文字列が格納された配列 ['id', 'name', 'url']
+ * @param {Array.<string>} targetArray - オブジェクトのキーとなる文字列が格納された配列 ['ID', '名前', 'URL']
  * @return {Object.<string>} - 構築されたオブジェクト
  */
-function buildObjectFromArray(header, keys) {
+function buildObjectFromArray(url, keys, targetArray) {
 
   console.log(`buildObjectFromArray()を実行中`);
   console.log(`01_spreadsheetに記載`);
 
-  const result = keys.reduce((object, key, index) => {
-      object[key] = header.indexOf(header[index]);
-      return object;
+  const sheet  = getActiveSheetByUrl(url);
+  const header = sheet.getDataRange().getValues().shift();
+  const object = keys.reduce((accumulator, key, index) => {
+    const result = header.indexOf(targetArray[index]);
+    result !== -1 ? accumulator[key] = result : false;
+    return accumulator;
   }, {});
 
-  console.log(result);
-  return result
+  console.log(object);
+  return object
 }
 
 
