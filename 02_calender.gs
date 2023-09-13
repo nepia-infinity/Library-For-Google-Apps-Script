@@ -47,8 +47,7 @@ function generateDateStringValues(string) {
   const targetDate = new Date(string);
   const today      = new Date();
 
-  let day, stringDate;
-
+  let day,stringDate;
   let newValues = [];
 
   if(targetDate < today){
@@ -170,11 +169,8 @@ function guestList_(guests, creators){
   
   let array = [];
 
-  if(creators){
-    array.push(creators[0]); //主催者を追加
-
-  }
-  guests.map(guest => array.push(guest.getEmail()));
+  if(creators) array.push(creators[0]); //主催者を追加
+  guests.forEach(guest => array.push(guest.getEmail()));
 
   //配列を文字列化する
   const guestsList = array.join();

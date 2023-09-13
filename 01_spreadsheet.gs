@@ -1081,7 +1081,7 @@ function rotateValues(values) {
  * @param {string} url - スプレッドシートのURL
  * @param {Array.<string>} keys - オブジェクトのキーとなる文字列が格納された配列 ['id', 'name', 'url']
  * @param {Array.<string>} array - オブジェクトのキーとなる文字列が格納された配列 ['ID', '名前', 'URL']
- * @return {Object.<string>} - 構築されたオブジェクト
+ * @return {Object.<string>}
  */
 function buildObjectFromPairs(url, keys, array) {
 
@@ -1284,7 +1284,6 @@ function swapWithAscendingIndex(object){
  */
 function getItemCounts(array, items) {
   const counts = {};
-
   array.forEach(item => {
     if (items.includes(item)) {
       counts[item] = (counts[item] || 0) + 1;
