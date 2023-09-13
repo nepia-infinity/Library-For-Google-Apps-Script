@@ -9,15 +9,13 @@
  * 
  */
 function getSheetByUrl(url, keyWord) {
-  const spreadsheet    = SpreadsheetApp.openByUrl(url);
-  const sheets         = spreadsheet.getSheets();
-  const sheetInfoArray = url.split('#gid=');
+  const spreadsheet = SpreadsheetApp.openByUrl(url);
+  const sheets      = spreadsheet.getSheets();
 
   console.log(`getSheetByUrl()　を実行中`);
-  console.log(sheetInfoArray);
 
   //シートIDを、文字列から数値に変換する
-  const sheetId = Number(sheetInfoArray[1]);
+  const sheetId = Number(url.split('#gid=')[1]);
 
   //前述のsheetIdが、型も含めて完全一致したときに、sheetをオブジェクトとして返す。
   //keyWord、2番目の引数が省略されており、定義されていない場合
