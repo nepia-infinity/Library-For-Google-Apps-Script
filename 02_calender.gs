@@ -449,6 +449,9 @@ function showEditEventsLauncher() {
  */
 function editEvents(object, rowIndex){
 
+  console.info(`editEvents()を実行中`);
+  console.info(`02_calenderに記載`);
+
   // 引数 'object' の型によって条件分岐して文字列に変換する
   const argument = typeof object === 'object' ? String(Object.values(object)) : String(object);
   const calId    = showPrompt('カレンダーIDを入力してください', '空白の場合は自分のカレンダーを処理対象とします');
@@ -512,6 +515,7 @@ function editEvents(object, rowIndex){
 }
 
 
+
 /**
  * @param  {string} eventId - イベントID、UI操作だと確認不可
  * @param  {string} calId - 予定の登録先、通常はメールアドレスなど
@@ -534,6 +538,8 @@ function getInfoByEventId(eventId, calId){
     eventDetail: event.getDescription()
   }
 
+  console.log(`処理対象のアカウント：${cal.getName()}`);
   console.log(info);
+
   return info;
 }

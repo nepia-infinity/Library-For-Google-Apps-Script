@@ -417,7 +417,7 @@ function test_getSlidesContents(){
 
 /**イベントIDから予定の詳細を取得する */
 function test_getInfoByEventId(){
-  const eventId = '0027piubunptcrgrgqavj8trn0';
+  const eventId = 'ektieo6tv8g0cmrjauea4ni3k8';
   getInfoByEventId(eventId);
 }
 
