@@ -113,18 +113,7 @@ function getCalAllEvents(string, offset, calId) {
   console.info(`convertDay()を実行中`);
   console.info(`02_calenderに記載`);
 
-  let cal;
-
-  if(calId){
-    // 特定のカレンダーを取得する
-    cal = CalendarApp.getCalendarById(calId);
-
-  }else{
-    // 3つ目の引数の指定がない場合、自分のカレンダーを取得する
-    console.warn(`3番目の引数の指定がないため、あなた自身のカレンダーの予定を取得します。`);
-    cal = CalendarApp.getDefaultCalendar();
-
-  }
+  const cal = calId ? CalendarApp.getCalendarById(calId) : CalendarApp.getDefaultCalendar();
         
   const startTime = new Date(string);
   const endTime   = new Date();
@@ -162,41 +151,115 @@ function getCalAllEvents(string, offset, calId) {
  * @return {string} 
  * 
  */
-function guestList_(guests, creators){
+function guestList_(guests, creators) {
 
   console.info(`guestList_()を実行中`);
   console.info(`02_calenderに記載`);
+
+  const guestEmails = guests.map(guest => guest.getEmail());
   
-  let array = [];
+  if (creators) {
+    // 主催者を既存の配列の先頭に追加
+    const organizers = creators.map(creator => creator[0]);
+    guestEmails.unshift(...organizers);
+  }
 
-  if(creators) array.push(creators[0]); //主催者を追加
-  guests.forEach(guest => array.push(guest.getEmail()));
+  // 配列を文字列化する
+  const guestsList = guestEmails.join();
+  return guestsList;
+}
 
-  //配列を文字列化する
-  const guestsList = array.join();
-  return guestsList
 
+
+
+/**
+ * シートの値に基づいて予定を登録するスクリプト
+ * 3番目の引数、calIdについては省略した場合、自分のカレンダーに予定が登録される
+ * 
+ * @param {string} sheeturl　- スプレッドシートのURL
+ * @param {number} rowIndex - ヘッダー行の位置
+ * @param {string} calId - カレンダーID　省略可　 (例) *****@gmail.com
+ * 
+ */
+function registerEvents(sheeturl, rowIndex, calId) {
+
+  console.info(`registerEvents()を実行中`);
+  console.info(`02_calenderに記載`);
+
+  const sheet  = getSheetByUrl(sheeturl);
+  const values = sheet.getDataRange().getValues();
+  const column = getHeader_(values, rowIndex);
+
+  // 3番目の引数、calIdが無かった場合、自分のカレンダーIDを使用する
+  calId = calId ? calId : CalendarApp.getDefaultCalendar().getId();
+
+  let count = 0;
+
+  values.forEach((row, index) => {
+    const eventId   = registerEventIfNotRegistered_(row, column, calId);
+    const targetRow = index + 1;
+
+    console.log(`処理対象行；　${targetRow}`);
+
+    if (eventId) {
+      sheet.getRange(targetRow, column.eventId + 1).setValue(eventId);
+      sheet.getRange(targetRow, column.status + 1).setValue('登録済');
+      count += 1;
+    }
+  });
+  
+  SpreadsheetApp.getUi().alert(`${count}件の予定を登録しました`);
+  
+}
+
+
+
+
+/**
+ * スプレッドシートの登録ステータスに応じて登録処理を進める関数
+ * 
+ * @param  {Array.<string|date>} row - 1次元配列
+ * @param  {number} index - 処理番号
+ * 
+ */
+function registerEventIfNotRegistered_(row, column, calId) {
+  // イベントID or 登録ステータスが空白の場合のみ登録処理を実行する
+  if (row[column.eventId] === '' && row[column.status] === '') {
+
+    // イベントの開始時刻
+    const startTime = new Date(row[column.date]);
+    startTime.setHours(row[column.startTime].getHours());
+    startTime.setMinutes(row[column.startTime].getMinutes());
+
+    // イベントの終了時刻
+    const endTime = new Date(startTime);
+    endTime.setHours(row[column.endTime].getHours());
+    endTime.setMinutes(row[column.endTime].getMinutes());
+
+    const eventObject = {
+      calId:       calId,
+      title:       row[column.title],
+      startTime:   Utilities.formatDate(startTime, 'JST', "yyyy-MM-dd'T'HH:mm:ss.000+09:00"),
+      endTime:     Utilities.formatDate(endTime, 'JST', "yyyy-MM-dd'T'HH:mm:ss.000+09:00"),
+      description: row[column.description],
+      attendees:   generateAttendees_(row[column.attendees]),
+    }
+    return createEventWithMeetUrl_(eventObject);
+  }
+  return null;
 }
 
 
 
 /**
- * シートの値を元にカレンダーに登録する
- * FIXME: Google Calender APIを有効にしておかないとエラーが生じてしまう。
- * FIXME: 参加者欄が空白だとエラーが生じる
+ * 新卒面接共有カレンダー登録用のヘッダー行のインデックスを取得する
  * 
- * @param {string} url - スプレッドシートのURL
+ * @param  {Array.<Array.<string|date>>} values - シートの値、2次元配列
+ * @return {Object.<number>}
  * 
  */
-function createEventsFromSheetValues(url) {
-
-  console.info(`createEventsFromSheetValues()を実行中`);
-  console.info(`02_calenderに記載`);
-
-  const sheet  = getSheetByUrl(url);
-  const values = sheet.getDataRange().getValues();
-  const header = values[0];
-  
+function getHeader_(values, rowIndex){
+  const header = values[rowIndex];
   const column = {
     eventId:     header.indexOf('イベントID'),
     title:       header.indexOf('イベント名'),
@@ -205,66 +268,22 @@ function createEventsFromSheetValues(url) {
     endTime:     header.indexOf('終了時刻'),
     attendees:   header.indexOf('出席者'),
     description: header.indexOf('イベント詳細'),
-    status:      header.indexOf('登録ステータス')
+    status:      header.indexOf('登録ステータス'),
   }
-
-  let count = 0;
-  
-  for(let i = 0; i < values.length; i++){
-    //二重登録防止のため、イベントIDが空白かつ、登録済みが付いていない予定のみを登録する。
-    if(!values[i][column.eventId] && !values[i][column.status]){
-      
-      //開始時刻
-      const startTime = new Date(values[i][column.date]);
-      startTime.setHours(values[i][column.startTime].getHours());
-      startTime.setMinutes(values[i][column.startTime].getMinutes());
-      
-      //終了時刻
-      const endTime = new Date(startTime);
-      endTime.setHours(values[i][column.endTime].getHours());
-      endTime.setMinutes(values[i][column.endTime].getMinutes());
-      
-      const row = i + 1;
-      console.log(`処理中：${row}　行目`);
-      
-      const object = {
-        title:       values[i][column.title],
-        startTime:   Utilities.formatDate(startTime, 'JST', "yyyy-MM-dd'T'HH:mm:ss.000+09:00"),
-        endTime:     Utilities.formatDate(endTime, 'JST', "yyyy-MM-dd'T'HH:mm:ss.000+09:00"),
-        description: values[i][column.description],
-        attendees:   generateAttendees_(values[i][column.attendees]),
-      }
-
-      const eventId = registerEventsWithMeetUrl_(object);
-
-      sheet.getRange(row, column.eventId + 1).setValue(eventId);
-      sheet.getRange(row, column.status  + 1).setValue('登録済');
-
-      count += 1;
-
-    }
-  }
-  console.log(`登録数：　${count}　件`);
-  SpreadsheetApp.getUi().alert(`${count}件の登録が完了しました。カレンダーをご確認ください。`);
+ 
+  console.log(column);
+  return column
 }
 
 
-
-
 /**
- * Meet URL付きのカレンダーを登録する
- * https://auto-worker.com/blog/?p=6252
+ * Google Meet付きで予定を登録し、Meet URLを返す
  * 
- * @param  {Object.<number>}　{id:0, title:1}のようなオブジェクトで設定
- * @param  {string}　calId - 登録するアカウントID 大抵の場合はメールアドレス
- * @return {string} 新規登録された予定のイベントID
+ * @param  {Object.<string>} object - 予定、日時、詳細などの情報
+ * @return {string} 
  * 
  */
-function registerEventsWithMeetUrl_(object, calId) {
-
-  if(!calId) calId = Session.getActiveUser().getEmail();
-  console.log(`登録用アカウント：　${calId}`);
-
+function createEventWithMeetUrl_(object) {
   //GoogleカレンダーでMeet会議が設定されるイベント登録パラメータを設定
   const eventParam = {
     conferenceData: {
@@ -277,24 +296,19 @@ function registerEventsWithMeetUrl_(object, calId) {
     },
     summary: object.title,//カレンダータイトル
     description: object.description,
-    start: {
-      dateTime: object.startTime
-    },
-    end: {
-      dateTime: object.endTime
-    },
+    start:     {dateTime: object.startTime},
+    end:       {dateTime: object.endTime},
     attendees: object.attendees,
   };
-
+ 
   //CalendarAPIに対し、Meet会議付き予定を追加
-  const event = Calendar.Events.insert(eventParam, calId, {conferenceDataVersion: 1});
+  const event = Calendar.Events.insert(eventParam, object.calId, {conferenceDataVersion: 1});
   console.log('登録成功');
   console.log(`イベントID：${event.id}`);
-
+ 
   return event.id
-
+ 
 }
-
 
 
 /**

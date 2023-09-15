@@ -357,8 +357,10 @@ function test_setValues(){
  * 
  */
 function test_createEvents(){
+  console.log(CalendarApp.getDefaultCalendar());
+  console.log(CalendarApp.getDefaultCalendar().getId());
   const url = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=1416056032';
-  createEventsFromSheetValues(url);
+  registerEvents(url, 0);
 }
 
 
@@ -422,5 +424,19 @@ function test_getInfoByEventId(){
 /**月次のデータを作成する */
 function test_createMonthlyDataNames(){
   createMonthlyDataNames('2023年', 12, '月');
+}
+
+
+function test_UnshiftGuests() {
+  const guestEmails = ['guest1@example.com', 'guest2@example.com'];
+  const organizers = ['organizer1@example.com', 'organizer2@example.com'];
+
+  console.log('Before unshift:');
+  console.log('Guest Emails:', guestEmails);
+
+  guestEmails.unshift(...organizers);
+
+  console.log('\nAfter unshift:');
+  console.log('Guest Emails:', guestEmails);
 }
 
