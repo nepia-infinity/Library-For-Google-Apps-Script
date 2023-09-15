@@ -7,27 +7,13 @@
  * @return {string} （例）2022/04/06
  */
 function formatDate(date, format){
-
-  console.info(`formatDate()を実行中`);
-  console.info(`02_calenderに記載`);
-
   const formatDate = Utilities.formatDate(date, 'JST', format);
+  const isMatch    = formatDate.match(/[a-zA-Z]/) !== null;
+  const day        = convertDay(date.getDay());
+  
+  // 2022/04/06 (wed) → 2022/04/06 (水)　のように変換
+  return isMatch ? formatDate.replace(/[a-zA-Z]{3}/, `${day}`) : formatDate;
 
-  if(formatDate.match(/[a-zA-Z]/)!== null){
-
-    // 2022/04/06 (wed) → 2022/04/06 (水)　のように変換
-    const day    = convertDay(date.getDay());
-    const marged = formatDate.replace(/[a-zA-Z]{3}/, `${day}`);
-
-    console.log(`変換前の表記：　${formatDate}`);
-    console.log(`変換後の表記：　${marged}`);
-    return marged
-
-  }else{
-    //曜日の指定がない場合
-    console.log(`日付　：　${formatDate}`);
-    return formatDate
-  }
 }
 
 
@@ -36,7 +22,6 @@ function formatDate(date, format){
  * 今日を起点として、対象日までの日付と曜日の2次元配列として返す
  * 
  * @param  {sting} string - '2023/04/29'のように 'yyyy/MM/dd' 形式で指定する
- * @param  {number} offset - .setMonth()　に使用する引数　1ヶ月後なら1と指定
  * @return {Array.<Array.<string>>}
  * 
  */
@@ -82,21 +67,24 @@ function generateDateStringValues(string) {
  * 英語表記の曜日、sat, wedなどを、'日月火水木金土'のいずれかに変換する
  * 
  * @param  {number} tempNumber - date.getDay()
+ * @param  {number} log - 使用頻度が多い関数なので、文字列で 'log'　と指定した時のみログを出力する
  * @return {string} 
  * 
  */
-function convertDay(tempNumber){
-
-  console.info(`convertDay()を実行中`);
-  console.info(`02_calenderに記載`);
+function convertDay(tempNumber, log){
 
   // 文字列を配列化
   const dayOfWeek = '日月火水木金土';
   const daysArray = dayOfWeek.split('');
   const day       = daysArray[tempNumber];
 
-  console.log(daysArray);
-  console.log(`daysArray[${tempNumber}]　${day}曜日`);
+  if(log){
+    console.info(`convertDay()を実行中`);
+    console.info(`02_calenderに記載`);
+
+    console.log(daysArray);
+    console.log(`daysArray[${tempNumber}]　${day}曜日`);
+  }
 
   return day
 
