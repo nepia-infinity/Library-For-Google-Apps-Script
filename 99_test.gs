@@ -406,9 +406,9 @@ function test_getLastName(){
 /**携帯電話を返す関数 */
 function test_getCellPhoneNumber(){
   const string  = '5012345678';
-  const string2 = '8034568125';
-  const string3 = '08034568125';
-  const string4 = 8034568125;
+  const string2 = '8034567793';
+  const string3 = '09012568125';
+  const string4 = 8089565025;
 
   convertCellPhoneNumber(string);
   convertCellPhoneNumber(string2);
