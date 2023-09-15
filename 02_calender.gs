@@ -199,7 +199,7 @@ function registerEvents(sheeturl, rowIndex, calId) {
     const eventId   = registerEventIfNotRegistered_(row, column, calId);
     const targetRow = index + 1;
 
-    console.log(`処理対象行；　${targetRow}`);
+    console.log(`処理対象行:　${targetRow}行目`);
 
     if (eventId) {
       sheet.getRange(targetRow, column.eventId + 1).setValue(eventId);
@@ -223,6 +223,10 @@ function registerEvents(sheeturl, rowIndex, calId) {
  * 
  */
 function registerEventIfNotRegistered_(row, column, calId) {
+
+  console.info(`registerEventIfNotRegistered_()を実行中`);
+  console.info(`02_calenderに記載`);
+
   // イベントID or 登録ステータスが空白の場合のみ登録処理を実行する
   if (row[column.eventId] === '' && row[column.status] === '') {
 
@@ -259,6 +263,10 @@ function registerEventIfNotRegistered_(row, column, calId) {
  * 
  */
 function getHeader_(values, rowIndex){
+
+  console.info(`getHeader_()を実行中`);
+  console.info(`02_calenderに記載`);
+
   const header = values[rowIndex];
   const column = {
     eventId:     header.indexOf('イベントID'),
@@ -284,7 +292,10 @@ function getHeader_(values, rowIndex){
  * 
  */
 function createEventWithMeetUrl_(object) {
-  //GoogleカレンダーでMeet会議が設定されるイベント登録パラメータを設定
+
+  console.info(`createEventWithMeetUrl_()を実行中`);
+  console.info(`02_calenderに記載`);
+  
   const eventParam = {
     conferenceData: {
       createRequest: {
@@ -320,6 +331,10 @@ function createEventWithMeetUrl_(object) {
  */
 
 function generateAttendees_(string){
+
+  console.info(`generateAttendees_()を実行中`);
+  console.info(`02_calenderに記載`);
+
   const newArray = string.split(',').map(email => ({'email': email}));
   console.log(newArray);
   return newArray
@@ -335,47 +350,27 @@ function generateAttendees_(string){
  * @param {string} calId - カレンダーID  省略可。　省略した場合は、自分のアカウントで処理が実施される。
  * 
  */
-function deleteEvents(query, calId){
+function deleteEvents(query, calId) {
+
+  console.info(`deleteEvents()を実行中`);
+  console.info(`02_calenderに記載`);
 
   if(!query) query = showPrompt('削除したい予定名を入力してください', '（例）：テスト');
 
-  const cal       = calId ? CalendarApp.getCalendarById(calId) : CalendarApp.getDefaultCalendar();
-  const startDate = new Date();
-  const endDate   = new Date();
-  endDate.setMonth(endDate.getMonth() + 1);
+  // 削除対象の予定情報を取得し、eventIdArray を作成
+  const events = getEventsByQuery_(query, calId);
 
-  let string = '';
-  let count  = 0;
+  // ダイアログを表示してユーザーに確認を求める
+  const ui = SpreadsheetApp.getUi();
+  const response = ui.alert(
+    `${query}　を含む予定が${events.array.length}件あります。
+    \n削除してもよろしいですか？\n\n
+    ${events.string}`, ui.ButtonSet.YES_NO);
 
-  const eventIdArray = cal.getEvents(startDate, endDate)
-  .filter(event => event.getTitle().includes(query)) // queryを含むイベントのみをフィルタリング
-  .map(event => {
-    const info = {
-      eventId:    event.getId(),
-      targetDate: formatDate(event.getStartTime(), 'yyyy/MM/dd (E) HH:mm'),
-      targetDay:  convertDay(event.getStartTime().getDay())
-    };
-
-    count  += 1;
-    string += `${count}. ${event.getTitle()} ${info.targetDate}\n`;
-    return info.eventId
-  
-  });
-
-  console.log(string);
-  console.log(`該当する予定が${count}件あります。`);
-  console.log(eventIdArray);
-
-  const ui       = SpreadsheetApp.getUi();
-  const response = ui.alert(`${query}　を含む予定が${count}件あります。\n
-    削除してもよろしいですか？\n\n
-    ${string}`, ui.ButtonSet.YES_NO
-  );
-
-  switch (response){
+  switch (response) {
     case ui.Button.YES:
       console.log('“はい” のボタンが押されました。');
-      eventIdArray.map(eventId => CalendarApp.getEventById(eventId).deleteEvent());
+      events.array.forEach(eventId => CalendarApp.getEventById(eventId).deleteEvent());
       ui.alert('予定の削除が完了しました。');
       break;
 
@@ -386,15 +381,56 @@ function deleteEvents(query, calId){
 
     default:
       console.log('処理が中断されました。');
-      return
+      return;
   }
 }
+
+
+/**
+ * eventIdと削除予定のイベントを含んだオブジェクトを返す
+ * 
+ * @param  {string} query - 削除したいカレンダーの予定名
+ * @param  {string} calId - カレンダーID
+ * @return {Object.<Array.<string> | string>}
+ * 
+ */
+function getEventsByQuery_(query, calId){
+
+  console.info(`getEventsByQuery_()を実行中`);
+  console.info(`02_calenderに記載`);
+
+  const cal       = calId ? CalendarApp.getCalendarById(calId) : CalendarApp.getDefaultCalendar();
+  const startDate = new Date();
+  const endDate   = new Date();
+  endDate.setMonth(endDate.getMonth() + 1);
+
+  let string = '';
+
+  // filterメソッドを使用し、undefinedが配列に追加されることを防ぐ
+  const eventIdArray = cal.getEvents(startDate, endDate)
+    .filter(event => event.getTitle().includes(query))
+    .map((event, index) => {
+      string += `${index + 1}. ${event.getTitle()}　　${formatDate(event.getStartTime(), 'yyyy/MM/dd (E) HH:mm')}\n`;
+      return event.getId();
+    });
+
+  const eventsInfo = {
+    array:  eventIdArray,
+    string: string
+  };
+
+  console.log(eventsInfo);
+  return eventsInfo
+  
+}
+
 
 
 
 /**
  * 
  * 予定を編集するスクリプトを起動する画面を表示する
+ * FIXME: ライブラリ経由だとHTMLのformタグの内容が受け取れない 値がnullになる模様
  * 
  */
 function showEditEventsLauncher() {
@@ -407,43 +443,25 @@ function showEditEventsLauncher() {
 
 /**
  * choice.htmlで選択した内容を受け取って、編集内容を分岐させる
- * @param  {Object.<string>} object - 選択肢の内容 
- *
+ * @param  {Object.<string>} object - 選択肢の内容　以下4つ
+ * (例)予定名を編集する, 詳細欄を編集する, 日時を編集する, 出席者を追加する
  * 
  */
-function editEvents(object){
-  const argument = String(Object.values(object));
+function editEvents(object, rowIndex){
+
+  // 引数 'object' の型によって条件分岐して文字列に変換する
+  const argument = typeof object === 'object' ? String(Object.values(object)) : String(object);
+  const calId    = showPrompt('カレンダーIDを入力してください', '空白の場合は自分のカレンダーを処理対象とします');
+  const cal      = calId ? CalendarApp.getCalendarById(calId) : CalendarApp.getDefaultCalendar();
+
   console.log(`argument: ${argument} typeOf ${typeof argument}`);
-
-  const calId = showPrompt('カレンダーIDを入力してください', '空白の場合は自分のカレンダーを処理対象とします');
-  console.log(`カレンダーID：　${calId}`);
-
-  let cal;
-
-  if(calId){
-    cal = CalendarApp.getCalendarById(calId);
-    console.log(`処理対象のアカウント：　${cal.getName()}`);
-
-  }else {
-    cal = CalendarApp.getDefaultCalendar();
-    console.log(`処理対象のアカウント：　${cal.getName()}`);
-
-  }
+  console.log(`カレンダーID：${calId}`);
+  console.log(`処理対象のアカウント：${cal.getName()}`);
   
   //シート上を走査して、編集対象のイベントIDを取得する
   const sheet  = SpreadsheetApp.getActiveSheet();
   const values = sheet.getDataRange().getValues();
-  const header = values[0];
-  const column = {
-    eventId:     header.indexOf('イベントID'),
-    title:       header.indexOf('イベント名'),
-    date:        header.indexOf('イベント予定日'),
-    startTime:   header.indexOf('開始時刻'),
-    endTime:     header.indexOf('終了時刻'),
-    attendees:   header.indexOf('出席者'),
-    description: header.indexOf('イベント詳細'),
-    status:      header.indexOf('登録ステータス')
-  }
+  const column = getHeader_(values, rowIndex);
 
   let count = 0;
 
@@ -475,7 +493,7 @@ function editEvents(object){
           const guests = values[i][column.attendees].split(',');
           console.log(guests);
 
-          guests.map(guest => event.addGuest(guest));
+          guests.forEach(guest => event.addGuest(guest));
           break;
         default:
           console.log('該当しませんでした');
