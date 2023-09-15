@@ -6,8 +6,7 @@
  * @param  {string} query - 検索したいファイル名、省略可
  * @return {Array.<Array.<string>>}
  */
-function getFilesValues(url, query){
-
+function getFilesValues(url, query) {
   console.info('getFilesValues()を実行中');
   console.info('04_driveに記載');
 
@@ -18,33 +17,24 @@ function getFilesValues(url, query){
     const file     = files.next();
     const fileName = file.getName();
 
-    // 2番目の引数が定義されており、ファイル名に検索queryがない場合は処理をスキップ　
-    if(query && !fileName.includes(query)) continue;
+    // 検索クエリが指定されていて、ファイル名にクエリが含まれていない場合はスキップ
+    if (query && !fileName.includes(query)) continue;
 
     const info = {
       fileName:    fileName,
       fileId:      file.getId(),
+      fileUrl:     `https://drive.google.com/file/d/${file.getId()}/view`,
       lastUpdated: formatDate(file.getLastUpdated(), 'yyyy/MM/dd')
     }
 
-    // URLを追加する
-    info['fileUrl'] = `https://drive.google.com/file/d/${info.fileId}/view`;
-
-    // 引数に検索queryの指定がある場合
-    if(query && fileName.includes(query)){
-      console.log(`検索query：${query} に該当しました`);
-      console.log(info);
-      newValues.push([info.fileName, info.fileId, info.fileUrl, info.lastUpdated]);
-
-    }else if(!query){
-      console.log(info);
-      newValues.push([info.fileName, info.fileId, info.fileUrl, info.lastUpdated]);
-
-    }
+    console.log(info);
+    newValues.push(Object.values(info));
   }
+
   console.log(newValues);
-  return newValues
+  return newValues;
 }
+
 
 
 
@@ -52,12 +42,15 @@ function getFilesValues(url, query){
  * GoogleドライブのURLからフォルダIDを抽出する
  * 
  * @param  {string} url - GoogleドライブのフォルダのURL
+ * @param  {string} log - 省略可。定義されている場合のみ、実行中の関数名を表記する
  * @return {string}
  */
-function getFolderId(url){
+function getFolderId(url, log){
 
-  console.info('getFolderId()を実行中');
-  console.info('04_driveに記載');
+  if(log){
+    console.info('getFolderId()を実行中');
+    console.info('04_driveに記載');
+  }
 
   let folderId;
   const reg = /.*\//;
