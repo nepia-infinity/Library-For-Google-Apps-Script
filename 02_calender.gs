@@ -339,7 +339,7 @@ function deleteEvents(query, calId){
 
   if(!query) query = showPrompt('削除したい予定名を入力してください', '（例）：テスト');
 
-  const cal       = calId ? CalendarApp.getCalendarById(calId) : CalendarApp.getDefaultCalendar().getId();
+  const cal       = calId ? CalendarApp.getCalendarById(calId) : CalendarApp.getDefaultCalendar();
   const startDate = new Date();
   const endDate   = new Date();
   endDate.setMonth(endDate.getMonth() + 1);
@@ -347,25 +347,24 @@ function deleteEvents(query, calId){
   let string = '';
   let count  = 0;
 
-  const eventIdArray = cal.getEvents(startDate, endDate).map(event => {
+  const eventIdArray = cal.getEvents(startDate, endDate)
+  .filter(event => event.getTitle().includes(query)) // queryを含むイベントのみをフィルタリング
+  .map(event => {
     const info = {
       eventId:    event.getId(),
-      title  :    event.getTitle(),
-      targetDate: formatDate(event.getStartTime(), 'yyyy/MM/dd HH:mm'),
+      targetDate: formatDate(event.getStartTime(), 'yyyy/MM/dd (E) HH:mm'),
       targetDay:  convertDay(event.getStartTime().getDay())
-    }
-
-    // queryを含んでいなかったら処理をスキップ
-    if(!info.title.includes(query)) return;
+    };
 
     count  += 1;
-    string += `${count}. ${info.title} (${info.targetDay}) ${info.targetDate}\n`;
+    string += `${count}. ${event.getTitle()} ${info.targetDate}\n`;
     return info.eventId
   
   });
 
   console.log(string);
   console.log(`該当する予定が${count}件あります。`);
+  console.log(eventIdArray);
 
   const ui       = SpreadsheetApp.getUi();
   const response = ui.alert(`${query}　を含む予定が${count}件あります。\n
