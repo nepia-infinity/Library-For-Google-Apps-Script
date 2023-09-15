@@ -61,6 +61,7 @@ function getFolderId(url, log){
     .replace(reg, '')
     .replace(/.hl=.*/, '');
 
+    console.log(`folderUrl: ${url}`);
     console.log(`folderId: ${folderId}`);
   }
 
@@ -107,15 +108,17 @@ function transferOwnership(url, accountId){
  * Googleドライブの特定フォルダ内のファイルを取得する
  * 
  * @param  {string} url - GoogleドライブのフォルダのURL
+ * @param  {string} log - 省略可　引数が定義されている場合のみ実行中の関数名を表示する
  * @return {Object.<Object.<string>>}
  */
-function getDriveFiles(url){
+function getDriveFiles(url, log){
 
+  if(log){
+    console.info('getDriveFiles()を実行中');
+    console.info('04_driveに記載');
+  }
+  
   const folderId = getFolderId(url);
-
-  console.info('getDriveFiles()を実行中');
-  console.info('04_driveに記載');
-
   const folder   = DriveApp.getFolderById(folderId);
   const files    = folder.getFiles();
 
@@ -226,10 +229,11 @@ function createFolders(url, newFolderNameList, innerFolderNameList) {
  * @param  {string} sheetUrl - シートのURL
  * @param  {string} stringRange - 'A2:D30' などPDFの生成範囲
  * @param  {string} folderUrl - Google DriveのフォルダURL
+ * @param  {boolean} isGridLines - グリッドラインの表示有無　true or falseで指定
  * @return {Object.<string>}
  * 
  */
-function convertSheetToPdf(sheetUrl, stringRange, folderUrl) {
+function convertSheetToPdf(sheetUrl, stringRange, folderUrl, isGridLines) {
 
   console.info('convertSheetToPdf()を実行中');
   console.info('04_driveに記載');
@@ -246,37 +250,34 @@ function convertSheetToPdf(sheetUrl, stringRange, folderUrl) {
 
   // 印刷情報、サイズや紙の向きや範囲などの情報を付与する
   const exportOptions = {
-    format:       'pdf',               // ファイル形式の指定 pdf / csv / xls / xlsx
-    size:         'A4',                // 用紙サイズの指定 legal / letter / A4
-    portrait:     'true',              // true → 縦向き、false → 横向き
-    fitw:         'true',              // 幅を用紙に合わせるか
-    sheetnames:   'false',             // シート名を PDF 上部に表示するか
-    printtitle:   'false',             // スプレッドシート名を PDF 上部に表示するか
-    pagenumbers:  'false',             // ページ番号の有無
-    gridlines:    'false',             // グリッドラインの表示有無
-    fzr:          'false',             // 固定行の表示有無
+    format:       'pdf',          // ファイル形式の指定 pdf / csv / xls / xlsx
+    size:         'A4',           // 用紙サイズの指定 legal / letter / A4
+    portrait:     'true',         // true → 縦向き、false → 横向き
+    fitw:         'true',         // 幅を用紙に合わせるか
+    sheetnames:   'false',        // シート名を PDF 上部に表示するか
+    printtitle:   'false',        // スプレッドシート名を PDF 上部に表示するか
+    pagenumbers:  'false',        // ページ番号の有無
+    gridlines:    isGridLines,    // グリッドラインの表示有無
+    fzr:          'false',        // 固定行の表示有無
     range:        info.printArea, // 対象範囲「%3A」 = : (コロン)  
     gid:          info.sheetId    // シート ID を指定 (省略する場合、すべてのシートをダウンロード)
   };
 
   console.log(exportOptions);
  
-  const array = [];
-  for(const [key, value] of Object.entries(exportOptions)) {
-    array.push(`${key}=${value}`);
-  }
-  console.log(array);
+  const queryString = Object.entries(exportOptions)
+  .map(([key, value]) => `${key}=${value}`)
+  .join('&');
 
-  const fileUrl = 'https://docs.google.com/spreadsheets/d/'+ info.spreadsheetId +'/export?';
-  const options = array.join('&');
-  console.log(options);
-
+  const fileUrl  = `https://docs.google.com/spreadsheets/d/${info.spreadsheetId}/export?${queryString}`;
   const token    = ScriptApp.getOAuthToken();
-  const response = UrlFetchApp.fetch(fileUrl + options, {
+  const response = UrlFetchApp.fetch(fileUrl, {
     headers: {
     'Authorization': 'Bearer ' +  token
     }
   });
+
+  console.log(fileUrl);
 
   const today    = formatDate(new Date(), 'yyyy_MMdd_HH:mm');
   const fileName = `${sheet.getName()}_${today}`;

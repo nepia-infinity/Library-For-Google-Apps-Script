@@ -486,3 +486,10 @@ function test_generateNumbersArray(){
   // console.log(newValues);
 }
 
+
+function test_convertSheetToPdf(){
+  const sheetUrl  = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=0';
+  const folderUrl = 'https://drive.google.com/drive/folders/1So21XbYuC5YHmSVmilOcfManpGRALMpO';
+  convertSheetToPdf(sheetUrl, 'A1:D69', folderUrl, true);
+}
+
