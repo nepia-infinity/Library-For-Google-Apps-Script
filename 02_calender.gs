@@ -36,39 +36,45 @@ function formatDate(date, format){
  * 今日を起点として、対象日までの日付と曜日の2次元配列として返す
  * 
  * @param  {sting} string - '2023/04/29'のように 'yyyy/MM/dd' 形式で指定する
+ * @param  {number} offset - .setMonth()　に使用する引数　1ヶ月後なら1と指定
  * @return {Array.<Array.<string>>}
  * 
  */
 function generateDateStringValues(string) {
-
   console.info(`generateDateStringValues()を実行中`);
   console.info(`02_calenderに記載`);
 
   const targetDate = new Date(string);
   const today      = new Date();
 
-  let day,stringDate;
-  let newValues = [];
+  const isPast   = targetDate < today;
+  const isFuture = today < targetDate;
 
-  if(targetDate < today){
-    // targetDateが、今日の日付より過去の場合
-    for(let d = targetDate; d < today; d.setDate(d.getDate()+1)) {
-      day        = convertDay(d.getDay());
-      stringDate = formatDate(d, 'yyyy/MM/dd');
-      newValues.push([stringDate, day]);
+  if (isPast || isFuture) {
+    
+    const startDate = isPast ? targetDate : today;
+    const endDate   = isPast ? today : targetDate;
 
-    }//for
-  }else if(today < targetDate){
-    // targetDateが、今日の日付より未来の場合
-    for(let d = today; d < targetDate; d.setDate(d.getDate()+1)){
-      day        = convertDay(d.getDay());
-      stringDate = formatDate(d, 'yyyy/MM/dd');
-      newValues.push([stringDate, day]);
-    }
+    console.warn(`startDate: ${formatDate(startDate, 'yyyy/MM/dd')}, endDate: ${formatDate(endDate, 'yyyy/MM/dd')}`);
+
+    const dayCount  = Math.floor((endDate - startDate) / (24 * 60 * 60 * 1000));
+    const newValues = Array.from({ length: dayCount + 1 }, (_, i) => {
+      const currentDate = new Date(startDate);
+      currentDate.setDate(currentDate.getDate() + i);
+      return formatDate(currentDate, 'yyyy/MM/dd E').split(' ');
+    });
+
+    console.log(newValues);
+    return newValues;
+
+  }else{
+    // 過去でも未来でもない場合、空の配列を返す
+    return [];
   }
-  console.log(newValues);
-  return newValues
-}//end
+}
+
+
+
 
 
 
@@ -113,14 +119,16 @@ function getCalAllEvents(string, offset, calId) {
   console.info(`convertDay()を実行中`);
   console.info(`02_calenderに記載`);
 
-  const cal = calId ? CalendarApp.getCalendarById(calId) : CalendarApp.getDefaultCalendar();
+  const cal   = calId ? CalendarApp.getCalendarById(calId) : CalendarApp.getDefaultCalendar();
+  const query = showPrompt('検索したい予定名を入力してください', '（例） 定例会議');
         
   const startTime = new Date(string);
   const endTime   = new Date();
   endTime.setMonth(endTime.getMonth() + offset);
 
-  //指定のカレンダーから予定を取得
-  const events = cal.getEvents(startTime, endTime).map(event => ({
+  const events = cal.getEvents(startTime, endTime)
+  .filter(event => event.getTitle().includes(query))
+  .map(event => ({
     title:       event.getTitle(),
     date:        formatDate(event.getStartTime(), 'yyyy/MM/dd'),
     day:         convertDay(event.getStartTime().getDay()),
@@ -135,8 +143,10 @@ function getCalAllEvents(string, offset, calId) {
   const keys   = Object.keys(events[0]);
   const values = events.map(event => keys.map(key => event[key]));
 
-  console.log(`オブジェクトを2次元配列に変換`);
+  console.warn(`オブジェクトを2次元配列に変換`);
   console.log(values);
+  console.log(`該当する予定： ${values.length}件`);
+
   return values
 
 }
@@ -160,8 +170,8 @@ function guestList_(guests, creators) {
   
   if (creators) {
     // 主催者を既存の配列の先頭に追加
-    const organizers = creators.map(creator => creator[0]);
-    guestEmails.unshift(...organizers);
+    const creator = creators[0];
+    guestEmails.unshift(creator);
   }
 
   // 配列を文字列化する
@@ -426,7 +436,6 @@ function getEventsByQuery_(query, calId){
 
 
 
-
 /**
  * 
  * 予定を編集するスクリプトを起動する画面を表示する
@@ -439,6 +448,7 @@ function showEditEventsLauncher() {
   //choice.htmlでGoogle.script.runが動くはず
   //返り値などは必要ない
 }
+
 
 
 /**

@@ -227,7 +227,7 @@ function test_createTextFinder(){
  * 
  */
 function test_getCalAllEvents(){
-  getCalAllEvents('2023/05/01', 1);
+  getCalAllEvents('2023/09/10', 1);
 }
 
 
@@ -448,6 +448,16 @@ function test_editEvents(){
 }
 
 
+/**予定の作成者を取得する */
+function test_getCreator(){
+  // https://developers.google.com/apps-script/reference/calendar/calendar-event-series?hl=ja#getcreators
+  const event = CalendarApp.getEventById('ektieo6tv8g0cmrjauea4ni3k8');
+  console.log(event.getCreators());
+  console.log(event.getCreators()[0], typeof event.getCreators()[0]);
+}
 
 
+function test_generateStringDate(){
+  generateDateStringValues('2023/08/10');
+}
 
