@@ -98,11 +98,14 @@ function convertCellPhoneNumber(original, log) {
   return cellPhoneNumber
 }
 
+
+
 /**
  * 携帯電話番号の文字列を作成する
  * 
  * @param  {string} string - 携帯電話の文字列を生成する
  * @param  {number} quantity - 文字をスライスする量
+ * @param  {number} log - 実行中の関数名を表示する
  * @return {string}
  * 
  */
@@ -121,8 +124,7 @@ function sliceStringNumber_(string, quantity, log) {
 
   console.log(parts);
 
-  const cellPhoneNumber = parts.join('-');
-  return cellPhoneNumber;
+  return parts.join('-');
 }
 
 
