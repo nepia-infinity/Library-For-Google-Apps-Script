@@ -157,7 +157,7 @@ NONE: なし
  * FIXME: 一度編集権限を付与してしまうとアクセス権を剥奪しないと閲覧オンリーなどに切り替えることが出来ない
  * 
  * @param  {string} url - GoogleドライブのフォルダのURL
- * @param  {string} users - GoogleドライブのフォルダのURL
+ * @param  {string} users - 権限を付与したいユーザーを格納した配列
  * @param  {string} role - 編集権限
  * 
  */
@@ -170,17 +170,8 @@ function authorizeEditing(url, users, role){
   const folder   = DriveApp.getFolderById(folderId);
   const reg      = / gmail.* | icloud.* /;
 
-  let permission;
-
-  if(role === '編集'){
-    //型が文字列ではない事に注意が必要
-    permission = DriveApp.Permission.EDIT;
-
-  }else{
-    role = '閲覧権限';
-    permission = DriveApp.Permission.VIEW;
-
-  }
+  role = role === '編集' ? '編集' : '閲覧';
+  permission = role === '編集' ? DriveApp.Permission.EDIT : DriveApp.Permission.VIEW;
 
   for(const user of users){
 

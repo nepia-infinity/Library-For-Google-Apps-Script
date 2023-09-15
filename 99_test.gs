@@ -405,8 +405,15 @@ function test_getLastName(){
 
 /**携帯電話を返す関数 */
 function test_getCellPhoneNumber(){
-  const string = '5012345678';
-  getCellPhoneNumber(string);
+  const string  = '5012345678';
+  const string2 = '8034568125';
+  const string3 = '08034568125';
+  const string4 = 8034568125;
+
+  convertCellPhoneNumber(string);
+  convertCellPhoneNumber(string2);
+  convertCellPhoneNumber(string3);
+  convertCellPhoneNumber(string4);
 }
 
 
@@ -457,8 +464,25 @@ function test_getCreator(){
   console.log(event.getCreators()[0], typeof event.getCreators()[0]);
 }
 
-
+/**日付の配列を作成する */
 function test_generateStringDate(){
   generateDateStringValues('2023/08/10');
+}
+
+
+function test_authorizeEditing(){
+  authorizeEditing('https://drive.google.com/drive/folders/1LhjJ6cfyp_PSujoMiGSkUnqIAmlC2rux', ['********@icloud.com'], '編集');
+}
+
+
+// 1, 5
+function test_generateNumbersArray(){
+  generateNumbers(1, 1000);
+  // const newValues = Array.from({ length: 100}, (_, index) => {
+  //   const temp = 1 + index;
+  //   console.log(temp);
+  //   return temp
+  // });
+  // console.log(newValues);
 }
 

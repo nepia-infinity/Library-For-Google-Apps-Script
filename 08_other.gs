@@ -9,15 +9,12 @@
  */
 function generateNumbers(start, end) {
 
+  const array = Array.from({ length: end}, (_, index) => start + index);
   console.info('generateNumbers()を実行中');
   console.info('08_otherに記載');
+  console.log(array);
 
-  let newArray = [];
-  for(let i = start; i <= end; i++){
-    newArray.push(i);
-  }
-  console.log(newArray);
-  return newArray
+  return array
 }
 
 
@@ -75,31 +72,29 @@ function findLargestNumber(array){
 /**
  * ハイフンなしの携帯電話番号を、ハイフンありで返す関数
  * 
- * @param  {string} string - 携帯電話の文字列 '09012345678'
- * @return {string} string - ハイフンありの携帯電話　 '090-1234-5678'
+ * @param  {string | number} original - 携帯電話の文字列 '09012345678'
+ * @param  {string} log - 省略可 - 実行中の関数名を表示する
+ * @return {string} ハイフンありの携帯電話 '090-1234-5678'
  * 
  */
-function getCellPhoneNumber(string){
+function convertCellPhoneNumber(original, log) {
 
-  console.info(`getCellPhoneNumber()を実行中`);
-  console.info('08_otherに記載');
-  console.log(`成形前：${string}`);
-
-  let cellPhoneNumber;
-
-  if(string.match(/[0-9].*/)!== null && string.match(/0.0/) !== null){
-
-    //ゼロ落ちがない場合
-    cellPhoneNumber = generateCellPhoneNumber_(string, 3);
-    
-  }else if(string[0] !== 0){
-
-    console.warn(`ゼロ落ちしている可能性があります。`);
-    cellPhoneNumber = `0${generateCellPhoneNumber_(string, 2)}`;
-
+  if(log){
+    console.info(`getCellPhoneNumber()を実行中`);
+    console.info('08_otherに記載');
   }
 
-  console.log(`成形後：${cellPhoneNumber}`);
+  // 数値型だったら文字列化し、文字列だったら引数をそのまま使用する
+  const originalString = typeof original === 'number' ? String(original) : original;
+  let cellPhoneNumber;
+
+  if (originalString.length < 11) {
+    cellPhoneNumber = `0${sliceStringNumber_(originalString, 2)}`;
+  } else {
+    cellPhoneNumber = sliceStringNumber_(originalString, 3);
+  }
+
+  console.warn(`成形後：${cellPhoneNumber}`);
   return cellPhoneNumber
 }
 
@@ -107,26 +102,31 @@ function getCellPhoneNumber(string){
  * 携帯電話番号の文字列を作成する
  * 
  * @param  {string} string - 携帯電話の文字列を生成する
- * @param  {quantity} quantity - 文字をスライスする量
+ * @param  {number} quantity - 文字をスライスする量
  * @return {string}
  * 
  */
-function generateCellPhoneNumber_(string, quantity){
+function sliceStringNumber_(string, quantity, log) {
+  if(log){
+    console.info(`generateCellPhoneNumber_()を実行中`);
+    console.info('08_otherに記載');
+  }
+  
+  console.log(`成形前：${string}, string.length: ${string.length}`);
 
-  console.info(`generateCellPhoneNumber_()を実行中`);
-  console.info('08_otherに記載');
+  const parts = [];
+  parts.push(string.slice(0, quantity)); // 最初の quantity 桁
+  parts.push(string.slice(quantity, quantity + 4)); // 次の 4 桁
+  parts.push(string.slice(quantity + 4)); // 残りの部分
 
-  const first  = string.slice(0, quantity);
-  const second = string.replace(first, '').slice(0, 4);
+  console.log(parts);
 
-  //1番最後の4桁のみを残す
-  const third  = string
-  .replace(first, '')
-  .replace(second, '');
-
-  const cellPhoneNumber = `${first}-${second}-${third}`;
-  return cellPhoneNumber
+  const cellPhoneNumber = parts.join('-');
+  return cellPhoneNumber;
 }
+
+
+
 
 /**
  * 半角英数字の置換用2次元配列を作成する

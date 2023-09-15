@@ -49,7 +49,7 @@ function getSpeakerNotes(url){
   const slides = presentation.getSlides();
   let array    = [];
   
-  slides.map((slide, index) => {
+  slides.forEach((slide, index) => {
     const count = index + 1;
     array.push([count, slide.getNotesPage().getSpeakerNotesShape().getText().asString()]);
   });
@@ -96,12 +96,11 @@ function convertSlidesToJpg(folderUrl) {
   
   let count = 0;
 
-  slides.map(slide => {
+  slides.forEach(slide => {
     count += 1;
     const slideNumber = ('0' + count).slice(-2);
-
-    createJpgFile_(folder, presentation, slide.getObjectId(), slideNumber)
-  })
+    createJpgFile_(folder, presentation, slide.getObjectId(), slideNumber);
+  });
   ui.alert(`${count}件のスライドをjpgに変換しました`);
 }
 
