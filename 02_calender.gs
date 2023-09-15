@@ -10,7 +10,7 @@ function formatDate(date, format){
   const formatDate = Utilities.formatDate(date, 'JST', format);
   const isMatch    = formatDate.match(/[a-zA-Z]/) !== null;
   const day        = convertDay(date.getDay());
-  
+
   // 2022/04/06 (wed) → 2022/04/06 (水)　のように変換
   return isMatch ? formatDate.replace(/[a-zA-Z]{3}/, `${day}`) : formatDate;
 
@@ -61,8 +61,6 @@ function generateDateStringValues(string) {
 
 
 
-
-
 /**
  * 英語表記の曜日、sat, wedなどを、'日月火水木金土'のいずれかに変換する
  * 
@@ -79,9 +77,6 @@ function convertDay(tempNumber, log){
   const day       = daysArray[tempNumber];
 
   if(log){
-    console.info(`convertDay()を実行中`);
-    console.info(`02_calenderに記載`);
-
     console.log(daysArray);
     console.log(`daysArray[${tempNumber}]　${day}曜日`);
   }
@@ -209,7 +204,6 @@ function registerEvents(sheeturl, rowIndex, calId) {
   SpreadsheetApp.getUi().alert(`${count}件の予定を登録しました`);
   
 }
-
 
 
 

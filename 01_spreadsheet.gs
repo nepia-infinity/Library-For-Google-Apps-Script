@@ -86,7 +86,6 @@ function getRange(sheet, info){
 
   console.info(`getRange()を実行中`);
   console.info(`01_spreadsheetに記載`);
-  console.log(info);
 
   if(info && typeof info !== 'string'){
     // infoがオブジェクトだった場合

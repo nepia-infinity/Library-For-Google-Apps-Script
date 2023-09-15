@@ -29,81 +29,75 @@ function extractText(text, reg, ...params){
   }else{
     console.log(`matchの結果：${text.match(reg)}`);
     console.warn(text);
-    return ''
+    return text
   }
 }
 
 
 
-
 /**
- * 
- * スペースの前の苗字を返す。'久保 翼'だとしたら、久保を返す
- * @param  {string} string - 氏名
+ * 氏名からスペースの前の苗字を取得します。
+ * @param  {string} fullName - 氏名
  * @return {string} 苗字
- * 
  */
-function getLastName(string){
-  let lastName;
-  const result = string.match(/.*\s/);
-
-  console.log(`getLastName()を実行中`);
-  console.info('03_stringに記載');
-  
-  console.log(result);
-  console.log(`氏名:　${string}`);
-
-  if(result !== null){
-    //苗字と名前の前後に空白が含まれていた場合
-    lastName = result[0].replace(/\s/, '');
-
-  }else if(3 <= string.length ){
-    console.warn(`3文字以上の文字列です。苗字リストを検索して該当したら3文字の苗字を返します。`);
-    lastName = getThreeCharLastName_(string);
-
-  }else{
-    lastName = string;
-    
+function getLastName(fullName, log) {
+  if(log){
+    console.info(`getLastName()を実行中`);
+    console.info('03_stringに記載');
   }
-  console.log(`苗字：　${lastName}`);
-  return lastName;
+  
+  const spaceIndex = fullName.indexOf(' ');
+
+  if (spaceIndex !== -1) {
+    // 苗字と名前の前後に空白が含まれていた場合
+    const lastName = fullName.slice(0, spaceIndex);
+    console.log(`氏名: ${fullName}, 苗字: ${lastName}`);
+    return lastName;
+
+  } else if (fullName.length >= 3) {
+
+    const threeCharLastName = getThreeCharLastName(fullName);
+    console.log(`氏名: ${fullName}, 苗字: ${threeCharLastName}`);
+    return threeCharLastName;
+
+  } else {
+    console.log(`氏名: ${fullName}, 苗字: ${fullName}\n`);
+    return fullName;
+
+  }
 }
 
-
 /**
- * 3文字の苗字の場合の処理
- * 
- * @param  {string} string - 氏名
- * @param  {string} lastName - 苗字
- * 
+ * 3文字の苗字を取得します。
+ * @param  {string} fullName - 氏名
+ * @return {string} 3文字の苗字
  */
-function getThreeCharLastName_(string){
+function getThreeCharLastName(fullName) {
   const sheet  = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('苗字3文字リスト');
   const values = sheet.getDataRange().getValues();
 
   const lastNameArray = values.map(record => record[0]).filter(value => value);
-  const temp          = string.slice(0, 3);
-  const result        = lastNameArray.indexOf(temp);
-  console.log(`indexOfの結果：　${result}`);
+  const temp   = fullName.slice(0, 3);
+  const result = lastNameArray.indexOf(temp);
 
-  let lastName;
+  if (result !== -1) {
+    const lastName = lastNameArray[result];
+    const row      = result + 1;
+    const range    = getRange(sheet, `B${row}`);
 
-  if(result !== -1){
-    lastName    = lastNameArray[result];
-    const row   = result + 1; 
-    const range = getRange(sheet, `B${row}`);
-
-    //検索でヒットした回数を更新する
+    // 検索でヒットした回数を更新する
     const previous = range.getValue();
-    const current  = previous + 1;
+    const current = previous + 1;
     range.setValue(current);
-    
-  } else{
-    lastName = string.slice(0, 2);
-    
+
+    return lastName;
+
+  }else{
+    const lastName = fullName.slice(0, 2);
+    return lastName;
   }
-  return lastName
 }
+
 
 
 

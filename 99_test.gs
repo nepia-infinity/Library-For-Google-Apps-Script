@@ -91,7 +91,7 @@ function test_replaceHeaderValues(){
   const url    = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=618215393';
   const sheet  = SpreadsheetApp.openByUrl(url).getSheetByName('test');
   const values = sheet.getDataRange().getValues();
-  const column = {id: 'ID', name: '名前', branch: '部署'};
+  const column = {id: 'ID', name: '名前', branch: '部署', address: '住所'};
   replaceHeaderValues(values, 0, column);
 
 }
@@ -397,6 +397,7 @@ function test_getLastName(){
   getLastName('野比　のび太');
   getLastName('坂田銀時'); //OK
   getLastName('西園寺姫奈'); //OK
+  getLastName('長久木勇二'); //OK
   getLastName('長谷川泰三（マダオ）'); //OK
   getLastName('嵯峨野芳輝'); //OK
 }
