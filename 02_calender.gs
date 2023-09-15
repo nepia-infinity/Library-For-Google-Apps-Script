@@ -337,40 +337,38 @@ function generateAttendees_(string){
  */
 function deleteEvents(query, calId){
 
-  if(!calId) calId = Session.getActiveUser().getEmail();
-  console.log(`登録用アカウント：　${calId}`);
-
   if(!query) query = showPrompt('削除したい予定名を入力してください', '（例）：テスト');
 
-  const cal       = CalendarApp.getCalendarById(calId);
+  const cal       = calId ? CalendarApp.getCalendarById(calId) : CalendarApp.getDefaultCalendar().getId();
   const startDate = new Date();
   const endDate   = new Date();
   endDate.setMonth(endDate.getMonth() + 1);
 
-  let string       = '';
-  let count        = 0;
-  let eventIdArray = [];
+  let string = '';
+  let count  = 0;
 
-  cal.getEvents(startDate, endDate).map(event => {
+  const eventIdArray = cal.getEvents(startDate, endDate).map(event => {
     const info = {
       eventId:    event.getId(),
       title  :    event.getTitle(),
       targetDate: formatDate(event.getStartTime(), 'yyyy/MM/dd HH:mm'),
-      targetDay: convertDay(event.getStartTime().getDay())
+      targetDay:  convertDay(event.getStartTime().getDay())
     }
 
     // queryを含んでいなかったら処理をスキップ
     if(!info.title.includes(query)) return;
+
     count  += 1;
-    string += `${count}. ${info.title} (${info.targetDay}) ${info.targetDate}\n`; 
-    eventIdArray.push(info.eventId);
+    string += `${count}. ${info.title} (${info.targetDay}) ${info.targetDate}\n`;
+    return info.eventId
+  
   });
 
   console.log(string);
   console.log(`該当する予定が${count}件あります。`);
 
   const ui       = SpreadsheetApp.getUi();
-  const response = ui.alert(`該当する予定が${count}件あります。\n
+  const response = ui.alert(`${query}　を含む予定が${count}件あります。\n
     削除してもよろしいですか？\n\n
     ${string}`, ui.ButtonSet.YES_NO
   );
