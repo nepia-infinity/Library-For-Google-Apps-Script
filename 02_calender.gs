@@ -469,8 +469,7 @@ function editEvents(object, rowIndex){
     if(values[i][column.status] === '編集対象'){
 
       const event = cal.getEventById(values[i][column.eventId]);
-      console.log(`予定名：${event.getTitle()}`);
-
+      
       switch(argument){
         case '予定名を編集する':
           event.setTitle(values[i][column.title]);
@@ -500,7 +499,7 @@ function editEvents(object, rowIndex){
       }
 
       const row = i + 1;
-      console.log(`処理対象行：　${row}`);
+      console.log(`${row}　行目  予定名：${event.getTitle()}`);
 
       sheet.getRange(row, column.status + 1).setValue('編集済');
       count += 1;
@@ -520,18 +519,11 @@ function editEvents(object, rowIndex){
  * 
  */
 function getInfoByEventId(eventId, calId){
-  let cal;
-  if(calId){
-    cal = CalendarApp.getCalendarById(calId);
-
-  }else{
-    cal = CalendarApp.getDefaultCalendar();
-
-  }
 
   console.info(`getInfoByEventId()を実行中`);
   console.info(`02_calenderに記載`);
 
+  const cal   = calId ? CalendarApp.getCalendarById(calId) : CalendarApp.getDefaultCalendar();
   const event = cal.getEventById(eventId);
   const info  = {
     eventTitle:  event.getTitle(),

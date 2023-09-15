@@ -426,7 +426,7 @@ function test_createMonthlyDataNames(){
   createMonthlyDataNames('2023年', 12, '月');
 }
 
-
+/**既存の配列に他の配列の要素を追加する */
 function test_UnshiftGuests() {
   const guestEmails = ['guest1@example.com', 'guest2@example.com'];
   const organizers = ['organizer1@example.com', 'organizer2@example.com'];
@@ -439,4 +439,15 @@ function test_UnshiftGuests() {
   console.log('\nAfter unshift:');
   console.log('Guest Emails:', guestEmails);
 }
+
+
+/**予定を編集する */
+function test_editEvents(){
+  // editEvents('日時を編集する', 0);
+  editEvents('詳細欄を編集する', 0);
+}
+
+
+
+
 
