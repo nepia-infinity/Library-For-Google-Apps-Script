@@ -256,20 +256,21 @@ function replaceHeaderValues(values, rowIndex, targetColumn) {
  * FIXME: 見出し行の項目が全て英語ではないと使えない
  * 
  * @param  {Array.<Array.<string|number>>} values - 2次元配列
+ * @param  {number} rowIndex - ヘッダー行の位置を指定
  * @return {Object.<number>} 
  */
-function generateHeaderIndex(values){
+function generateHeaderIndex(values, rowIndex){
   
   console.log(`generateHeaderIndex_()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
-  const header = values.shift();//1次元配列
-  const object = new Map();
+  const header = values[rowIndex];
+  const object = Object.fromEntries(
+    header.map((value, index) => [value, index])
+  );
 
-  header.map((value, index) => object[value] = index);
   console.log(object);
-
-  return object
+  return object;
 }
 
 

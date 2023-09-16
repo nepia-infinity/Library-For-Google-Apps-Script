@@ -103,7 +103,7 @@ function test_generateHeaderIndex(){
   const url    = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=0';
   const sheet  = SpreadsheetApp.openByUrl(url).getSheetByName('ScriptDetail');
   const values = sheet.getDataRange().getValues();
-  generateHeaderIndex(values);
+  generateHeaderIndex(values, 0);
 
 }
 
