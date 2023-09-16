@@ -199,15 +199,15 @@ function getHeaderRow(values, query){
   console.info(`getHeaderRow()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
-  let row = 1;
+  const index = values.findIndex(row => row.includes(query));
 
-  for(let i = 0; i < values.length; i++){
-    if(values[i].indexOf(query) !== -1){
-      row += i;
-      console.log(`ヘッダー行：　${row}`);
-      return row
-    }
-  }//for
+  if (index !== -1) {
+    const row = index + 1;
+    console.log(`ヘッダー行：　${row}`);
+    return row;
+  }
+
+  return 1; // 一致する行が見つからない場合、デフォルトで1行目を返す
 }
 
 
@@ -215,6 +215,7 @@ function getHeaderRow(values, query){
 /**
  * 2次元配列から見出し行の位置を連想配列として取得する
  * FIXME: 見出しの名前が変更になった時の対応が難しい
+ * 類似する関数として、generateHeaderIndexがある
  * 
  * @param  {Array.<Array.<string|number>>} values - 2次元配列
  * @param  {number} rowIndex - 見出し行の位置をindexで指定　1行目の場合は0を指定

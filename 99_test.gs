@@ -164,11 +164,11 @@ function test_getFilteredValues(){
 function test_reduceObjectKeys() {
 
   const values = [
-    {id: 0, name: 'nobita', address: 'chiba', mail: 'sample@docom.jp', hoby: 'guitar'},
+    {id: 0, name: 'nobita', address: 'chiba', mail: 'sample@docom.jp', hobby: 'guitar'},
     {id: 1, name: 'shizuka', address: 'tokyo', mail: 'sample@softbank.jp', hobby: 'piano'},
   ];
 
-  reduceObjectKeys(values, 'name', 'address');
+  reduceObjectKeys(values, 'name', 'hobby');
   
 }
 
@@ -471,24 +471,19 @@ function test_generateStringDate(){
   generateDateStringValues('2023/08/10');
 }
 
-
+/**編集権限を付与する */
 function test_authorizeEditing(){
   authorizeEditing('https://drive.google.com/drive/folders/1LhjJ6cfyp_PSujoMiGSkUnqIAmlC2rux', ['********@icloud.com'], '編集');
 }
 
 
-// 1, 5
+/**1から1000までの整数を生成 */
 function test_generateNumbersArray(){
   generateNumbers(1, 1000);
-  // const newValues = Array.from({ length: 100}, (_, index) => {
-  //   const temp = 1 + index;
-  //   console.log(temp);
-  //   return temp
-  // });
-  // console.log(newValues);
 }
 
 
+/**シートからPDFを作成 */
 function test_convertSheetToPdf(){
   const sheetUrl  = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=0';
   const folderUrl = 'https://drive.google.com/drive/folders/1So21XbYuC5YHmSVmilOcfManpGRALMpO';
@@ -496,7 +491,7 @@ function test_convertSheetToPdf(){
 }
 
 
-
+/**２次元配列を文字列化する */
 function test_convertText(){
   const values = [
     ['John', 'Doe'],
@@ -509,11 +504,16 @@ function test_convertText(){
   console.log(`型：${typeof string}`);
 }
 
+
+
 /**連番付与とファイル名のリネームが出来るスクリプト*/
 function test_renameAllFiles(){
   const folderUrl = 'https://drive.google.com/drive/folders/1z365po-hxBmUNg7MJXD1LEWBYSvqsi9y';
   renameAllFiles(folderUrl);
 }
+
+
+
 
 /** for of文とforEach文の違いをテスト */
 function test_forOf(){
@@ -541,3 +541,9 @@ function test_getFolderId(){
   getFolderId(folderUrl);
 }
 
+
+function test_getHeaderRow(){
+  const url    = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=0';
+  const values = getValues(url);
+  getHeaderRow(values, 'setRules()');
+}
