@@ -111,16 +111,14 @@ function getThreeCharLastName(fullName) {
  * 
  */
 function createMonthlyDataNames(prefix, maxMonths, suffix) {
-  const monthlyDataNames = [];
+  const list = Array.from({ length: maxMonths }, (_, i) => {
+    const month = ('0' + (i + 1)).slice(-2);
+    return `${prefix}${month}${suffix}`;
+  });
 
-  for (let i = 1; i <= maxMonths; i++) {
-    const month = ('0' + i).slice(-2);
-    const dataName = `${prefix}${month}${suffix}`;
-    monthlyDataNames.push([dataName]);
-  }
+  console.log(list);
+  return list
 
-  console.log(monthlyDataNames);
-  return monthlyDataNames;
 }
 
 
