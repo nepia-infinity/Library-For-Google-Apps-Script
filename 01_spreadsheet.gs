@@ -680,26 +680,8 @@ function selectNewValues(existingRecords, newValues, columnIndex){
  * @param  {number} headerIndex - 見出し行の配列番号
  * @param  {Object.<string>} object - 見出し行に使用されている項目名をオブジェクトで指定　　（例）{name: '氏名', url: 'URL'}
  * @param  {string} params - 検索クエリ複数可　（例）　active,　合格など残余引数として指定できる
- * @return {string} 
+ * @return {string} 生成されたHTML文字列
  * 
- */
-/**
- * 応募者名のリンク付きURLを生成する
- * 
- * @param {string} url - スプレッドシートのURL
- * @param {number} headerIndex - 見出し行の配列番号
- * @param {Object.<string>} headers - 見出し行に使用されている項目名をオブジェクトで指定 {name: '氏名', url: 'URL'}
- * @param {string[]} params - 検索クエリ複数可
- * @returns {string} 生成されたHTML文字列
- */
-/**
- * 応募者名のリンク付きURLを生成する
- * 
- * @param {string} url - スプレッドシートのURL
- * @param {number} headerIndex - 見出し行の配列番号
- * @param {Object.<string>} headers - 見出し行に使用されている項目名をオブジェクトで指定
- * @param {string[]} params - 検索クエリ複数可
- * @returns {string} 生成されたHTML文字列
  */
 function generateNameWithUrl(url, headerIndex, headers, ...params) {
   console.log(`generateNameWithUrl()を実行中`);
