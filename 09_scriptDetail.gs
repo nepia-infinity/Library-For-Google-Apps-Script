@@ -18,34 +18,21 @@ function showScriptId(){
  * 
  */
 function onEdit(){
-  const sheetName   = 'ScriptDetail';
-  const activeSheet = SpreadsheetApp.getActiveSheet();
+  const url    = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=0';
+  const sheet  = getActiveSheetByUrl(url);
+  const values = sheet.getDataRange().getValues();
+  const activeCell = getActiveCell(sheet);
 
-  if(activeSheet.getName() !== sheetName){
-    console.log(`処理対象のシートではないため、処理を終了`);
-    return
-  }
+  let column = generateHeaderIndex(values, 0);
+  column     = modifyObject(column);
 
-  const values     = activeSheet.getDataRange().getValues();
-  const column     = generateHeaderIndex(values);
-  const activeCell = getActiveCell(activeSheet);
+  const today = formatDate(new Date(), 'yyyy/MM/dd');
 
-  if(activeCell.column !== column.scriptName + 1){
-    console.log(`処理対象列ではないため、処理を終了`);
-    return
-
-  }else if(activeCell.row === 1){
-    console.log(`見出し行なので処理終了します。`);
-    return
-
-  }else{
-    const range = activeSheet.getRange(activeCell.row, column.updateDate + 1);
-    console.log(`転記範囲:　${range.getA1Notation()}`);
-
-    const today = formatDate(new Date(), 'yyyy/MM/dd');
-    range.setValue(today);
-  }
+  //編集されている列が、column.scriptName、2列目かつ見出し行ではない場合
+  activeCell.column === column.scriptName && activeCell.row !== 1 ? sheet.getRange(activeCell.row, column.updateDate).setValue(today) : false
+    
 }
+
 
 
 

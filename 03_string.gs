@@ -41,11 +41,11 @@ function extractText(text, reg, ...params){
  * @return {string} 苗字
  */
 function getLastName(fullName, log) {
-  if(log){
+  if (log) {
     console.info(`getLastName()を実行中`);
     console.info('03_stringに記載');
   }
-  
+
   const spaceIndex = fullName.indexOf(' ');
 
   if (spaceIndex !== -1) {
@@ -53,51 +53,42 @@ function getLastName(fullName, log) {
     const lastName = fullName.slice(0, spaceIndex);
     console.log(`氏名: ${fullName}, 苗字: ${lastName}`);
     return lastName;
-
-  } else if (fullName.length >= 3) {
-
-    const threeCharLastName = getThreeCharLastName(fullName);
-    console.log(`氏名: ${fullName}, 苗字: ${threeCharLastName}`);
-    return threeCharLastName;
-
-  } else {
-    console.log(`氏名: ${fullName}, 苗字: ${fullName}\n`);
-    return fullName;
-
   }
+
+  const threeCharLastName = getShortenedLastName(fullName);
+  console.log(`氏名: ${fullName}, 苗字: ${threeCharLastName}`);
+  return threeCharLastName;
 }
+
+
 
 /**
  * 3文字の苗字を取得します。
  * @param  {string} fullName - 氏名
+ * @param  {string} log - 省略可　実行中の関数名を表示する
  * @return {string} 3文字の苗字
  */
-function getThreeCharLastName(fullName) {
-  const sheet  = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('苗字3文字リスト');
+function getShortenedLastName(fullName, log) {
+  if (log) {
+    console.info(`getShortenedLastName()を実行中`);
+    console.info('03_stringに記載');
+  }
+
+  const url    = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=692870033';
+  const sheet  = SpreadsheetApp.openByUrl(url).getSheetByName('苗字3文字リスト');
   const values = sheet.getDataRange().getValues();
 
+  //苗字リストから3文字を切り取って該当するかどうか検索する
   const lastNameArray = values.map(record => record[0]).filter(value => value);
-  const temp   = fullName.slice(0, 3);
-  const result = lastNameArray.indexOf(temp);
+  const isThreeCharacters = fullName.slice(0, 3);
 
-  if (result !== -1) {
-    const lastName = lastNameArray[result];
-    const row      = result + 1;
-    const range    = getRange(sheet, `B${row}`);
+  // 検索結果がヒットしたらリストから苗字を返す
+  const result   = lastNameArray.indexOf(isThreeCharacters);
+  const lastName = result !== -1 ? lastNameArray[result] : fullName.slice(0, 2);
 
-    // 検索でヒットした回数を更新する
-    const previous = range.getValue();
-    const current = previous + 1;
-    range.setValue(current);
-
-    return lastName;
-
-  }else{
-    const lastName = fullName.slice(0, 2);
-    return lastName;
-  }
+  console.log(`苗字：　${lastName}`);
+  return lastName;
 }
-
 
 
 

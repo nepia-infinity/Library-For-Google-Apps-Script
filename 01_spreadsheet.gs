@@ -255,7 +255,7 @@ function replaceHeaderValues(values, rowIndex, targetColumn) {
  */
 function generateHeaderIndex(values, rowIndex){
   
-  console.log(`generateHeaderIndex_()を実行中`);
+  console.log(`generateHeaderIndex()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
   const header = values[rowIndex];
@@ -716,51 +716,80 @@ function selectNewValues(existingRecords, newValues, columnIndex){
  * @return {string} 
  * 
  */
-function generateNameWithUrl(url, headerIndex, object, ...params){
-
+/**
+ * 応募者名のリンク付きURLを生成する
+ * 
+ * @param {string} url - スプレッドシートのURL
+ * @param {number} headerIndex - 見出し行の配列番号
+ * @param {Object.<string>} headers - 見出し行に使用されている項目名をオブジェクトで指定 {name: '氏名', url: 'URL'}
+ * @param {string[]} params - 検索クエリ複数可
+ * @returns {string} 生成されたHTML文字列
+ */
+/**
+ * 応募者名のリンク付きURLを生成する
+ * 
+ * @param {string} url - スプレッドシートのURL
+ * @param {number} headerIndex - 見出し行の配列番号
+ * @param {Object.<string>} headers - 見出し行に使用されている項目名をオブジェクトで指定
+ * @param {string[]} params - 検索クエリ複数可
+ * @returns {string} 生成されたHTML文字列
+ */
+function generateNameWithUrl(url, headerIndex, headers, ...params) {
   console.log(`generateNameWithUrl()を実行中`);
   console.log(`01_spreadsheetに記載`);
 
   const sheet  = getSheetByUrl(url);
   const values = sheet.getDataRange().getDisplayValues();
+  
+  // ヘッダー行を除いたデータをコピー
+  const data = [...values];
+  data.splice(headerIndex, 1);
+
   const header = values[headerIndex];
-  const column = {
-    name: header.indexOf(object.name),
-    url:  header.indexOf(object.url)
+
+  // 各列のインデックスをオブジェクトで保持
+  const columnIndex = {};
+  for (const key in headers) {
+    const columnName = headers[key];
+    columnIndex[key] = header.indexOf(columnName);
   }
+
   console.log(header);
-  console.log(column);
+  console.log(columnIndex);
 
-  //　URLが含まれるものだけを残す everyメソッドは配列内全ての条件を満たすとtrueで返す
-  let filtered = values.filter(row => params.every(param => row.includes(param)));
+  // フィルタリング
+  const filtered = data.filter(row => params.every(param => row.includes(param)));
   console.log(filtered);
-  console.log(`該当件数：　${filtered.length}　件`);
+  console.log(`該当件数：　${filtered.length} 件`);
 
-  let string = '<ol>';
+  // HTML生成
+  const listItems = filtered.map(row => {
+    const name = getLastName(row[columnIndex.name]);
+    const link = row[columnIndex.url];
+    return `<li><a href="${link}">${name}さん</a></li>`;
+  });
 
-  // HTMLを生成
-  filtered.map(row => string += `<li><a href ="${row[column.url]}">${getLastName(row[column.name])}さん</a></li>`);
-  string += '</ol>';
-
-  console.log(string);
-  return string
-
+  const html = `<ol>${listItems.join('')}</ol>`;
+  console.log(html);
+  return html;
 }
+
+
 
   
 /**
- * 2次元配列を、各元素を個別の配列要素とする新しい2次元配列に変換します。
+ * 2次元配列を縦1列に変換する
  * @param {Array.<Array.<string|number>>} original - 変換対象の元の2次元配列。
  * @returns {Array.<Array.<string|number>>} - 各要素が個別の配列内に収められた新しい2次元配列。
  */
-function reformatWithAlternateValues(original){
+function convertToSingleColumn(original){
 
   const newValues = original.flat().reduce((accumulator, current) => {
     accumulator.push([current]);
     return accumulator;
   }, []);
 
-  console.log(`reformatWithAlternateValues()を実行中`);
+  console.log(`convertToSingleColumn()を実行中`);
   console.log(`01_spreadsheetに記載`);
 
   console.log(`変換前`);

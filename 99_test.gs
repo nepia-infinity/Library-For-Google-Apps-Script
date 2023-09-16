@@ -564,3 +564,10 @@ function test_getHeaderRow(){
   const values = getValues(url);
   getHeaderRow(values, 'setRules()');
 }
+
+
+function test_generateNameWithUrl(){
+  const url  = 'https://docs.google.com/spreadsheets/d/*******';
+  const html = nepia_infinity.generateNameWithUrl(url, 0, {name: '氏名', url: 'URL'});
+  nepia_infinity.showHtmlSentence(html, 'HTMLを表示する');
+}
