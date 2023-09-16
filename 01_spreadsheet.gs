@@ -564,10 +564,10 @@ function createTextFinder(url, query, sheetName) {
   const newArray = results.map(result => ({
     query,
     sheetName: result.getSheet().getName(),
-    row: result.getRow(),
-    column: result.getColumn(),
-    range: result.getA1Notation(),
-    value: result.getValue()
+    row:       result.getRow(),
+    column:    result.getColumn(),
+    range:     result.getA1Notation(),
+    value:     result.getValue()
   }));
 
   console.log(`検索語句：　${query} , 検索結果：　${newArray.length} 件`);
@@ -583,48 +583,31 @@ function createTextFinder(url, query, sheetName) {
  * getDataRange()などで取得した2次元配列から必要な列だけを抽出し、新しい2次元配列を作成する
  * 
  * @param  {Array.<Array.<string|number>>} values - 元の2次元配列
- * @param  {Object.<number>} column - 見出し行のオブジェクト (例) column = {id: 0, name: 1, university: 3}
+ * @param  {Object.<number>} column - 見出し行のオブジェクト (例) {id: 0, name: 1, university: 3}
  * @param  {string} query - 2次元配列から情報を取捨選択するためのキーワード
  * @return {Array.<Array.<string|number>>} 新しい配列
  *
  */
-function selectColumns(values, column, query){
-
+function selectColumns(values, column, ...queries) {
   console.log(`selectColumns()を実行中`);
   console.log(`01_spreadsheetに記載`);
-
-  const numbers = Object.values(column);
-
-  console.log(column);
-  console.log(`Object.valuesの実行結果`);
-  console.log(numbers);//1次元配列
-
-  //indexに該当する列だけを残して2次元配列を作成する
-  const newValues = values.map(array => array.reduce((accumulator, current, index) =>{
-      if(numbers.includes(index)){
-        accumulator.push(current);
-      }
-    return accumulator
-    }, [])//reduce
-  );//map
-
-  //console.log(newValues);
   
-  if(!query){
-   //queryが省略されており、定義されていない場合、空白行の配列を取り除く
-    const filtered = newValues.filter(row => row[0] !== '');
-    console.log(filtered);
+  //{id: 0, name: 1, university: 3}　-> [0, 1, 3]
+  const columnsToSelect = Object.values(column);
+  console.log(columnsToSelect);
 
-    return filtered
+  // 指定された列のインデックスを抽出し、新しい2次元配列を作成する
+  const newValues = values.map(row => columnsToSelect.map(index => row[index]));
 
-  }else if(query){
-    //newValuesから、さらに特定の単語が含まれている配列のみを残す
-    const filtered = newValues.filter(row => row.indexOf(query) !== -1);
-    console.log(filtered);
+  // 指定したすべての単語に合致する行のみを残す
+  const filtered = newValues.filter(row => {
+    return queries.every(query => row.join(',').includes(query));
+  });
 
-    return filtered
-  }
+  console.log(filtered);
+  return filtered;
 }
+
 
 
 
