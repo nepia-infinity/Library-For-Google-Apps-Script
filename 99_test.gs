@@ -24,11 +24,11 @@ function test_getSheetByUrl() {
  * 
  */
 function test_getRange(){
-  const url   = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=476791012';
-  const sheet = getSheetByUrl(url);
+  const url   = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=0';
+  const sheet = getActiveSheetByUrl(url);
   const info  = {row: 2, column: 1}
   getRange(sheet, info);
-  
+  getRange(sheet, 'A2:G69');
 }
 
 

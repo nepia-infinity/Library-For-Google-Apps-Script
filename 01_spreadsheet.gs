@@ -81,39 +81,38 @@ function getActiveSheetByUrl(targetSheetUrl, string) {
  * @return {SpreadsheetApp.Range} 
  * 
  */
-function getRange(sheet, info){
-  let range, offset, numRows, numColumns;
+function getRange(sheet, info) {
+  console.info('getRange()を実行中');
+  console.info('01_spreadsheetに記載');
 
-  console.info(`getRange()を実行中`);
-  console.info(`01_spreadsheetに記載`);
+  if (info && typeof info !== 'string') {
 
-  if(info && typeof info !== 'string'){
-    // infoがオブジェクトだった場合
-    offset  = info.row - 1;
-    numRows = sheet.getLastRow() - offset;
+    // infoがオブジェクトだった場合、次の処理を実施
+    // info.row が falsy（例: undefined, null, 0, false など）の場合ゼロが設定されます。
+    const offset = {
+      row: info.row ? info.row - 1 : 0,
+      column: info.column ? info.column - 1 : 0,
+    };
 
-    if(info.column !== 1){
-      offset     = info.column - 1;
-      numColumns = sheet.getLastColumn() - offset;
-      range      = sheet.getRange(info.row, info.column, numRows, numColumns);
+    const numRows    = sheet.getLastRow() - offset.row;
+    const numColumns = sheet.getLastColumn() - offset.column;
 
-    }else{
-      // info.columnが1の時
-      numColumns = sheet.getLastColumn();
-      range      = sheet.getRange(info.row, info.column, numRows, numColumns);
+    // info.row と info.column が両方指定されていない場合、デフォルトで A1 セルからデータを取得
+    const range = sheet.getRange(info.row || 1, info.column || 1, numRows, numColumns);
 
-    }
+    console.log(`startRow: ${info.row || 1}, startColumn: ${info.column || 1}, numRows: ${numRows}, numColumns: ${numColumns}`);
+    console.log(`取得範囲：　${range.getA1Notation()}`);
 
-    console.log(`startRow: ${info.row}, startColumn: ${info.column}, numRows: ${numRows}, numColumns: ${numColumns}`);
+    return range;
 
-  }else{
+  } else {
     // infoが'A2:E5'のように文字列だった場合
-    range = sheet.getRange(info);
-    
+    const range = sheet.getRange(info);
+    console.log(`取得範囲：　${range.getA1Notation()}`);
+    return range;
   }
-  console.log(`取得範囲：　${range.getA1Notation()}`);
-  return range
 }
+
 
 
 
