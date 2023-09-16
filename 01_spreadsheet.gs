@@ -226,21 +226,13 @@ function replaceHeaderValues(values, rowIndex, targetColumn) {
   console.info(`replaceHeaderValues()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
+  const column = {};
   const header = values[rowIndex];
-  console.log('header');
   console.log(header);
 
-  // key, valueを一人ずつ取り出す
-  const entries = Object.entries(targetColumn);
-  const column  = {};
-
-  console.log('Object.entriesの結果');
-  console.log(entries);
-
   // 空のcolumnにプロパティを挿入する
-  for(const [key, value] of entries){
+  for(const [key, value] of Object.entries(targetColumn)){
     column[key] = header.indexOf(value);
-
   }
 
   console.log(column);
@@ -254,6 +246,7 @@ function replaceHeaderValues(values, rowIndex, targetColumn) {
  * 
  * 見出し行の位置を特定する
  * FIXME: 見出し行の項目が全て英語ではないと使えない
+ * 類似する関数として、replaceHeaderValuesがある
  * 
  * @param  {Array.<Array.<string|number>>} values - 2次元配列
  * @param  {number} rowIndex - ヘッダー行の位置を指定
@@ -269,7 +262,9 @@ function generateHeaderIndex(values, rowIndex){
     header.map((value, index) => [value, index])
   );
 
+  console.log(header);
   console.log(object);
+
   return object;
 }
 
