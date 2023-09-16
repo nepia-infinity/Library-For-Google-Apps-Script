@@ -61,8 +61,9 @@ function getFolderId(url, log){
     .replace(reg, '')
     .replace(/.hl=.*/, '');
 
-    console.log(`folderUrl: ${url}`);
-    console.log(`folderId: ${folderId}`);
+    console.log(`folderName: ${DriveApp.getFolderById(folderId).getName()}`);
+    console.log(`folderUrl:  ${url}`);
+    console.log(`folderId:   ${folderId}`);
   }
 
   return folderId
@@ -222,73 +223,103 @@ function createFolders(url, newFolderNameList, innerFolderNameList) {
 
 
 
+
 /**
+ * スプレッドシートから印刷範囲を指定してPDFを作成、指定したフォルダに保存
  * 
- * スプレッドシートのURLと印刷範囲をして、PDFを生成する
- * 
- * @param  {string} sheetUrl - シートのURL
+ * @param  {string} sheetUrl - スプレッドシートのURL
  * @param  {string} stringRange - 'A2:D30' などPDFの生成範囲
- * @param  {string} folderUrl - Google DriveのフォルダURL
+ * @param  {string} folderUrl - フォルダのURL
  * @param  {boolean} isGridLines - グリッドラインの表示有無　true or falseで指定
- * @return {Object.<string>}
  * 
  */
-function convertSheetToPdf(sheetUrl, stringRange, folderUrl, isGridLines) {
+function convertSheetToPdf(sheetUrl, stringRange, folderUrl, isGridLines){
+  const sheet    = getSheetByUrl(sheetUrl);
+  const today    = formatDate(new Date(), 'yyyy_MMdd_HH:mm');
+  const fileName = `${sheet.getName()}_${today}`;
 
-  console.info('convertSheetToPdf()を実行中');
+  // FetchするURLを生成
+  const targetUrl = generateUrlWithSheetOptions_(sheet, stringRange, isGridLines);
+  createPdfFile_(targetUrl, folderUrl, fileName)
+}
+
+
+
+/**
+ * スプレッドシートから指定したエクスポートオプションを含むURLを生成します。
+ * 
+ * @param  {SpreadsheetApp.Sheet} sheet - シートオブジェクト
+ * @param  {string} stringRange - 'A2:D30' などPDFの生成範囲
+ * @param  {boolean} isGridLines - グリッドラインの表示有無　true or falseで指定
+ * @return {string}
+ * 
+ */
+function generateUrlWithSheetOptions_(sheet, stringRange, isGridLines){
+  console.info('prepareSheetForPdf()を実行中');
   console.info('04_driveに記載');
 
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  const sheet = getSheetByUrl(sheetUrl);
   const info  = {
     spreadsheetId: spreadsheet.getId(),
-    sheetId:       sheet.getSheetId(),
-    printArea:     stringRange.replace(':', '%3A')
+    sheetId: sheet.getSheetId(),
+    printArea: stringRange.replace(':', '%3A')
   }
 
   console.log(info);
 
   // 印刷情報、サイズや紙の向きや範囲などの情報を付与する
   const exportOptions = {
-    format:       'pdf',          // ファイル形式の指定 pdf / csv / xls / xlsx
-    size:         'A4',           // 用紙サイズの指定 legal / letter / A4
-    portrait:     'true',         // true → 縦向き、false → 横向き
-    fitw:         'true',         // 幅を用紙に合わせるか
-    sheetnames:   'false',        // シート名を PDF 上部に表示するか
-    printtitle:   'false',        // スプレッドシート名を PDF 上部に表示するか
-    pagenumbers:  'false',        // ページ番号の有無
-    gridlines:    isGridLines,    // グリッドラインの表示有無
-    fzr:          'false',        // 固定行の表示有無
-    range:        info.printArea, // 対象範囲「%3A」 = : (コロン)  
-    gid:          info.sheetId    // シート ID を指定 (省略する場合、すべてのシートをダウンロード)
+    format: 'pdf',
+    size: 'A4',
+    portrait: 'true',
+    fitw: 'true',
+    sheetnames: 'false',
+    printtitle: 'false',
+    pagenumbers: 'false',
+    gridlines: isGridLines,
+    fzr: 'false',
+    range: info.printArea,
+    gid: info.sheetId
   };
 
   console.log(exportOptions);
- 
-  const queryString = Object.entries(exportOptions)
-  .map(([key, value]) => `${key}=${value}`)
-  .join('&');
 
-  const fileUrl  = `https://docs.google.com/spreadsheets/d/${info.spreadsheetId}/export?${queryString}`;
+  const queryString = Object.entries(exportOptions)
+    .map(([key, value]) => `${key}=${value}`)
+    .join('&');
+
+  const targetUrl = `https://docs.google.com/spreadsheets/d/${info.spreadsheetId}/export?${queryString}`;
+  console.log(targetUrl);
+
+  return targetUrl
+}
+
+
+/**
+ * 
+ * スプレッドシート、ドキュメント、スライドからPDFファイルを作成
+ * 
+ * @param  {string} targetUrl - FetchするURL
+ * @param  {string} folderUrl - Google DriveのフォルダURL
+ * @param  {boolean} fileName - PDFのファイル名
+ * @return {Object.<string>}
+ * 
+ */
+function createPdfFile_(targetUrl, folderUrl, fileName){
   const token    = ScriptApp.getOAuthToken();
-  const response = UrlFetchApp.fetch(fileUrl, {
+  const response = UrlFetchApp.fetch(targetUrl, {
     headers: {
-    'Authorization': 'Bearer ' +  token
+      'Authorization': 'Bearer ' + token
     }
   });
 
-  console.log(fileUrl);
-
-  const today    = formatDate(new Date(), 'yyyy_MMdd_HH:mm');
-  const fileName = `${sheet.getName()}_${today}`;
+  console.log(`生成されたPDFファイル：　${fileName}`);
+  
   const blob     = response.getBlob().setName(fileName + '.pdf');
+  const folderId = getFolderId(folderUrl);
+  DriveApp.getFolderById(folderId).createFile(blob);
+}
 
-  //　フォルダを指定してファイルを保存する
-  const folderId = folderUrl.replace(/.*\//, '');
-  const folder   = DriveApp.getFolderById(folderId);
-  folder.createFile(blob);
- 
-}//end
 
 
 
