@@ -491,3 +491,49 @@ function test_convertSheetToPdf(){
   convertSheetToPdf(sheetUrl, 'A1:D69', folderUrl, true);
 }
 
+
+
+function test_convertText(){
+  const values = [
+    ['John', 'Doe'],
+    ['Alice', 'Smith'],
+    ['Bob', 'Johnson'],
+  ];
+
+  const string = values.map(record => record[0]).join('\n');
+  console.log(string);
+  console.log(`型：${typeof string}`);
+}
+
+/**連番付与とファイル名のリネームが出来るスクリプト*/
+function test_renameAllFiles(){
+  const folderUrl = 'https://drive.google.com/drive/folders/1z365po-hxBmUNg7MJXD1LEWBYSvqsi9y';
+  renameAllFiles(folderUrl);
+}
+
+/** for of文とforEach文の違いをテスト */
+function test_forOf(){
+  const values = [
+    ['John', 'Doe'],
+    ['Alice', 'Smith'],
+    ['Bob', 'Johnson'],
+  ];
+
+  for(const [fileName, fileId] of values){
+    console.log(fileName, fileId);
+  }
+}
+
+
+/**連番作成のテスト */
+function test_serialNumbersArray(){
+  const serialNumbersArray = Array.from({ length: 999 }, (_, i) => ('00' + (i + 1)).slice(-3));
+  console.log(serialNumbersArray);
+}
+
+
+function test_getFolderId(){
+  const folderUrl = 'https://drive.google.com/drive/folders/1z365po-hxBmUNg7MJXD1LEWBYSvqsi9y';
+  getFolderId(folderUrl);
+}
+

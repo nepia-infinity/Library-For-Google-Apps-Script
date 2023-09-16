@@ -2,15 +2,15 @@
  * Googleドライブのフォルダから指定のファイル名を含むファイルを2次元配列で取得
  * 'ファイル名', 'ファイルID', 'URL', '最終更新日'を取得できる
  * 
- * @param  {string} url - GoogleドライブのフォルダのURL
+ * @param  {string} folderUrl - GoogleドライブのフォルダのURL
  * @param  {string} query - 検索したいファイル名、省略可
  * @return {Array.<Array.<string>>}
  */
-function getFilesValues(url, query) {
+function getFilesValues(folderUrl, query) {
   console.info('getFilesValues()を実行中');
   console.info('04_driveに記載');
 
-  const files   = getDriveFiles(url);
+  const files   = getDriveFiles(folderUrl);
   let newValues = [['ファイル名', 'ファイルID', 'URL', '最終更新日']];
 
   while (files.hasNext()) {
@@ -41,11 +41,11 @@ function getFilesValues(url, query) {
 /**
  * GoogleドライブのURLからフォルダIDを抽出する
  * 
- * @param  {string} url - GoogleドライブのフォルダのURL
+ * @param  {string} folderUrl - GoogleドライブのフォルダのURL
  * @param  {string} log - 省略可。定義されている場合のみ、実行中の関数名を表記する
  * @return {string}
  */
-function getFolderId(url, log){
+function getFolderId(folderUrl, log){
 
   if(log){
     console.info('getFolderId()を実行中');
@@ -56,13 +56,13 @@ function getFolderId(url, log){
   const reg = /.*\//;
 
   // URLから不要な文字列を削除する
-  if(url.match(reg) !== null){
-    folderId = url
+  if(folderUrl.match(reg) !== null){
+    folderId = folderUrl
     .replace(reg, '')
     .replace(/.hl=.*/, '');
 
     console.log(`folderName: ${DriveApp.getFolderById(folderId).getName()}`);
-    console.log(`folderUrl:  ${url}`);
+    console.log(`folderUrl:  ${folderUrl}`);
     console.log(`folderId:   ${folderId}`);
   }
 
@@ -76,16 +76,16 @@ function getFolderId(url, log){
  * FIXME: 個人からビジネスドメインへの権限移譲は失敗することがある
  * FIXME: 個人アカウントには、ファイルのオーナー権限を譲渡という概念がないので失敗する
  * 
- * @param  {string} url - GoogleドライブのフォルダのURL
+ * @param  {string} folderUrl - GoogleドライブのフォルダのURL
  * @param  {string} accountId - ファイルを譲渡したいアカウントID
  * @return {Array.<Array.<string>>}
  */
-function transferOwnership(url, accountId){
+function transferOwnership(folderUrl, accountId){
 
   console.info('transferOwnership()を実行中');
   console.info('04_driveに記載');
 
-  const files = getDriveFiles(url);
+  const files = getDriveFiles(folderUrl);
 
   while (files.hasNext()) {
     const file = files.next();
@@ -108,18 +108,18 @@ function transferOwnership(url, accountId){
 /**
  * Googleドライブの特定フォルダ内のファイルを取得する
  * 
- * @param  {string} url - GoogleドライブのフォルダのURL
+ * @param  {string} folderUrl - GoogleドライブのフォルダのURL
  * @param  {string} log - 省略可　引数が定義されている場合のみ実行中の関数名を表示する
  * @return {Object.<Object.<string>>}
  */
-function getDriveFiles(url, log){
+function getDriveFiles(folderUrl, log){
 
   if(log){
     console.info('getDriveFiles()を実行中');
     console.info('04_driveに記載');
   }
   
-  const folderId = getFolderId(url);
+  const folderId = getFolderId(folderUrl);
   const folder   = DriveApp.getFolderById(folderId);
   const files    = folder.getFiles();
 
@@ -153,17 +153,17 @@ NONE: なし
  * 指定したユーザーにフォルダの閲覧権限や編集権限を一括で付与する
  * FIXME: 一度編集権限を付与してしまうとアクセス権を剥奪しないと閲覧オンリーなどに切り替えることが出来ない
  * 
- * @param  {string} url - GoogleドライブのフォルダのURL
+ * @param  {string} folderUrl - GoogleドライブのフォルダのURL
  * @param  {string} users - 権限を付与したいユーザーを格納した配列
  * @param  {string} role - 編集権限
  * 
  */
-function authorizeEditing(url, users, role){
+function authorizeEditing(folderUrl, users, role){
 
   console.info('authorizeEditing()を実行中');
   console.info('04_driveに記載');
 
-  const folderId = getFolderId(url);
+  const folderId = getFolderId(folderUrl);
   const folder   = DriveApp.getFolderById(folderId);
   const reg      = / gmail.* | icloud.* /;
 
@@ -191,16 +191,16 @@ function authorizeEditing(url, users, role){
 /**
  * 1次元配列の内容を元にフォルダを作成する
  * 
- * @param  {string} url - GoogleドライブのフォルダのURL
+ * @param  {string} folderUrl - GoogleドライブのフォルダのURL
  * @param  {Array.<string>} newFolderNameList - 1次元配列　この配列に格納された値がフォルダ名となる
  * @return {Array.<string>} innerFolderNameList - 1次元配列　さらに内側にフォルダを作成する場合に指定する
  */
-function createFolders(url, newFolderNameList, innerFolderNameList) {
+function createFolders(folderUrl, newFolderNameList, innerFolderNameList) {
 
   console.info('createFolders()を実行中');
   console.info('04_driveに記載');
 
-  const folderId = getFolderId(url);
+  const folderId = getFolderId(folderUrl);
   const folder   = DriveApp.getFolderById(folderId);
 
   console.log(`対象フォルダー名：${folder.getName()}`);
@@ -296,6 +296,7 @@ function generateUrlWithSheetOptions_(sheet, stringRange, isGridLines){
 }
 
 
+
 /**
  * 
  * スプレッドシート、ドキュメント、スライドからPDFファイルを作成
@@ -323,21 +324,20 @@ function createPdfFile_(targetUrl, folderUrl, fileName){
 
 
 /**
- * Google Driveのフォルダ内のファイル名を任意の文字列にリネームする
+ * Google Driveのフォルダ内のファイル名に連番付与とリネームが出来るスクリプト
  * 
- * @param {string} url - フォルダのURL
+ * @param {string} folderUrl - フォルダのURL
  * @param {Array.<Array.<string>>} values - [['置換対象', '置換後']]
+ * @param {number} maxLength - 連番の最終番号　(例)100
  * 
  */
-function renameAllFile(url, values){
+function renameAllFiles(folderUrl, values, maxLength){
 
-  const files = getDriveFiles(url);
-
-  console.info('renameAllFile()を実行中');
+  console.info('renameAllFiles()を実行中');
   console.info('04_driveに記載');
 
   let count = 0;
-  let lists = [[/\s/, '']];
+  let lists = [[/\s/g, '']];
 
   // 引数に指定された置換対象を追加する
   lists = values ? lists.concat(values) : lists;
@@ -345,6 +345,7 @@ function renameAllFile(url, values){
   console.log(lists);
 
   let newValues = [];
+  const files   = getDriveFiles(folderUrl);
 
   while (files.hasNext()) {
     const file        = files.next();
@@ -362,42 +363,56 @@ function renameAllFile(url, values){
   console.log(`${count}件`);
   console.log(newValues);
 
-  showAlertBeforeExecution_(newValues);
+  // ファイル名を一括変更する前に確認画面を表示する
+  renameFilesWithConfirmation_(newValues, maxLength);
 
 }
+
 
 
 /**
  * 実行前にアラートを表示する
  * 
  * @param {Array.<Array.<string>>} values - [['ファイル名', 'ファイルID']]
+ * @param {number} maxLength - 連番の最終番号　(例)100 
  * 
  */
-function showAlertBeforeExecution_(values){
+function renameFilesWithConfirmation_(values, maxLength){
 
   console.info('showAlertBeforeExecution_()を実行中');
   console.info('04_driveに記載');
 
-  let string = '';
-  values.map((row, index) => {
-    const number = index + 1;
-    string += `${number}. ${row[0]}\n`;
-  });
+  const string = values.map(record => record[0]).join('\n');
+  console.log(string);
 
-  let fileIdArray = [];
-  values.map(row => fileIdArray.push(`${row[1]}`));
-  console.log(fileIdArray);
-
-  const ui       = SpreadsheetApp.getUi();
+  const ui = SpreadsheetApp.getUi();
   const response = ui.alert(`
     ファイル名を下記のように変更してもよろしいですか？\n\n
     ${string}`, ui.ButtonSet.YES_NO
   );
 
+  let count = 0;
+  let serialNumbers = [];
+
+  // 指定があった場合のみ、連番の配列を作成する
+  maxLength ? serialNumbers = Array.from({ length: maxLength}, (_, i) => ('00' + (i + 1)).slice(-3)) : false
+  
   switch (response){
     case ui.Button.YES:
       console.log('“はい” のボタンが押されました。');
-      fileIdArray.map((fileId, index) => DriveApp.getFileById(fileId).setName(values[index][0]));
+
+      for(const [fileName, fileId] of values){
+        console.log(`fileName: ${fileName}, fileId: ${fileId}`);
+        const extension    = getExtensionFromFileName_(fileName);
+        const baseFileName = fileName.replace(extension, '');
+        
+        // 連番作成の指定があれば、ファイル名の末尾に連番を入れる
+        maxLength ? DriveApp.getFileById(fileId).setName(`${baseFileName}_${serialNumbers[count]}${extension}`) : 
+        DriveApp.getFileById(fileId).setName(fileName)
+
+        count += 1;
+      }
+      
       ui.alert('ファイル名の変更が完了しました。');
       break;
 
@@ -417,21 +432,16 @@ function showAlertBeforeExecution_(values){
 /**
  * リンク付きのファイル一覧をHTMLとして表示する
  * 
- * @param  {string} url - フォルダのURL
+ * @param  {string} folderUrl - フォルダのURL
  * @return {string} string - ファイル一覧のHTMLタグ
  */
-function getFileNameWithUrl(url){
+function getFileNameWithUrl(folderUrl){
 
   console.info('getFileWithUrl()を実行中');
   console.info('04_driveに記載');
 
-  const folderId = getFolderId(url);
-  const folder   = DriveApp.getFolderById(folderId);
-  const files    = folder.getFiles();
-
-  console.log(`取得対象フォルダ：${folder.getName()}`);
-
-  let html = `<p>フォルダ名：　<a href="${url}">${folder.getName()}</a></p>`;
+  const files = getDriveFiles(folderUrl);
+  let html    = '';
 
   while (files.hasNext()) {
     const file     = files.next();
@@ -458,10 +468,8 @@ function getFileNameWithUrl(url){
 * 
 */
 function getImageFiles_(folderUrl) {
-  const folderId = getFolderId(folderUrl);
-  const folder   = DriveApp.getFolderById(folderId);
-  const files    = folder.getFiles();
-  const values   = [];
+  const files  = getDriveFiles(folderUrl);
+  const values = [];
 
   //jpg、gif、pngを取得してシートの最終行に挿入する
   while(files.hasNext()){
@@ -477,5 +485,20 @@ function getImageFiles_(folderUrl) {
 
   return values
 
+}
+
+
+
+/**
+ * ファイル名から拡張子を取得する
+ * 
+ * @param  {string} fileName - ファイル名
+ * @return {string} 
+ */
+function getExtensionFromFileName_(fileName) {
+  const match = fileName.match(/.jpg|.png|.pdf/i);
+  console.log(`matchの結果:${match}`);
+
+  return match ? match[0].toLowerCase() : null;
 }
 
