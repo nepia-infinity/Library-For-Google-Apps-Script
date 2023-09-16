@@ -529,6 +529,7 @@ function test_forOf(){
 }
 
 
+
 /**連番作成のテスト */
 function test_serialNumbersArray(){
   const serialNumbersArray = Array.from({ length: 999 }, (_, i) => ('00' + (i + 1)).slice(-3));
@@ -536,12 +537,16 @@ function test_serialNumbersArray(){
 }
 
 
+
+/**フォルダのURLからIDを取得 */
 function test_getFolderId(){
   const folderUrl = 'https://drive.google.com/drive/folders/1z365po-hxBmUNg7MJXD1LEWBYSvqsi9y';
   getFolderId(folderUrl);
 }
 
 
+
+/**ヘッダー行を取得 */
 function test_getHeaderRow(){
   const url    = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=0';
   const values = getValues(url);

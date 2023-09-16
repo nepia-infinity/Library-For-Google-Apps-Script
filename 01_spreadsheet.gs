@@ -545,53 +545,37 @@ function removeDuplicates(array){
  * @param  {string} sheetName - 検索したいシートの名前　検索対象を絞りたい場合に使用
  * @return {Array.<Object.<srting | number>>} 
  */
-function createTextFinder(url, query, sheetName){
+function createTextFinder(url, query, sheetName) {
   const spreadsheet = SpreadsheetApp.openByUrl(url);
   let finder;
 
   if(sheetName){
+    // シート名が指定されている場合、指定したシートでテキスト検索を実行
     const sheet = spreadsheet.getSheetByName(sheetName);
-    finder      = sheet.createTextFinder(query).useRegularExpression(true);
+    finder = sheet.createTextFinder(query).useRegularExpression(true);
 
-  }else if(!sheetName){
+  }else{
+    // シート名が指定されていない場合、全てのシートでテキスト検索を実行
     finder = spreadsheet.createTextFinder(query).useRegularExpression(true);
-    
+
   }
 
-  const results = finder.findAll();
-  const length  = results.length;
+  const results  = finder.findAll();
+  const newArray = results.map(result => ({
+    query,
+    sheetName: result.getSheet().getName(),
+    row: result.getRow(),
+    column: result.getColumn(),
+    range: result.getA1Notation(),
+    value: result.getValue()
+  }));
 
-  console.log(`検索語句：　${query} , 検索結果：　${length} 件`);
-  const keys     = ['query', 'sheetName', 'row', 'column', 'range', 'value'];
-  let object     = {};
-  let temp       = [];
-  const newArray = [];
-
-  for(const result of results){
-    const info = {
-      sheetName: result.getSheet().getName(),
-      row:       result.getRow(),
-      column:    result.getColumn(),
-      range:     result.getA1Notation(),
-      value:     result.getValue()
-    }
-
-    temp.push(query, info.sheetName, info.row, info.column, info.range, info.value);
-    //console.log(temp);
-
-    for(const [i, value] of temp.entries()){
-      const key = keys[i];
-      object[key] = value;
-    }
-    newArray.push(object);
-
-    //配列に加えた後で初期化
-    object = {};
-    temp   = [];
-  }
+  console.log(`検索語句：　${query} , 検索結果：　${newArray.length} 件`);
   console.log(newArray);
-  return newArray
+
+  return newArray;
 }
+
 
 
 
