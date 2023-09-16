@@ -1,4 +1,4 @@
-# Library-for-Google-Apps-Script
+# Library-For-Google-Apps-Script
 Google Apps Script用のライブラリ
 
 noteにライブラリの使い方を記載しています。　実装例や実行時のログなどをメモしています。
