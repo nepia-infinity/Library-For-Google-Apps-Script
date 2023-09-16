@@ -6,7 +6,7 @@
  * @param  {number} quantity - 引数に100とした場合、100件のスレッドを検索する　
  * @return {Array.<Array.<string>>}
  */
-function getGmailThread(query, quantity) {
+function getGmailThread(query, quantity){
 
   console.info('getGmailThread()を実行中');
   console.info('05_Gmailに記載');
@@ -35,7 +35,7 @@ function getGmailThread(query, quantity) {
           html:    message.getBody(),
         }
 
-        values.push([info.date, info.from, info.subject, info.text, info.html]);
+        values.push(Object.values(info));
       }
     }//for
   }//for

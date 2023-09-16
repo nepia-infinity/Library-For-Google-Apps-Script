@@ -237,6 +237,7 @@ function convertSheetToPdf(sheetUrl, stringRange, folderUrl, isGridLines){
   const sheet    = getSheetByUrl(sheetUrl);
   const today    = formatDate(new Date(), 'yyyy_MMdd_HH:mm');
   const fileName = `${sheet.getName()}_${today}`;
+  console.log(`生成されたPDFファイル：　${fileName}`);
 
   // FetchするURLを生成
   const targetUrl = generateUrlWithSheetOptions_(sheet, stringRange, isGridLines);
@@ -255,7 +256,7 @@ function convertSheetToPdf(sheetUrl, stringRange, folderUrl, isGridLines){
  * 
  */
 function generateUrlWithSheetOptions_(sheet, stringRange, isGridLines){
-  console.info('prepareSheetForPdf()を実行中');
+  console.info('generateUrlWithSheetOptions_()を実行中');
   console.info('04_driveに記載');
 
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -313,8 +314,6 @@ function createPdfFile_(targetUrl, folderUrl, fileName){
     }
   });
 
-  console.log(`生成されたPDFファイル：　${fileName}`);
-  
   const blob     = response.getBlob().setName(fileName + '.pdf');
   const folderId = getFolderId(folderUrl);
   DriveApp.getFolderById(folderId).createFile(blob);
@@ -332,42 +331,34 @@ function createPdfFile_(targetUrl, folderUrl, fileName){
  */
 function renameAllFile(url, values){
 
+  const files = getDriveFiles(url);
+
   console.info('renameAllFile()を実行中');
   console.info('04_driveに記載');
 
-  const folderId = getFolderId(url);
-  const folder   = DriveApp.getFolderById(folderId);
-  const files    = folder.getFiles();
-
-  console.log(`取得対象フォルダ名：${folder.getName()}`);
-
   let count = 0;
-  let lists = [
-    [/\s/, ''],
-    ['★', ''],
-  ];
+  let lists = [[/\s/, '']];
 
-  if(values){ 
-    lists = lists.concat(values);
-    console.log(`結合後`);
-    console.log(lists); 
-  }
+  // 引数に指定された置換対象を追加する
+  lists = values ? lists.concat(values) : lists;
+  console.log(`結合後`);
+  console.log(lists);
 
   let newValues = [];
 
   while (files.hasNext()) {
-    const file     = files.next();
-    const original = file.getName();
-
-    count += 1;
-    console.log(`変更前: ${count}. ${original}`);
-
+    const file        = files.next();
+    const original    = file.getName();
     const newFileName = lists.reduce((accumulator, list) => accumulator.replace(...list), original);
+    count += 1;
+
+    console.log(`変更前: ${count}. ${original}`);
     console.log(`変更後: ${count}. ${newFileName}`);
     
     newValues.push([newFileName, file.getId()]);
 
   }
+
   console.log(`${count}件`);
   console.log(newValues);
 
