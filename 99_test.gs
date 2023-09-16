@@ -36,7 +36,7 @@ function test_getRange(){
  * n列目の文字が入力されている最終行を取得する
  * 
  */
-function textCode_getLastRowWithText(){
+function text_getLastRowWithText(){
   const url    = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=0';
   const sheet  = getSheetByUrl(url);
   const values = sheet.getDataRange().getValues();

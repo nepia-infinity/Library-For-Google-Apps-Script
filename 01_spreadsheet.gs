@@ -102,7 +102,6 @@ function getRange(sheet, info) {
 
     console.log(`startRow: ${info.row || 1}, startColumn: ${info.column || 1}, numRows: ${numRows}, numColumns: ${numColumns}`);
     console.log(`取得範囲：　${range.getA1Notation()}`);
-
     return range;
 
   } else {
@@ -130,22 +129,15 @@ function getLastRowWithText(values, columnIndex){
   console.info('01_spreadsheetに記載');
 
   // 途中の空白行を含む1次元配列を生成する
-  const generateArrayWithBlank = values.map(row => row[columnIndex]);
-  console.log(generateArrayWithBlank);
+  const arrayWithBlank = values.map(row => row[columnIndex]);
+  let lastRow = arrayWithBlank.length;
 
-  let lastRow    = generateArrayWithBlank.length;
-  const reversed = generateArrayWithBlank.reverse();
+  for(let i = arrayWithBlank.length - 1; i >= 0; i--){
+    if(arrayWithBlank[i] !== '') break;
+    lastRow--;
+  }
 
-  for(const value of reversed){
-    if(!value){
-      //　空白行だったら、maxLengthから1を引く
-      lastRow -=1;
-
-    }else if(value){
-      break;
-    }
-  }//for
-  console.log(`最終行：　${lastRow}`);
+  console.log('最後の行:', lastRow);
   return lastRow
 }
 
