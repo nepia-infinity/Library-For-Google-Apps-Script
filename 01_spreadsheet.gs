@@ -369,42 +369,31 @@ function getValues(url) {
  * @return {SpreadsheetApp.Range} 
  * 
  */
-function setValues(sheet, info, values, alert){
-
+function setValues(sheet, info, values, alert) {
   console.info('setValues()を実行中');
   console.info('01_spreadsheetに記載');
-  console.log(info);
 
   const range = sheet.getRange(info.row, info.column, values.length, values[0].length);
   console.log(`転記範囲：${range.getA1Notation()}`);
 
-  if(!alert){
-    range.setValues(values);
-
-  }else if(alert){
-    const ui       = SpreadsheetApp.getUi();
+  if(alert){
+    const ui = SpreadsheetApp.getUi();
     const response = ui.alert(`転記範囲に間違いはありませんか？\n\n
       シート名：　${sheet.getName()}
       転記範囲：　${range.getA1Notation()}`, ui.ButtonSet.YES_NO
     );
 
-    switch (response){
-      case　ui.Button.YES:
-        console.log('“はい”　のボタンが押されました。');
-        range.setValues(values);
-        break;
-
-      case ui.Button.NO:
-        console.log('“いいえ”　のボタンが押されました。');
-        ui.alert('処理が中断されました。');
-        break;
-
-      default:
-        console.log('処理が中断されました。');
-        return
+    if(response === ui.Button.NO){
+      console.log('“いいえ”　のボタンが押されました。');
+      ui.alert('処理が中断されました。');
+      return;
     }
   }
+
+  range.setValues(values);
+  console.log('転記が完了しました。');
 }
+
 
 
 

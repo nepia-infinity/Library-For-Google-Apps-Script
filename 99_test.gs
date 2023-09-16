@@ -341,7 +341,7 @@ function test_createFolders(){
  */
 function test_setValues(){
   const url      = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=476791012';
-  const values   = [['JP55475', '桐生萌郁', '秋葉原']];
+  const values   = [['JP55475', 'pikachu', '秋葉原']];
   const sheet    = getSheetByUrl(url);
   const original = sheet.getDataRange().getValues();
 
