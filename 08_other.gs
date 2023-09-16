@@ -9,7 +9,7 @@
  */
 function generateNumbers(start, end) {
 
-  const array = Array.from({ length: end}, (_, index) => start + index);
+  const array = Array.from({length: end}, (_, index) => start + index);
   console.info('generateNumbers()を実行中');
   console.info('08_otherに記載');
   console.log(array);

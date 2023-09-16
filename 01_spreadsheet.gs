@@ -611,39 +611,6 @@ function selectColumns(values, column, ...queries) {
 
 
 
-
-/**
- * オブジェクトの中身をsortし、上書きする
- * 
- * @param  {Object.<number>} column - 見出し行の情報　{id: 0, name: 1, department: 2}
- * @param  {number} index - SORTする対象のindex
- * @return {Object.<number>}
- * 
- */
-function sortInsideObject(column, index) {
-  console.log(`sortInsideObject()を実行中`);
-  console.log(`01_spreadsheetに記載`);
-
-  // {id: 0, name: 1, department: 2}　-> [['id', 0],['name', 1],['department', 2]]
-  const values = Object.entries(column);
-  console.log(values);
-
-  values.sort((previous, current) => (previous[index] < current[index]) ? -1 : 1);
-  console.log(values);
-
-  // 分割代入で　keyのみを取り出している
-  const keys = values.map(([key]) => key).filter(Boolean);
-  console.log(keys);
-
-  // キーとインデックスのマッピングを生成
-  const object = Object.fromEntries(keys.map((key, index) => [key, index]));
-  console.log(object);
-
-  return object;
-}
-
-
-
 /**
  * 
  * getRange()メソッドで使うために、オブジェクトの値を全て　+1　にする
@@ -1201,18 +1168,26 @@ function generateMultipleSheets(sheetNames){
 
 
 /**
- * オブジェクト内の値を昇順に並び替え、それに対応するインデックスで置換する
+ * オブジェクト内の値を昇順に並び替え、valueをindexで置き換える
+ * selectColumnsと併用する事を前提に作成された関数
+ * 
+ *{id: 0, name: 1, department: 6, birthDate: 2} -> {id: 0, name: 1, birthDate: 2, department: 3}
  *
  * @param  {Object.<number>} object - 値を並び替えて置き換える対象のオブジェクト
+ * @param  {number} rowIndex - 比較する列のindex 1列目の場合、0
  * @return {Object.<number>} 値が昇順のインデックスで置き換えられたオブジェクト
  */
-function swapWithAscendingIndex(object){
+function swapWithIndex(object, rowIndex){
   
   console.log('元のオブジェクト');
   console.log(object);
 
-  const entries = Object.entries(object).sort((a, b) => a[1] - b[1]);
-  const replaced = entries.map(([key, _], index) => [key, index]);
+  // オブジェクトを一旦、2次元配列化して昇順で並び替える
+  // {id: 0, name: 1, department: 2}　-> [['id', 0],['name', 1],['department', 2]]
+  const entries   = Object.entries(object).sort((previous, current) => previous[rowIndex] - current[rowIndex]);
+
+  // keyとvalueを分割代入で取り出し、valueをindexに置き換える
+  const replaced  = entries.map(([key, _], index) => [key, index]);
   const newObject = Object.fromEntries(replaced);
 
   console.log(`sortしてindexで置換後`);

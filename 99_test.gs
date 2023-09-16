@@ -287,11 +287,12 @@ function test_modifyObject(){
 /**
  * 
  * オブジェクトの中身を上書きする
- * 
+ * すごく似た関数がある
  */
 function test_sortInsideObject(){
   const original = {subject: 2, date: 4, id: 1};
   sortInsideObject(original, 1);
+  swapWithAscendingIndex(original);
 }
 
 
@@ -571,3 +572,6 @@ function test_generateNameWithUrl(){
   const html = nepia_infinity.generateNameWithUrl(url, 0, {name: '氏名', url: 'URL'});
   nepia_infinity.showHtmlSentence(html, 'HTMLを表示する');
 }
+
+
+
