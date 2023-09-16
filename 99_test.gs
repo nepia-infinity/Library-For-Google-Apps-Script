@@ -295,6 +295,18 @@ function test_sortInsideObject(){
 }
 
 
+/** sortの挙動補足 */
+function test_sortInsideObject_sideNote(){
+  const values = [['id', 5],['name', 3],['department', 4]];
+  const index  = 1;
+  values.sort((previous, current) => (previous[index] < current[index]) ? -1 : 1);
+
+  // 1週目：previous = undefined,   current = ['id', 5] 
+  // 2週目：previous = ['id', 5],   current = ['name', 3]
+  // 3週目：previous = ['name', 3], current = ['department', 4]]
+}
+
+
 /**
  * 
  * 値が配列の中に存在するかどうかを調べる

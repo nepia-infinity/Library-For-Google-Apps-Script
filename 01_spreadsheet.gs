@@ -584,7 +584,7 @@ function createTextFinder(url, query, sheetName) {
  * 
  * @param  {Array.<Array.<string|number>>} values - 元の2次元配列
  * @param  {Object.<number>} column - 見出し行のオブジェクト (例) {id: 0, name: 1, university: 3}
- * @param  {string} query - 2次元配列から情報を取捨選択するためのキーワード
+ * @param  {Array.<string>} queries - 2次元配列から情報を取捨選択するためのキーワード、残余引数なので、いくつでも指定可
  * @return {Array.<Array.<string|number>>} 新しい配列
  *
  */
@@ -621,27 +621,25 @@ function selectColumns(values, column, ...queries) {
  * 
  */
 function sortInsideObject(column, index) {
-
   console.log(`sortInsideObject()を実行中`);
   console.log(`01_spreadsheetに記載`);
 
+  // {id: 0, name: 1, department: 2}　-> [['id', 0],['name', 1],['department', 2]]
   const values = Object.entries(column);
-  console.log(`Object.entriesの実行結果`);
   console.log(values);
 
-  // 2次元配列を日付などでSORTする
-  const newValues = values.sort((previous, current) => (previous[index] < current[index]) ? -1 : 1);
-  console.log(`SORT後の2次元配列`);
-  console.log(newValues);
+  values.sort((previous, current) => (previous[index] < current[index]) ? -1 : 1);
+  console.log(values);
 
-  const keys = newValues.map(record => record[0]).filter(value => value);
-  // console.log(keys);
+  // 分割代入で　keyのみを取り出している
+  const keys = values.map(([key]) => key).filter(Boolean);
+  console.log(keys);
 
-  const object = new Object();
-  keys.map((key, index) => object[`${key}`] = index);
+  // キーとインデックスのマッピングを生成
+  const object = Object.fromEntries(keys.map((key, index) => [key, index]));
   console.log(object);
 
-  return object
+  return object;
 }
 
 
@@ -661,12 +659,11 @@ function modifyObject(original) {
   console.log(`modifyObject()を実行中`);
   console.log(`01_spreadsheetに記載`);
 
-  console.log(original);
-
   const object = Object.keys(original).reduce((accumulator, key) => (
     {...accumulator, [key]: original[key] += 1} 
   ),{});
 
+  console.log(original);
   console.log(object);
   return object
 }
@@ -689,16 +686,13 @@ function selectNewValues(existingRecords, newValues, columnIndex){
   console.log(`selectNewValues() 関数を実行中`);
   console.log(`01_spreadsheet に記載中`);
 
-  newValues.shift();
+  const result  = [];
+  const newData = [...newValues]; // スプレッド演算子を使って、newValuesをコピー
+  newData.shift();
 
-  console.log('newValues ヘッダー行削除後');
-  console.log(newValues);
-
-  let result = [];
-
-  newValues.map(row => {
-    if(existingRecords.indexOf(row[columnIndex]) === -1){
-      console.log(`${row[columnIndex]} は新しい値です。転記対象です。`);
+  newData.forEach(row => {
+    if (existingRecords.indexOf(row[columnIndex]) === -1) {
+      console.log(`${newValue[columnIndex]} は新しい値です。転記対象です。`);
       result.push(row);
     }
   });
