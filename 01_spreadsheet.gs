@@ -313,38 +313,25 @@ function convertValuesToObjects(values) {
  * @return {string}
  */
 function showPrompt(title, sample) {
-
   console.info(`showPrompt()を実行中`);
   console.info(`01_spreadsheetに記載`);
   
-  let ui;
-
-  try{
-    ui = SpreadsheetApp.getUi();
-  }catch{
-    ui = DocumentApp.getUi();
-  }
-
+  const ui = (SpreadsheetApp.getUi() || DocumentApp.getUi());
   const response = ui.prompt(title, sample, ui.ButtonSet.OK);
   const input    = response.getResponseText();
 
-  switch (response.getSelectedButton()){
-    case ui.Button.OK:
-      console.log(`入力された内容：${input}`);
-      break;
-
-    case ui.Button.CLOSE:
-      console.log('閉じるボタンが押されました。');
-      break;
-
-    default:
+  if (response.getSelectedButton() === ui.Button.OK) {
+    console.log(`入力内容：${input}`);
+    
+  }else{
     console.log('処理が中断されました。');
 
-  }//switch
-
-  return input
-
+  }
+  return input;
 }
+
+
+
 
 /**
  * シートの表示内容を2次元配列で取得する
