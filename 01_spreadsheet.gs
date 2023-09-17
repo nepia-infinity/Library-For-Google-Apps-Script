@@ -156,7 +156,7 @@ function getLastRowWithText(values, columnIndex){
  */
 function generateArray(values, columnIndex){
 
-  console.info(`generateArray_()を実行中`);
+  console.info(`generateArray()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
   const array = values.map(record => record[columnIndex]).filter(value => value);
