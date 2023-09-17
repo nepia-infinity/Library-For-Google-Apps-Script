@@ -374,18 +374,19 @@ function getValues(url) {
  * @param  {SpreadsheetApp.Sheet} sheet - シートオブジェクト
  * @param  {Object.<number>} info - 取得開始行と取得開始列 {row: 1, column: 2}
  * @param  {Array.<Array.<string|number>>} values - 2次元配列
- * @param  {string} alert - setValuesを実行する前にアラートを表示するかいなか　(例)　アラート
+ * @param  {boolean} hasAlert - setValuesを実行する前にアラートを表示するかどうか
  * @return {SpreadsheetApp.Range} 
  * 
  */
-function setValues(sheet, info, values, alert) {
+function setValues(sheet, info, values, hasAlert) {
+  
   console.info('setValues()を実行中');
   console.info('01_spreadsheetに記載');
 
   const range = sheet.getRange(info.row, info.column, values.length, values[0].length);
   console.log(`転記範囲：${range.getA1Notation()}`);
 
-  if(alert){
+  if(hasAlert){
     const ui = SpreadsheetApp.getUi();
     const response = ui.alert(`転記範囲に間違いはありませんか？\n\n
       シート名：　${sheet.getName()}

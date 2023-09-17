@@ -354,14 +354,14 @@ function test_createFolders(){
  */
 function test_setValues(){
   const url      = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=476791012';
-  const values   = [['JP55475', 'pikachu', '秋葉原']];
+  const values   = [['JP55475', '炭治郎', '東京']];
   const sheet    = getSheetByUrl(url);
   const original = sheet.getDataRange().getValues();
 
   const targetRow = getLastRowWithText(original, 1) + 1;
   const info      = {row: targetRow, column: 1}
-  // setValues(sheet, info, values, 'アラート');
-  setValues(sheet, info, values);
+  setValues(sheet, info, values, true);
+  // setValues(sheet, info, values);
 }
 
 
