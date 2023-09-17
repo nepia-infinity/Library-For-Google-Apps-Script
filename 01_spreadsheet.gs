@@ -818,8 +818,8 @@ function sortInsideArray(array, key){
  */
 function findDataByQuery(url, queryColumnIndex, query, targetColumnIndex) {
 
-  console.log(`findDataByQuery()を実行中`);
-  console.log(`01_spreadsheetに記載`);
+  console.info(`findDataByQuery()を実行中`);
+  console.info(`01_spreadsheetに記載`);
 
   const values   = getValues(url);
   const foundRow = values.find(row => row[queryColumnIndex] === query);
@@ -1005,13 +1005,13 @@ function replacePlaceholders_(values, info){
  * @param  {string} templateFileId - テンプレートのファイルID
  * @param  {string} folderIdentifier - フォルダのURL or フォルダID
  * @param  {string} replacedFileName - 複製したファイルに付ける名前
- * @param  {string} log - 省略可、引数を定義すると、実行中の関数名を表示する
+ * @param  {boolean} hasLog - 省略可、引数を定義すると、実行中の関数名を表示する
  * @return {string} 複製したファイルのID
  * 
  */
-function makeCopyFile(templateFileId, folderIdentifier, replacedFileName, log){
+function makeCopyFile(templateFileId, folderIdentifier, replacedFileName, hasLog){
 
-  if(log){
+  if(hasLog){
     console.info(`makeCopyFile()を実行中`);
     console.info(`01_spreadsheetに記載`);
   }
@@ -1038,6 +1038,10 @@ function makeCopyFile(templateFileId, folderIdentifier, replacedFileName, log){
  * 
  */
 function insertNewSheet(sheetName){
+
+  console.info(`insertNewSheet()を実行中`);
+  console.info(`01_spreadsheetに記載`);
+
   const newSheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet();
 
   try{
@@ -1071,12 +1075,12 @@ function insertNewSheet(sheetName){
  */
 function setRules(sourceSheetUrl, columnIndex, cell){
 
+  console.info(`setRules()を実行中`);
+  console.info(`01_spreadsheetに記載`);
+
   const values = getValues(sourceSheetUrl);
   const array  = generateArray(values, columnIndex);
   const sheet  = SpreadsheetApp.getActiveSheet();
-
-  console.log(`setRules()を実行中`);
-  console.log(`01_spreadsheetに記載`);
 
   sheet.getRange(cell)
   .setDataValidation(SpreadsheetApp.newDataValidation()
@@ -1098,8 +1102,8 @@ function setRules(sourceSheetUrl, columnIndex, cell){
  */
 function rotateValues(values) {
 
-  console.log(`rotateValues()を実行中`);
-  console.log(`01_spreadsheetに記載`);
+  console.info(`rotateValues()を実行中`);
+  console.info(`01_spreadsheetに記載`);
 
   const rotated = values[0].map((_, i) => values.map(row => row[i]));
   console.log(`変更後`);
@@ -1121,8 +1125,8 @@ function rotateValues(values) {
  */
 function buildObjectFromPairs(header, keys, array) {
 
-  console.log(`buildObjectFromArray()を実行中`);
-  console.log(`01_spreadsheetに記載`);
+  console.info(`buildObjectFromArray()を実行中`);
+  console.info(`01_spreadsheetに記載`);
 
   const object = keys.reduce((accumulator, key, index) => {
     const result = header.indexOf(array[index]);
@@ -1143,6 +1147,10 @@ function buildObjectFromPairs(header, keys, array) {
  * 
  */
 function deleteSpecificSheets(excludedSheetNames){
+
+  console.info(`deleteSpecificSheets()を実行中`);
+  console.info(`01_spreadsheetに記載`);
+
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   const sheets      = spreadsheet.getSheets();
   let count         = 0;
@@ -1171,6 +1179,10 @@ function deleteSpecificSheets(excludedSheetNames){
  * 
  */
 function generateMultipleSheets(sheetNames){
+
+  console.info(`generateMultipleSheets()を実行中`);
+  console.info(`01_spreadsheetに記載`);
+
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   sheetNames.forEach(sheetName => spreadsheet.insertSheet(sheetName));
   SpreadsheetApp.getUi().alert(`${sheetNames.length}　件のシートを作成しました`);
@@ -1189,13 +1201,16 @@ function generateMultipleSheets(sheetNames){
  * @return {Object.<number>} 値が昇順のインデックスで置き換えられたオブジェクト
  */
 function swapWithIndex(object, rowIndex){
+
+  console.info(`swapWithIndex()を実行中`);
+  console.info(`01_spreadsheetに記載`);
   
   console.log('元のオブジェクト');
   console.log(object);
 
   // オブジェクトを一旦、2次元配列化して昇順で並び替える
   // {id: 0, name: 1, department: 2}　-> [['id', 0],['name', 1],['department', 2]]
-  const entries   = Object.entries(object).sort((previous, current) => previous[rowIndex] - current[rowIndex]);
+  const entries = Object.entries(object).sort((previous, current) => previous[rowIndex] - current[rowIndex]);
 
   // keyとvalueを分割代入で取り出し、valueをindexに置き換える
   const replaced  = entries.map(([key, _], index) => [key, index]);
@@ -1221,7 +1236,11 @@ function swapWithIndex(object, rowIndex){
  * @return {Object.<number>} オブジェクト　（例）　{ 'とても満足': 3, 'やや不満': 2, 'やや満足': 3, '不満': 1 }
  * 
  */
-function getItemCounts(array, items) {
+function getItemCounts(array, items){
+
+  console.info(`getItemCounts()を実行中`);
+  console.info(`01_spreadsheetに記載`);
+
   const counts = {};
   array.forEach(item => {
     if (items.includes(item)) {
