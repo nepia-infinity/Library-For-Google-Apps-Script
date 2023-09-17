@@ -210,8 +210,8 @@ function getHeaderRow(values, query){
     console.log(`ヘッダー行：　${row}`);
     return row;
   }
-
-  return 1; // 一致する行が見つからない場合、デフォルトで1行目を返す
+  console.warn(`一致する行が見つかりませんでした。1を返します`);
+  return 1;
 }
 
 
@@ -586,7 +586,6 @@ function createTextFinder(url, query, sheetName) {
 
 
 
-
 /**
  * getDataRange()などで取得した2次元配列から必要な列だけを抽出し、新しい2次元配列を作成する
  * 
@@ -615,7 +614,6 @@ function selectColumns(values, column, ...queries) {
   console.log(filtered);
   return filtered;
 }
-
 
 
 
@@ -818,6 +816,7 @@ function sortInsideArray(array, key){
 }
 
 
+
 /**
  * スプレッドシートの2次元配列内のデータを検索し、一致した行かつ指定した列の情報を返す
  * 
@@ -842,6 +841,7 @@ function findDataByQuery(url, queryColumnIndex, query, targetColumnIndex) {
 
   return result;
 }
+
 
 
 /**
@@ -870,6 +870,7 @@ function combineColumnToSingleCell(url){
   console.log(newValues);
   return newValues
 }
+
 
 
 /**
@@ -963,7 +964,6 @@ function duplicateReplacedTemplate(info){
   // ヘッダー行を除いてカウントする
   SpreadsheetApp.getUi().alert(`${newValues.length -1}　件の書類を作成しました`);
 }
-
 
 
 
