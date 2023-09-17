@@ -741,35 +741,30 @@ function convertToSingleColumn(original){
 
 
 /**
- * テンプレートの文章にシートの値を流し込むスクリプト
+ *  文字列内の指定されたプレイスホルダーをスプレッドシートの値で置き換え2次元配列で返す
  * 
- * @param {string} template - 置換対象となる文章やテンプレート
- * @param {Array.<number>} targetArray - 置換対象となる単語、プレイスホルダーを格納した1次元配列
- * @param {Array.<Array.<string>>} values - 主にシートから取得した2次元配列
+ * @param  {string} template - 置換対象となる文章  (例)　'こんにちは、{name}さん。URLは{url}です。'
+ * @param  {Array.<Array.<string>>} values - 主にシートから取得した2次元配列 (例)　 [['John', 'https://example.com'],['Tim', 'https://example2.com']]
+ * @param  {Array.<string>} params - 置換対象となる単語、プレイスホルダーの文字列 (例)　  '{name}', '{url}'
+ * @return {Array.<Array.<string>>}
  * 
  */
-function replaceTemplateWithValues(template, targetArray, values) {
+function replaceStringWithSheetValue(originalText, values, ...params) {
 
-  console.info(`replaceTemplateWithValues()を実行中`);
+  console.info(`replaceStringWithSheetValue()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
-  const newValues   = [];
-  
-  for(const row of values){
-    const lists = targetArray.map((string, index) => [new RegExp(string, 'g'), row[index]]);
-    console.log(lists);
-
-    // 2次元配列を作成しテンプレートの文章を置換する
-    // [[/置換対象/g, '差込する値'], [/置換対象/g, '差込する値']]
-    const replaced = lists.reduce((acc, [regex, replacement]) => acc.replace(regex, replacement), template);
-    console.log(replaced);
-
-    newValues.push([replaced]);
-
-  }
+  //シートの2次元配列を取り出し、originalText内のプレイスホルダーを書き換える
+  const newValues = values.map(row => {
+    const replaced = params.reduce((accumulator, current, index) => {
+      const regex = new RegExp(current, 'g');
+      return accumulator.replace(regex, row[index]);
+    }, originalText);
+    return [replaced];
+  });
 
   console.log(newValues);
-  return newValues
+  return newValues;
   
 }
 

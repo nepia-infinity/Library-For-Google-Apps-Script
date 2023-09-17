@@ -585,6 +585,15 @@ function test_convertValuesToObjects(){
 }
 
 
+function test_replaceStringWithSheetValue(){
+  const values      = [["John", "https://example.com"],["Tim", "https://example2.com"]];
+  const template    = "こんにちは、{name}さん。URLは{url}です。";
+
+  // nepia_infinity.replaceStringWithSheetValue(template, values, '{name}', '{url}');
+  replaceStringWithSheetValue(template, values, '{name}', '{url}');
+}
+
+
 
 
 

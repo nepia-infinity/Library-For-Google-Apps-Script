@@ -93,6 +93,10 @@ function getShortenedLastName(fullName, hasLog) {
  * 
  */
 function createMonthlyDataNames(prefix, maxMonths, suffix) {
+
+  console.info(`createMonthlyDataNames()を実行中`);
+  console.info('03_stringに記載');
+
   const list = Array.from({ length: maxMonths }, (_, i) => {
     const month = ('0' + (i + 1)).slice(-2);
     return `${prefix}${month}${suffix}`;
