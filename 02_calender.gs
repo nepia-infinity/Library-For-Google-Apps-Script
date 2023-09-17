@@ -71,6 +71,11 @@ function generateDateStringValues(string) {
  */
 function convertDay(tempNumber, log){
 
+  if(log){
+    console.info(`convertDay()を実行中`);
+    console.info(`02_calenderに記載`);
+  }
+
   // 文字列を配列化
   const dayOfWeek = '日月火水木金土';
   const daysArray = dayOfWeek.split('');
@@ -89,7 +94,6 @@ function convertDay(tempNumber, log){
 
 /**
  * 引数にした日時からnカ月後の予定を2次元配列で取得する
- * FIXME:全ての予定を取得しているため、予定がたくさん登録されている場合は　を使用してください
  * 
  * @param  {string} string - 'yyyy/MM/dd'形式で日付を指定　（例）'2023/04/28'
  * @param  {number} offset - nカ月後にあたる　数値で指定
@@ -99,7 +103,7 @@ function convertDay(tempNumber, log){
  */
 function getCalAllEvents(string, offset, calId) {
 
-  console.info(`convertDay()を実行中`);
+  console.info(`getCalAllEvents()を実行中`);
   console.info(`02_calenderに記載`);
 
   const cal   = calId ? CalendarApp.getCalendarById(calId) : CalendarApp.getDefaultCalendar();
