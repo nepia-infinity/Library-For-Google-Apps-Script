@@ -4,9 +4,16 @@
  * 
  * @param  {date} date - dateオブジェクト
  * @param  {sting} format - 'yyyy/MM/dd', 'yyyy/MM/dd HH:mm', 'yyyy/MM/dd (E)'
+ * @param  {boolean} hasLog - 実行中の関数名をログ表示にするかどうか
  * @return {string} （例）2022/04/06
  */
-function formatDate(date, format){
+function formatDate(date, format, hasLog){
+
+  if(hasLog){
+    console.info(`formatDate()を実行中`);
+    console.info(`02_calenderに記載`);
+  }
+
   const formatDate = Utilities.formatDate(date, 'JST', format);
   const isMatch    = formatDate.match(/[a-zA-Z]/) !== null;
   const day        = convertDay(date.getDay());
@@ -26,6 +33,7 @@ function formatDate(date, format){
  * 
  */
 function generateDateStringValues(string) {
+
   console.info(`generateDateStringValues()を実行中`);
   console.info(`02_calenderに記載`);
 
@@ -65,23 +73,20 @@ function generateDateStringValues(string) {
  * 英語表記の曜日、sat, wedなどを、'日月火水木金土'のいずれかに変換する
  * 
  * @param  {number} tempNumber - date.getDay()
- * @param  {number} log - 使用頻度が多い関数なので、文字列で 'log'　と指定した時のみログを出力する
+ * @param  {boolean} hasLog - 実行中の関数名をログ表示にするかどうか
  * @return {string} 
  * 
  */
-function convertDay(tempNumber, log){
+function convertDay(tempNumber, hasLog){
 
-  if(log){
-    console.info(`convertDay()を実行中`);
-    console.info(`02_calenderに記載`);
-  }
-
-  // 文字列を配列化
   const dayOfWeek = '日月火水木金土';
   const daysArray = dayOfWeek.split('');
   const day       = daysArray[tempNumber];
 
-  if(log){
+  if(hasLog){
+    console.info(`convertDay()を実行中`);
+    console.info(`02_calenderに記載`);
+
     console.log(daysArray);
     console.log(`daysArray[${tempNumber}]　${day}曜日`);
   }
