@@ -217,8 +217,7 @@ function getHeaderRow(values, query){
 
 
 /**
- * 2次元配列から見出し行の位置を連想配列として取得する
- * FIXME: 見出しの名前が変更になった時の対応が難しい
+ * 引数で渡されたオブジェクトの値をindexOfの結果に差し替える
  * 類似する関数として、generateHeaderIndexがある
  * 
  * @param  {Array.<Array.<string|number>>} values - 2次元配列
@@ -231,14 +230,12 @@ function replaceHeaderValues(values, rowIndex, targetColumn) {
   console.info(`replaceHeaderValues()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
-  const column = {};
   const header = values[rowIndex];
   console.log(header);
 
-  // 空のcolumnにプロパティを挿入する
-  for(const [key, value] of Object.entries(targetColumn)){
-    column[key] = header.indexOf(value);
-  }
+  // targetColumnの値をindexOfの結果で差し替える (例) {id: 'ID', name: '名前', branch: '所属先'};
+  const newValues = Object.entries(targetColumn).map(([key, value]) => [key, header.indexOf(value)]);
+  const column    = Object.fromEntries(newValues);
 
   console.log(column);
   return column
@@ -250,7 +247,6 @@ function replaceHeaderValues(values, rowIndex, targetColumn) {
 /**
  * 
  * 見出し行の位置を特定する
- * FIXME: 見出し行の項目が全て英語ではないと使えない
  * 類似する関数として、replaceHeaderValuesがある
  * 
  * @param  {Array.<Array.<string|number>>} values - 2次元配列
@@ -701,17 +697,13 @@ function generateNameWithUrl(url, headerIndex, columnNames, ...params) {
   const filtered = getFilteredValues(values, params);
   console.log(filtered);
   console.log(`該当件数：　${filtered.length} 件`);
-
-  // spliceは元の配列に影響が出てしまうため、配列をコピーして処理を進める
-  const data = [...values];
-  data.splice(headerIndex, 1);
   
   // 引数で渡されたオブジェクトの値をindexOfの結果に差し替える
   const columnIndex = replaceHeaderValues(values, headerIndex, columnNames);
   console.log(columnIndex);
 
   // HTMLを生成
-  const listItems = data.map(row => {
+  const listItems = filtered.map(row => {
     const name = getLastName(row[columnIndex.name]);
     const link = row[columnIndex.url];
     return `<li><a href="${link}">${name}さん</a></li>`;
@@ -736,11 +728,8 @@ function convertToSingleColumn(original){
     return accumulator;
   }, []);
 
-  console.log(`convertToSingleColumn()を実行中`);
-  console.log(`01_spreadsheetに記載`);
-
-  console.log(`変換前`);
-  console.log(original);
+  console.info(`convertToSingleColumn()を実行中`);
+  console.info(`01_spreadsheetに記載`);
 
   console.log(`変換後`);
   console.log(newValues);
@@ -760,8 +749,8 @@ function convertToSingleColumn(original){
  */
 function replaceTemplateWithValues(template, targetArray, values) {
 
-  console.log(`replaceTemplateWithValues()を実行中`);
-  console.log(`01_spreadsheetに記載`);
+  console.info(`replaceTemplateWithValues()を実行中`);
+  console.info(`01_spreadsheetに記載`);
 
   const newValues   = [];
   
