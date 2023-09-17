@@ -689,8 +689,9 @@ function selectNewValues(existingRecords, newValues, columnIndex){
  * 
  */
 function generateNameWithUrl(url, headerIndex, columnNames, ...params) {
-  console.log(`generateNameWithUrl()を実行中`);
-  console.log(`01_spreadsheetに記載`);
+
+  console.info(`generateNameWithUrl()を実行中`);
+  console.info(`01_spreadsheetに記載`);
 
   // ヘッダー行を削除する
   const values   = getValues(url);
@@ -723,15 +724,15 @@ function generateNameWithUrl(url, headerIndex, columnNames, ...params) {
  */
 function convertToSingleColumn(original){
 
+  console.info(`convertToSingleColumn()を実行中`);
+  console.info(`01_spreadsheetに記載`);
+
   const newValues = original.flat().reduce((accumulator, current) => {
     accumulator.push([current]);
     return accumulator;
   }, []);
 
-  console.info(`convertToSingleColumn()を実行中`);
-  console.info(`01_spreadsheetに記載`);
-
-  console.log(`変換後`);
+  console.warn(`変換後`);
   console.log(newValues);
 
   return newValues
