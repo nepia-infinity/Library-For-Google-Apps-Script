@@ -379,7 +379,7 @@ function getValues(url) {
  * 
  */
 function setValues(sheet, info, values, hasAlert) {
-  
+
   console.info('setValues()を実行中');
   console.info('01_spreadsheetに記載');
 
@@ -554,7 +554,8 @@ function removeDuplicates(array){
  * @param  {string} sheetName - 検索したいシートの名前　検索対象を絞りたい場合に使用
  * @return {Array.<Object.<srting | number>>} 
  */
-function createTextFinder(url, query, sheetName) {
+function createTextFinder(url, query, sheetName){
+
   const spreadsheet = SpreadsheetApp.openByUrl(url);
   let finder;
 
@@ -597,8 +598,9 @@ function createTextFinder(url, query, sheetName) {
  *
  */
 function selectColumns(values, column, ...queries) {
-  console.log(`selectColumns()を実行中`);
-  console.log(`01_spreadsheetに記載`);
+
+  console.info(`selectColumns()を実行中`);
+  console.info(`01_spreadsheetに記載`);
   
   //{id: 0, name: 1, university: 3}　-> [0, 1, 3]
   const columnsToSelect = Object.values(column);
@@ -685,35 +687,31 @@ function selectNewValues(existingRecords, newValues, columnIndex){
  * 
  * @param  {string} url - スプレッドシートのURL
  * @param  {number} headerIndex - 見出し行の配列番号
- * @param  {Object.<string>} object - 見出し行に使用されている項目名をオブジェクトで指定　　（例）{name: '氏名', url: 'URL'}
+ * @param  {Object.<string>} columnNames - 見出し行に使用されている項目名をオブジェクトで指定　　（例）{name: '氏名', url: 'URL'}
  * @param  {string} params - 検索クエリ複数可　（例）　active,　合格など残余引数として指定できる
  * @return {string} 生成されたHTML文字列
  * 
  */
-function generateNameWithUrl(url, headerIndex, headers, ...params) {
+function generateNameWithUrl(url, headerIndex, columnNames, ...params) {
   console.log(`generateNameWithUrl()を実行中`);
   console.log(`01_spreadsheetに記載`);
 
-  const sheet  = getSheetByUrl(url);
-  const values = sheet.getDataRange().getDisplayValues();
-  
-  // ヘッダー行を除いたデータをコピー
-  const data = [...values];
-  data.splice(headerIndex, 1);
-
-  const header      = values[headerIndex];
-  const newValues   = Object.entries(headers).map(([key, columnName]) => [key, header.indexOf(columnName)]); // 2次元配列化
-  const columnIndex = Object.fromEntries(newValues);  // オブジェクト化
-
-  console.log(header);
-  console.log(columnIndex);
-
-  const filtered = data.filter(row => params.every(param => row.includes(param)));
+  // ヘッダー行を削除する
+  const values   = getValues(url);
+  const filtered = getFilteredValues(values, params);
   console.log(filtered);
   console.log(`該当件数：　${filtered.length} 件`);
 
+  // spliceは元の配列に影響が出てしまうため、配列をコピーして処理を進める
+  const data = [...values];
+  data.splice(headerIndex, 1);
+  
+  // 引数で渡されたオブジェクトの値をindexOfの結果に差し替える
+  const columnIndex = replaceHeaderValues(values, headerIndex, columnNames);
+  console.log(columnIndex);
+
   // HTMLを生成
-  const listItems = filtered.map(row => {
+  const listItems = data.map(row => {
     const name = getLastName(row[columnIndex.name]);
     const link = row[columnIndex.url];
     return `<li><a href="${link}">${name}さん</a></li>`;
