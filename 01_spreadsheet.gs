@@ -745,7 +745,7 @@ function convertToSingleColumn(original){
  * 
  * @param  {string} template - 置換対象となる文章  (例)　'こんにちは、{name}さん。URLは{url}です。'
  * @param  {Array.<Array.<string>>} values - 主にシートから取得した2次元配列 (例)　 [['John', 'https://example.com'],['Tim', 'https://example2.com']]
- * @param  {Array.<string>} params - 置換対象となる単語、プレイスホルダーの文字列 (例)　  '{name}', '{url}'
+ * @param  {Array.<string>} params - 置換対象となる単語、プレイスホルダーの文字列 (例)　'{name}', '{url}'
  * @return {Array.<Array.<string>>}
  * 
  */

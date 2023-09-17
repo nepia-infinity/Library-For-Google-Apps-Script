@@ -10,7 +10,7 @@
 function extractText(string, reg, ...params){
 
   const result   = string.match(reg);
-  const replaced = result !== null ? params.reduce((modifiedString, targetWord) => modifiedString.replace(targetWord, ''), result[0])
+  const replaced = result !== null ? params.reduce((accumulator, current) => accumulator.replace(current, ''), result[0])
     : (console.warn(`${reg}に一致しませんでした`), string);
 
   console.log(`オリジナルの文字列： ${string}`);

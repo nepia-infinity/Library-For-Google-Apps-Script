@@ -42,29 +42,23 @@ function getFilesValues(folderUrl, query) {
  * GoogleドライブのURLからフォルダIDを抽出する
  * 
  * @param  {string} folderUrl - GoogleドライブのフォルダのURL
- * @param  {string} log - 省略可。定義されている場合のみ、実行中の関数名を表記する
+ * @param  {boolean} hasLog - 省略可。定義されている場合のみ、実行中の関数名を表記する
  * @return {string}
  */
-function getFolderId(folderUrl, log){
+function getFolderId(folderUrl, hasLog){
 
-  if(log){
+  if(hasLog){
     console.info('getFolderId()を実行中');
     console.info('04_driveに記載');
   }
 
-  let folderId;
-  const reg = /.*\//;
+  const reg      = /.*\//;
+  const lists    = [[reg, ''], [/.hl=.*/, '']];
+  const folderId = folderUrl.match(reg) !== null ? lists.reduce((accumulator, current) => accumulator.replace(...current), folderUrl) : false
 
-  // URLから不要な文字列を削除する
-  if(folderUrl.match(reg) !== null){
-    folderId = folderUrl
-    .replace(reg, '')
-    .replace(/.hl=.*/, '');
-
-    console.log(`folderName: ${DriveApp.getFolderById(folderId).getName()}`);
-    console.log(`folderUrl:  ${folderUrl}`);
-    console.log(`folderId:   ${folderId}`);
-  }
+  console.log(`folderName: ${DriveApp.getFolderById(folderId).getName()}`);
+  console.log(`folderUrl:  ${folderUrl}`);
+  console.log(`folderId:   ${folderId}`);
 
   return folderId
 }
@@ -129,6 +123,7 @@ function getDriveFiles(folderUrl, log){
 }
 
 
+
 /*
 共有範囲
 DriveApp.getFileById('File_ID').getSharingAccess();
@@ -152,40 +147,41 @@ NONE: なし
 /**
  * 指定したユーザーにフォルダの閲覧権限や編集権限を一括で付与する
  * FIXME: 一度編集権限を付与してしまうとアクセス権を剥奪しないと閲覧オンリーなどに切り替えることが出来ない
+ * FIXME: フォルダの編集権限を付与する関数で、folderUrlにスプレッドシートのURLを指定するとエラーが起きる
  * 
  * @param  {string} folderUrl - GoogleドライブのフォルダのURL
  * @param  {string} users - 権限を付与したいユーザーを格納した配列
- * @param  {string} role - 編集権限
+ * @param  {string} role - 編集 or 閲覧
  * 
  */
-function authorizeEditing(folderUrl, users, role){
+function grantEditPermissionToFolder(folderUrl, users, role){
 
-  console.info('authorizeEditing()を実行中');
+  console.info('grantEditPermissionToFolder()を実行中');
   console.info('04_driveに記載');
 
   const folderId = getFolderId(folderUrl);
   const folder   = DriveApp.getFolderById(folderId);
   const reg      = / gmail.* | icloud.* /;
 
-  role = role === '編集' ? '編集' : '閲覧';
-  permission = role === '編集' ? DriveApp.Permission.EDIT : DriveApp.Permission.VIEW;
+  const permission = role === '編集' ? DriveApp.Permission.EDIT : DriveApp.Permission.VIEW;
 
   for(const user of users){
 
     if(user.match(reg) !== null){
       // 個人のフリーアドレス宛に権限を付与する
-      console.log(`${user} に ${folder.getName()}　の　${role} 権限を付与しました`);
+      console.log(`${user} に ${folder.getName()}　の　${role}権限を付与しました`);
       folder.addEditor(user).setSharing(DriveApp.Access.PRIVATE, permission);
 
     }else{
       // ドメイン内のユーザーに引数に応じた権限を付与する
-      console.log(`${user} に ${folder.getName()}　の　${role} 権限を付与しました`);
+      console.log(`${user} に ${folder.getName()}　の　${role}権限を付与しました`);
       folder.addEditor(user).setSharing(DriveApp.Access.ANYONE_WITH_LINK, permission);
 
     }
   }
   console.log(`全員に権限の付与が完了しました`);
 }
+
 
 
 /**
@@ -220,7 +216,6 @@ function createFolders(folderUrl, newFolderNameList, innerFolderNameList) {
   console.log(`全てのフォルダの作成が終了しました。作成結果が反映されるまで少し時間が掛かる場合があります`);
 
 }
-
 
 
 

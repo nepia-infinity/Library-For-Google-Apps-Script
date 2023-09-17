@@ -64,7 +64,7 @@ function test_formatDate(){
  */
 function test_extractText(){
   const string = 'ID:564321 波風ミナト';
-  extractText(string, /ID:[0-9]{6}/, [/ID.*:/, /\s.*/]);
+  extractText(string, /ID:[0-9]{6}/, [/ID.*:/, /\s.*/]); //ID:564321
 }
 
 
@@ -485,8 +485,8 @@ function test_generateStringDate(){
 }
 
 /**編集権限を付与する */
-function test_authorizeEditing(){
-  authorizeEditing('https://drive.google.com/drive/folders/1LhjJ6cfyp_PSujoMiGSkUnqIAmlC2rux', ['********@icloud.com'], '編集');
+function test_grantEditPermissionToFolder(){
+  grantEditPermissionToFolder('https://drive.google.com/drive/folders/1rhbnV8lGbrI6QvOw-7JEPZY5UkgZaMNM', ['nepia_infinity@icloud.com'], '編集');
 }
 
 
