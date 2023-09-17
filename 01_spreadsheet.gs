@@ -36,7 +36,6 @@ function getSheetByUrl(url, keyWord) {
 
 
 
-
 /**
  * SpreadsheetのURLからsheetオブジェクトを取得する。
  * シート名を取得したい場合は、2番目の引数に、'sheetName' と指定する
@@ -115,7 +114,6 @@ function getRange(sheet, info) {
     return range;
   }
 }
-
 
 
 
@@ -346,7 +344,6 @@ function showPrompt(title, sample) {
 
 
 
-
 /**
  * シートの表示内容を2次元配列で取得する
  * 
@@ -366,7 +363,6 @@ function getValues(url) {
   return values;
 
 }//end​
-
 
 
 
@@ -409,7 +405,6 @@ function setValues(sheet, info, values, alert) {
 
 
 
-
 /**
  * 指定した単語のみを含む2次元配列を生成
  * 
@@ -433,7 +428,6 @@ function getFilteredValues(values, ...params){
   return filtered
   
 }
-
 
 
 
@@ -495,7 +489,6 @@ function showHtmlSentence(file, title){
 
 
 
-
 /**
  * spliceメソッドを使用時に分かりやすくログを表示する
  * 
@@ -529,6 +522,7 @@ function splice(array, start, quantity, query){
 }
 
 
+
 /**
  * 
  * 1次元配列内の要素の重複を省く
@@ -547,6 +541,7 @@ function removeDuplicates(array){
   console.log(newArray);
   return newArray
 }
+
 
 
 /**
