@@ -40,7 +40,7 @@ function getSheetByUrl(url, keyWord) {
 /**
  * SpreadsheetのURLからsheetオブジェクトを取得する。
  * シート名を取得したい場合は、2番目の引数に、'sheetName' と指定する
- * アクティブなシートを元に処理をするため、トリガー設定は不向き
+ * FIXME: アクティブなシートを元に処理をするため、トリガー設定は不向き
  * 
  * @param  {string} targetSheetUrl - スプレッドシートのURL
  * @param  {string} string - 引数の省略可　'sheetName' と指定する
@@ -48,6 +48,10 @@ function getSheetByUrl(url, keyWord) {
  * 
  */
 function getActiveSheetByUrl(targetSheetUrl, string) {
+
+  console.info(`getActiveSheetByUrl()を実行中`);
+  console.info(`01_spreadsheetに記載`);
+
   const activeSheet    = SpreadsheetApp.getActiveSheet();
   const sheetInfoArray = targetSheetUrl.split('#gid='); //['https....', 'sheetId(typeof string)'];
 
@@ -82,12 +86,12 @@ function getActiveSheetByUrl(targetSheetUrl, string) {
  * 
  */
 function getRange(sheet, info) {
+
   console.info('getRange()を実行中');
   console.info('01_spreadsheetに記載');
 
   if (info && typeof info !== 'string') {
 
-    // infoがオブジェクトだった場合、次の処理を実施
     // info.row が falsy（例: undefined, null, 0, false など）の場合ゼロが設定されます。
     const offset = {
       row: info.row ? info.row - 1 : 0,
@@ -257,7 +261,7 @@ function replaceHeaderValues(values, rowIndex, targetColumn) {
  */
 function generateHeaderIndex(values, rowIndex){
   
-  console.log(`generateHeaderIndex()を実行中`);
+  console.info(`generateHeaderIndex()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
   const header = values[rowIndex];
@@ -290,7 +294,7 @@ function generateHeaderIndex(values, rowIndex){
 
 function convertValuesToObjects(values, columnIndex, keys) {
 
-  console.info(`generateHeaderIndex_()を実行中`);
+  console.info(`convertValuesToObjects()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
   // headers にvalues[0], recordsに、valuesの内容をコピーする　（スプレッド構文）
