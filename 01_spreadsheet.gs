@@ -707,24 +707,18 @@ function generateNameWithUrl(url, headerIndex, headers, ...params) {
   const data = [...values];
   data.splice(headerIndex, 1);
 
-  const header = values[headerIndex];
-
-  // 各列のインデックスをオブジェクトで保持
-  const columnIndex = {};
-  for (const key in headers) {
-    const columnName = headers[key];
-    columnIndex[key] = header.indexOf(columnName);
-  }
+  const header      = values[headerIndex];
+  const newValues   = Object.entries(headers).map(([key, columnName]) => [key, header.indexOf(columnName)]); // 2次元配列化
+  const columnIndex = Object.fromEntries(newValues);  // オブジェクト化
 
   console.log(header);
   console.log(columnIndex);
 
-  // フィルタリング
   const filtered = data.filter(row => params.every(param => row.includes(param)));
   console.log(filtered);
   console.log(`該当件数：　${filtered.length} 件`);
 
-  // HTML生成
+  // HTMLを生成
   const listItems = filtered.map(row => {
     const name = getLastName(row[columnIndex.name]);
     const link = row[columnIndex.url];
@@ -735,7 +729,6 @@ function generateNameWithUrl(url, headerIndex, headers, ...params) {
   console.log(html);
   return html;
 }
-
 
 
   
@@ -1110,6 +1103,7 @@ function setRules(sourceSheetUrl, columnIndex, cell){
 }
 
 
+
 /**
  * 
  * 2次元配列を回転させる
@@ -1155,11 +1149,6 @@ function buildObjectFromPairs(header, keys, array) {
   console.log(object);
   return object
 }
-
-
-
-
-  
 
 
 

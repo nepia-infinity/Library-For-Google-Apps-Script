@@ -570,9 +570,9 @@ function test_getHeaderRow(){
 
 /**採用業務を多用する、リンク付きの名前をHTML形式で表示する */
 function test_generateNameWithUrl(){
-  const url  = 'https://docs.google.com/spreadsheets/d/*******';
-  const html = nepia_infinity.generateNameWithUrl(url, 0, {name: '氏名', url: 'URL'});
-  nepia_infinity.showHtmlSentence(html, 'HTMLを表示する');
+  const url  = 'https://docs.google.com/spreadsheets/d/1JfPF1KQss6nMA4fHyGvNyAVnaE4zGG80aVx3qKhx4Ow/edit#gid=3542835';
+  const html = generateNameWithUrl(url, 0, {name: '氏名', url: 'URL'});
+  showHtmlSentence(html, 'HTMLを表示する');
 }
 
 
