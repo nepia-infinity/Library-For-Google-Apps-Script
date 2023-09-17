@@ -132,13 +132,15 @@ function getLastRowWithText(values, columnIndex){
   const arrayWithBlank = values.map(row => row[columnIndex]);
   let lastRow = arrayWithBlank.length;
 
+  // 値があった段階で処理を中断する
   for(let i = arrayWithBlank.length - 1; i >= 0; i--){
-    if(arrayWithBlank[i] !== '') break;
+    if(arrayWithBlank[i]) break;
     lastRow--;
   }
 
   console.log('最後の行:', lastRow);
   return lastRow
+
 }
 
 
@@ -280,23 +282,30 @@ function generateHeaderIndex(values, rowIndex){
  * 
  * 
  * @param  {Array.<Array.<string|number>>} values - 2次元配列
+ * @param  {number} columnIndex - 空白をチェックする列のインデックス（0から始まる）
+ * @param  {Array.<string>} keys - ヘッダー行、オブジェクトのkeyを格納した1次元配列 (例)　['name', 'url']
  * @return {Array.<Object.<string|number>>}
  * 
  */
 
-function convertValuesToObjects(values) {
+function convertValuesToObjects(values, columnIndex, keys) {
 
-  console.log(`generateHeaderIndex_()を実行中`);
+  console.info(`generateHeaderIndex_()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
-  const [headers, ...records] = values; // headers にvalues[0], recordsにそれ以外が代入される
+  // headers にvalues[0], recordsに、valuesの内容をコピーする　（スプレッド構文）
+  const [headers, ...records] = values; 
   console.log(values);
 
+  // keysが指定されていればそれをヘッダーとして使用し、そうでなければvaluesの1行目をヘッダーとする
+  const customHeaders   = keys || headers;
+  const filteredRecords = records.filter(record => !!record[columnIndex]);
+
   // 2次元配列内の1次元配列をオブジェクトに置き換える
-  // headers[0] = name;
+  // customHeaders[0] = name;
   // [Bob, 20, ramen] -> [name, Bob] -> {name: Bob}
-  const objects = records.map(record => Object.fromEntries(
-    record.map((value, i) => [headers[i], value])
+  const objects = filteredRecords.map(record => Object.fromEntries(
+    record.map((value, i) => [customHeaders[i], value])
   ));
 
   console.log(objects);

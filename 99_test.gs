@@ -567,11 +567,21 @@ function test_getHeaderRow(){
 }
 
 
+
+/**採用業務を多用する、リンク付きの名前をHTML形式で表示する */
 function test_generateNameWithUrl(){
   const url  = 'https://docs.google.com/spreadsheets/d/*******';
   const html = nepia_infinity.generateNameWithUrl(url, 0, {name: '氏名', url: 'URL'});
   nepia_infinity.showHtmlSentence(html, 'HTMLを表示する');
 }
 
+
+
+function test_convertValuesToObjects(){
+  const url      = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=476791012';
+  const values   = getValues(url);
+  const keys     = ['id', 'name', 'department'];
+  convertValuesToObjects(values, 0, keys);
+}
 
 
