@@ -1,47 +1,37 @@
 /**
  * 捜査対象のテキストから、文字列を消去して欲しい文字列を取得するための関数
+ * 使用回数が多くなる傾向にあるので、意図的にconsole.infoを記載していない
  * 
- * @param  {string} text - 操作対象のテキスト
+ * @param  {string} string - 操作対象のテキスト
  * @param  {string} reg -  正規表現
- * @param  {string} string - 置換対象の文字列、残余引数で何個でも可
+ * @param  {Array.<string>} string - 残余引数で何個でも指定可、　置換対象の文字列
  * @return {string}
  */
-function extractText(text, reg, ...params){
+function extractText(string, reg, ...params){
 
-  console.info('extractText()を実行中');
-  console.info('03_stringに記載');
+  const result   = string.match(reg);
+  const replaced = result !== null ? params.reduce((modifiedString, targetWord) => modifiedString.replace(targetWord, ''), result[0])
+    : (console.warn(`${reg}に一致しませんでした`), string);
 
-  let string;
+  console.log(`オリジナルの文字列： ${string}`);
+  console.log(`抽出された文字列：  ${replaced}`);
 
-  if(text.match(reg) !== null){
-    string = text.match(reg)[0];
+  return replaced
 
-    //配列に格納されている置換対象の文字列で置換していく
-    for(const targetWord of params){
-      string = string.replace(targetWord, '');
-    }
-   
-    console.log(`オリジナルの文字列：　${text}`);
-    console.log(`抽出された文字列：　${string}`);
-    
-    return string
-
-  }else{
-    console.log(`matchの結果：${text.match(reg)}`);
-    console.warn(text);
-    return text
-  }
 }
+
 
 
 
 /**
  * 氏名からスペースの前の苗字を取得します。
  * @param  {string} fullName - 氏名
+ * @param  {boolean} hasLog - 実行中の関数名を表示するかどうか
  * @return {string} 苗字
  */
-function getLastName(fullName, log) {
-  if (log) {
+function getLastName(fullName, hasLog){
+
+  if(hasLog){
     console.info(`getLastName()を実行中`);
     console.info('03_stringに記載');
   }
@@ -65,11 +55,12 @@ function getLastName(fullName, log) {
 /**
  * 3文字の苗字を取得します。
  * @param  {string} fullName - 氏名
- * @param  {string} log - 省略可　実行中の関数名を表示する
+ * @param  {boolean} hasLog - 省略可　実行中の関数名を表示するかどうか
  * @return {string} 3文字の苗字
  */
-function getShortenedLastName(fullName, log) {
-  if (log) {
+function getShortenedLastName(fullName, hasLog) {
+
+  if (hasLog) {
     console.info(`getShortenedLastName()を実行中`);
     console.info('03_stringに記載');
   }
