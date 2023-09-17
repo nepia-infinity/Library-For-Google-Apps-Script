@@ -468,6 +468,10 @@ function getFileNameWithUrl(folderUrl){
 * 
 */
 function getImageFiles_(folderUrl) {
+
+  console.info('getImageFiles_()を実行中');
+  console.info('04_driveに記載');
+
   const files  = getDriveFiles(folderUrl);
   const values = [];
 
@@ -480,7 +484,7 @@ function getImageFiles_(folderUrl) {
   }
 
   //ファイル名を連番順にSORTする
-  values.sort((a, b) => a[0] < b[0] ? -1:1);
+  values.sort((previous, current) => previous[0] < current[0] ? -1:1);
   console.log(values);
 
   return values
@@ -495,10 +499,51 @@ function getImageFiles_(folderUrl) {
  * @param  {string} fileName - ファイル名
  * @return {string} 
  */
-function getExtensionFromFileName_(fileName) {
+function getExtensionFromFileName_(fileName){
+
+  console.info('getExtensionFromFileName_()を実行中');
+  console.info('04_driveに記載');
+
   const match = fileName.match(/.jpg|.png|.pdf/i);
   console.log(`matchの結果:${match}`);
 
   return match ? match[0].toLowerCase() : null;
+}
+
+
+
+
+/**
+ * ドキュメントかシートのURLからファイルIDを返す
+ * 
+ * @param  {string} fileUrl - ドキュメントかシートのURL
+ * @return {string} ファイルIDを返す
+ * 
+ */
+function getFileId(fileUrl) {
+
+  console.info('getFileId()を実行中');
+  console.info('04_driveに記載');
+
+  // スプレッドシートURLの場合
+  const spreadsheetMatch = fileUrl.match(/\/spreadsheets\/d\/([\w-]+)\//);
+  if (spreadsheetMatch && spreadsheetMatch[1]) {
+    const fileId = spreadsheetMatch[1];
+    console.log(`シートのURL: ${fileUrl}`);
+    console.log(`ファイルID : ${fileId}`);
+    return fileId
+  }
+
+  // ドキュメントURLの場合
+  const documentMatch = fileUrl.match(/\/document\/d\/([\w-]+)\//);
+  if (documentMatch && documentMatch[1]) {
+    const fileId = documentMatch[1];
+    console.log(`ドキュメントのURL: ${fileUrl}`);
+    console.log(`ファイルID :     ${fileId}`);
+    return fileId
+  }
+
+  // ファイルIDが見つからない場合は null を返す
+  return null;
 }
 
