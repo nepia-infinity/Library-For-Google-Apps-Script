@@ -273,15 +273,12 @@ function generateHeaderIndex(values, rowIndex, keys){
 
 
 /**
- * 2次元配列内の1次元配列を全てオブジェクトに変換するスクリプト　Googleフォームの回答などにおすすめ
- * 
- * NOTES: https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries
- * Object.fromEntries() メソッドは、キーと値の組み合わせの配列をオブジェクトに変換する。
- * 
+ * 2次元配列内の1次元配列を全てオブジェクトに変換するスクリプト
+ * FIXME: 見出しが日本語だとオブジェクトの各keyも日本語になってしまう
  * 
  * @param  {Array.<Array.<string|number>>} values - 2次元配列
  * @param  {number} columnIndex - 空白をチェックする列のインデックス（0から始まる）
- * @param  {Array.<string>} keys - オブジェクトのkeyを格納した1次元配列 (例)　['name', 'url']
+ * @param  {Array.<string>} keys - 省略可、オブジェクトのkeyを格納した1次元配列 (例)　['name', 'url']
  * @return {Array.<Object.<string|number>>}
  * 
  */
