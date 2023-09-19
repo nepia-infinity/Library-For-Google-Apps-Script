@@ -268,19 +268,11 @@ function getHeaders_(values, rowIndex){
   console.info(`getHeaders_()を実行中`);
   console.info(`02_calenderに記載`);
 
-  const header = values[rowIndex];
-  const column = {
-    eventId:     header.indexOf('イベントID'),
-    title:       header.indexOf('イベント名'),
-    date:        header.indexOf('イベント予定日'),
-    startTime:   header.indexOf('開始時刻'),
-    endTime:     header.indexOf('終了時刻'),
-    attendees:   header.indexOf('出席者'),
-    description: header.indexOf('イベント詳細'),
-    status:      header.indexOf('登録ステータス'),
-  }
+  const headers = values[rowIndex];
+  const keys    = ['eventId', 'title', 'date', 'startTime', 'endTime', 'attendees', 'description', 'status'];
+  const array   = ['イベントID', 'イベント名', 'イベント予定日', '開始時刻', '終了時刻', '出席者', 'イベント詳細', '登録ステータス' ];
+  const column  = buildObjectFromPairs(headers, keys, array);
  
-  console.log(column);
   return column
 }
 
