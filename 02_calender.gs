@@ -446,12 +446,16 @@ function editEvents(object, rowIndex){
   console.info(`editEvents()を実行中`);
   console.info(`02_calenderに記載`);
 
+  //FIXME: google.script.run.editEvents()の引数に2個指定することが出来ない模様
+  //引数にrowIndexが定義されていない、undefinedであれば0を代入する
+  rowIndex = rowIndex ? rowIndex : 0;
+
   // 引数 'object' の型によって条件分岐して文字列に変換する
-  const argument = typeof object === 'object' ? String(Object.values(object)) : String(object);
+  const eventItem = typeof object === 'object' ? String(Object.values(object)) : String(object);
   const calId    = showPrompt('カレンダーIDを入力してください', '空白の場合は自分のカレンダーを処理対象とします');
   const cal      = calId ? CalendarApp.getCalendarById(calId) : CalendarApp.getDefaultCalendar();
 
-  console.log(`argument: ${argument} typeOf ${typeof argument}`);
+  console.log(`eventItem: ${eventItem} typeOf ${typeof eventItem}`);
   console.log(`カレンダーID：${cal.getId()}`);
   console.log(`処理対象のアカウント：${cal.getName()}`);
   
@@ -462,43 +466,44 @@ function editEvents(object, rowIndex){
 
   let count = 0;
 
-  for(let i = 0; i < values.length; i++){
-    if(values[i][column.status] === '編集対象'){
+  for(const array of values){
+    if(array[column.status] === '編集対象'){
 
-      const event = cal.getEventById(values[i][column.eventId]);
+      const updateInfo = {
+        event:       cal.getEventById(array[column.eventId]),
+        title:       array[column.title],
+        date:        array[column.date],
+        start:       array[column.startTime],
+        end:         array[column.endTime],
+        description: array[column.description],
+        guests:      array[column.attendees].split(',')
+      }
       
-      switch(argument){
+      switch(eventItem){
         case '予定名を編集する':
-          event.setTitle(values[i][column.title]);
+          event.setTitle(updateInfo.title);
           break;
+
         case '詳細欄を編集する':
-          event.setDescription(values[i][column.description]);
+          event.setDescription(updateInfo.description);
           break;
+
         case '日時を編集する':
-          const startTime = new Date(values[i][column.date]);
-          startTime.setHours(values[i][column.startTime].getHours());
-          startTime.setMinutes(values[i][column.startTime].getMinutes());
-
-          const endTime = new Date(startTime);
-          endTime.setHours(values[i][column.endTime].getHours());
-          endTime.setMinutes(values[i][column.endTime].getMinutes());
-
-          event.setTime(startTime, endTime);
+          updateEventDateTime(updateInfo);  
           break;
+
         case '出席者を追加する':
-          const guests = values[i][column.attendees].split(',');
-          console.log(guests);
-
-          guests.forEach(guest => event.addGuest(guest));
+          updateInfo.guests.forEach(guest => event.addGuest(guest));
           break;
+
         default:
           console.log('該当しませんでした');
       }
 
       const row = i + 1;
-      console.log(`${row}　行目  予定名：${event.getTitle()}`);
-
       sheet.getRange(row, column.status + 1).setValue('編集済');
+      console.log(`${row} 行目  予定名：${updateInfo.title}`);
+
       count += 1;
 
     }else {
@@ -537,3 +542,25 @@ function getInfoByEventId(eventId, calId){
 
   return info;
 }
+
+
+
+/**
+ * 予定の日時を更新する
+ * @param  {Object.<date>}
+ * 
+ */
+function updateEventDateTime(info){
+  const startTime = new Date(info.date);
+  startTime.setHours(info.start.getHours());
+  startTime.setMinutes(info.start.getMinutes());
+
+  const endTime = new Date(startTime);
+  endTime.setHours(info.end.getHours());
+  endTime.setMinutes(info.end.getMinutes());
+
+  event.setTime(startTime, endTime);
+}
+
+
+
