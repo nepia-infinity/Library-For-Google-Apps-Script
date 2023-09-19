@@ -10,8 +10,8 @@ function getSlidesContents(url){
   const presentation = SlidesApp.openByUrl(url);  
   const slides       = presentation.getSlides();
 
-  console.log(`スライドの名前：　${presentation.getName()}`);
-  console.log(`スライドの長さ：　${slides.length}`);
+  console.log(`スライドの名前: ${presentation.getName()}`);
+  console.log(`スライドの長さ : ${slides.length}`);
 
   let page      = 1;
   let newValues = [['ページ数', 'オブジェクトID', 'スライド内容']];
@@ -68,30 +68,20 @@ function getSpeakerNotes(url){
  * 
  */
 function convertSlidesToJpg(folderUrl) {
+
+  console.info(`convertSlidesToJpg()を実行中`);
+  console.info(`07_slidesに記載`);
+
   const presentation = SlidesApp.getActivePresentation();
   const slides       = presentation.getSlides();
   const ui           = SlidesApp.getUi();
 
   console.log(`presentationName: ${presentation.getName()}`);
-  console.log(`presentationId: ${presentation.getId()}`);
-  console.log(`slides.length: ${slides.length}`);
+  console.log(`presentationId:   ${presentation.getId()}`);
+  console.log(`slides.length:    ${slides.length}`);
 
-  // UI経由でGoogle DriveのフォルダURLを入力させる
-  let folderId;
-
-  if(!folderUrl){
-    const sample = 'https://drive.google.com/drive/folders/******';
-    const prompt = ui.prompt('Google DriveのURLを入力してください', sample, ui.ButtonSet.OK).getResponseText();
-    console.log(`input: ${prompt}`);
-
-    folderId = getFolderId(prompt); 
-
-  }else{
-    folderId = getFolderId(folderUrl); 
-
-  }
-
-  const folder = DriveApp.getFolderById(folderId);
+  const folderId = getFolderId(folderUrl);
+  const folder   = DriveApp.getFolderById(folderId);
   console.log(`folderName: ${folder.getName()}`);
   
   let count = 0;
@@ -99,7 +89,7 @@ function convertSlidesToJpg(folderUrl) {
   slides.forEach(slide => {
     count += 1;
     const slideNumber = ('0' + count).slice(-2);
-    createJpgFile_(folder, presentation, slide.getObjectId(), slideNumber);
+    createImgeFromSlide_(folder, presentation, slide.getObjectId(), slideNumber);
   });
   ui.alert(`${count}件のスライドをjpgに変換しました`);
 }
@@ -115,7 +105,7 @@ function convertSlidesToJpg(folderUrl) {
  * @param {string} slideNumber - ファイルの命名に使用する連番
  * 
  */
-function createJpgFile_(folder, presentation, pageId, slideNumber){
+function createImgeFromSlide_(folder, presentation, pageId, slideNumber){
   const presentationId = presentation.getId();
   const baseUrl        = `https://docs.google.com/presentation/d/`;
   const requestUrl     = `${baseUrl}${presentationId}/export/jpeg?id=${presentationId}&pageid=${pageId}`;
