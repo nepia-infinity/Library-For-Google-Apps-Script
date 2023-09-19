@@ -932,7 +932,12 @@ function createImageFromBlob_(fileId, fileName, hasLog){
 
 
 /**
+ * 差込文書作成を自動化する関数、テンプレートとなるドキュメント、保存先等を指定する必要がある
  * 
+ * @param {Object.<string>} info - オブジェクト
+ * sheetUrl, fileName, keys, headerNames, templateUrl, folderUrlを定義する必要がある
+ * オブジェクトの定義例については、下記URLを参照
+ * https://note.com/nepia_infinity/n/n4320954a3851#21dbed4d-7fa0-4cc2-ba3f-b0bb7a819a65
  * 
  * 1. replacePlaceholders() シートの値でプレイスホルダを差し替える
  * 2. makeCopyFile() テンプレートファイルを複製して複製後のファイルIDを返す
@@ -1295,6 +1300,11 @@ function convertSheetDataToQueryResults(info, ...additionalInfo){
   const newValues = values.map(row => {
     // （例） 名前 -> メールアドレス
     const array = row.map(query => findDataByQuery(info.sheetUrl, query, info.queryColumnIndex, info.resultColumnIndex));
+
+    // 引数が複数、つまり配列ならば、forEachを使用して一つずつ値を取り出して追加
+    (additionalInfo && typeof additionalInfo === 'object') ? additionalInfo.forEach(newValue => array.unshift(newValue))
+    : array.unshift(additionalInfo)
+
     return [array.join(',')];
   });
 
