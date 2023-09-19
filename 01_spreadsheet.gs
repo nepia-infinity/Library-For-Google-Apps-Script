@@ -229,9 +229,9 @@ function getHeadersRow(values, query){
  * @param  {Object.<string>} targetColumn - 例 {id: 'ID', name: '名前', branch: '所属先'};
  * @return {Object.<number>} {id: 0, name: 1, branch: 2};
  */
-function replaceHeaderValues(values, rowIndex, targetColumn) {
+function replaceHeadersValues(values, rowIndex, targetColumn) {
 
-  console.info(`replaceHeaderValues()を実行中`);
+  console.info(`replaceHeadersValues()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
   const header = values[rowIndex];
@@ -251,7 +251,7 @@ function replaceHeaderValues(values, rowIndex, targetColumn) {
 /**
  * 
  * 見出し行の位置を特定する
- * 類似する関数として、replaceHeaderValuesがある
+ * 類似する関数として、replaceHeadersValuesがある
  * 
  * @param  {Array.<Array.<string|number>>} values - 2次元配列
  * @param  {number} rowIndex - ヘッダー行の位置を指定
@@ -684,13 +684,13 @@ function selectNewValues(existingRecords, newValues, columnIndex){
  * https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Functions/rest_parameters
  * 
  * @param  {string} url - スプレッドシートのURL
- * @param  {number} headerIndex - 見出し行の配列番号
+ * @param  {number} rowIndex - 見出し行の配列番号
  * @param  {Object.<string>} columnNames - 見出し行に使用されている項目名をオブジェクトで指定　　（例）{name: '氏名', url: 'URL'}
  * @param  {string} params - 検索クエリ複数可　（例）　active,　合格など残余引数として指定できる
  * @return {string} 生成されたHTML文字列
  * 
  */
-function generateNameWithUrl(url, headerIndex, columnNames, ...params) {
+function generateNameWithUrl(url, rowIndex, columnNames, ...params) {
 
   console.info(`generateNameWithUrl()を実行中`);
   console.info(`01_spreadsheetに記載`);
@@ -702,7 +702,7 @@ function generateNameWithUrl(url, headerIndex, columnNames, ...params) {
   console.log(`該当件数：　${filtered.length} 件`);
   
   // 引数で渡されたオブジェクトの値をindexOfの結果に差し替える
-  const columnIndex = replaceHeaderValues(values, headerIndex, columnNames);
+  const columnIndex = replaceHeadersValues(values, rowIndex, columnNames);
   console.log(columnIndex);
 
   // HTMLを生成
