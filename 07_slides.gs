@@ -1,38 +1,32 @@
-
 /**
  * Google Slidesのテキストを取得　2次元配列で取得
  * 
  * @param  {string} url -　Google SlidesのURL
  * @return {Array.<Array.<string>>}
  * 
+ * newValues.unshift(['ページ数', 'オブジェクトID', 'スライド内容']);
+ * 
  */
-function getSlidesContents(url){
-  const presentation = SlidesApp.openByUrl(url);  
-  const slides       = presentation.getSlides();
+function getSlidesContents(url) {
+
+  console.info(`getSlidesContents()を実行中`);
+  console.info(`07_slides()に記載`);
+
+  const presentation = SlidesApp.openByUrl(url);
+  const slides = presentation.getSlides();
 
   console.log(`スライドの名前: ${presentation.getName()}`);
-  console.log(`スライドの長さ : ${slides.length}`);
+  console.log(`スライドの長さ: ${slides.length}`);
 
-  let page      = 1;
-  let newValues = [['ページ数', 'オブジェクトID', 'スライド内容']];
+  const newValues = slides.map((slide, index) => {
+    return slide.getShapes().map(shape => [index + 1, shape.getText().asString(), shape.getObjectId()]);
+  });
 
-  for(const slide of slides){
-    const shapes = slide.getShapes();
-    for(const shape of shapes){
-      const info = {
-        text :      shape.getText().asString(),
-        objectId:   shape.getObjectId()
-      }
-    console.log(`page: ${page}, ${info.text}`);
-    newValues.push([page, info.objectId, info.text]);
+  newValues.unshift(['ページ数', 'オブジェクトID', 'スライド内容']);
 
-    }
-    page += 1;
-  }
   console.log(newValues);
-  return newValues
+  return newValues;
 }
-
 
 
 
@@ -41,7 +35,6 @@ function getSlidesContents(url){
  * 
  * @param  {string} url - Google SlidesのURL
  * @return {Array.Array.<string>} 
- * 
  * 
  */
 function getSpeakerNotes(url){
@@ -56,7 +49,6 @@ function getSpeakerNotes(url){
 
   console.log(array);
 }
-
 
 
 
@@ -78,20 +70,19 @@ function convertSlidesToJpg(folderUrl) {
 
   console.log(`presentationName: ${presentation.getName()}`);
   console.log(`presentationId:   ${presentation.getId()}`);
-  console.log(`slides.length:    ${slides.length}`);
 
   const folderId = getFolderId(folderUrl);
   const folder   = DriveApp.getFolderById(folderId);
   console.log(`folderName: ${folder.getName()}`);
-  
-  let count = 0;
 
   slides.forEach(slide => {
     count += 1;
     const slideNumber = ('0' + count).slice(-2);
     createImgeFromSlide_(folder, presentation, slide.getObjectId(), slideNumber);
   });
-  ui.alert(`${count}件のスライドをjpgに変換しました`);
+
+  ui.alert(`${slides.length}件のスライドをjpgに変換しました`);
+  return
 }
 
 

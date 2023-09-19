@@ -466,8 +466,13 @@ function test_UnshiftGuests() {
 
 /**予定を編集する */
 function test_editEvents(){
-  // editEvents('日時を編集する', 0);
-  editEvents('詳細欄を編集する', 0);
+  editEvents('日時を編集する', 0);
+  // editEvents('詳細欄を編集する', 0);
+}
+
+
+function test_showEditEventsLauncher(){
+  showEditEventsLauncher();
 }
 
 

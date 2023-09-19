@@ -18,9 +18,16 @@ function showScriptId(){
  * 
  */
 function onEdit(){
-  const url    = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=0';
-  const sheet  = getActiveSheetByUrl(url);
-  const values = sheet.getDataRange().getValues();
+  const url     = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=1416056032';
+  const sheetId = Number(url.match('#gid=')[1]);
+  const sheet   = SpreadsheetApp.getActiveSheet();
+
+  if(sheet.getSheetId() !== sheetId){
+    console.warn(`処理対象シートではないので処理を中断します`);
+    return
+  }
+
+  const values     = sheet.getDataRange().getValues();
   const activeCell = getActiveCell(sheet);
 
   let column = generateHeadersIndex(values, 0);

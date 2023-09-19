@@ -11,11 +11,13 @@
 function getSheetByUrl(url, keyWord) {
 
   console.info(`getSheetByUrl()を実行中`);
-  console.info(sheetInfoArray);
-
+  console.info(`01_spreadsheetに記載`);
+  
   const spreadsheet    = SpreadsheetApp.openByUrl(url);
   const sheets         = spreadsheet.getSheets();
   const sheetInfoArray = url.split('#gid=');
+
+  console.info(sheetInfoArray);
 
   //シートIDを、文字列から数値に変換する
   const sheetId = Number(sheetInfoArray[1]);

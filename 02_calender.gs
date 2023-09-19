@@ -452,7 +452,7 @@ function editEvents(object, rowIndex){
   const cal      = calId ? CalendarApp.getCalendarById(calId) : CalendarApp.getDefaultCalendar();
 
   console.log(`argument: ${argument} typeOf ${typeof argument}`);
-  console.log(`カレンダーID：${calId}`);
+  console.log(`カレンダーID：${cal.getId()}`);
   console.log(`処理対象のアカウント：${cal.getName()}`);
   
   //シート上を走査して、編集対象のイベントIDを取得する
