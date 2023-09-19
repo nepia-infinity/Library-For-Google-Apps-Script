@@ -868,12 +868,10 @@ function combineColumnToSingleCell(url){
  */
 function addImageToSheet(folderUrl, startRow, startColumn) {
   
-  const values = getImageFiles_(folderUrl); // 04_drive.gsに記載
-  console.log(`${values.length} 件`);
+  console.info(`addImageSheet()を実行中`);
+  console.info(`01_spreadsheetに記載`);
 
-  console.log(`addImageSheet()を実行中`);
-  console.log(`01_spreadsheetに記載`);
-
+  const values   = getImageFiles_(folderUrl); // 04_drive.gsに記載
   let sheet      = SpreadsheetApp.getActiveSheet();
   const response = Browser.msgBox(`${sheet.getName()}に画像を挿入します。よろしいでしょうか？`, Browser.Buttons.OK_CANCEL);
   console.log(`ダイアログの選択肢：${response}`); //ok, cancel
@@ -885,17 +883,7 @@ function addImageToSheet(folderUrl, startRow, startColumn) {
 
   for(const [fileName, fileId] of values){
 
-    const imageBlob   = DriveApp.getFileById(fileId).getBlob();
-    const contentType = imageBlob.getContentType();
-    const base64      = Utilities.base64Encode(imageBlob.getBytes());
-    const imageStr    = "data:" + contentType + ";base64, " + base64;
-
-    const image = SpreadsheetApp.newCellImage()
-    .setSourceUrl(imageStr)
-    .setAltTextTitle(fileName)
-    .setAltTextDescription("-")
-    .build();
-
+    const image = createImageFromBlob_(fileId, fileName);
     const range = sheet.getRange(targetRow, startColumn)
     range.setValue(image);
     console.log(`処理対象範囲: ${range.getA1Notation()}`);
@@ -906,6 +894,37 @@ function addImageToSheet(folderUrl, startRow, startColumn) {
 
   SpreadsheetApp.getUi().alert(`${values.length} 件の画像を挿入しました`);
 
+}
+
+
+
+/**
+ * 与えられたファイルIDとファイル名から画像を生成し、新しい画像オブジェクトを作成して返す関数です。
+ *
+ * @param {string} fileId - 画像ファイルのGoogle Drive上のファイルID
+ * @param {string} fileName - 画像のファイル名
+ * @param {boolean} hasLog - 実行中の関数名を表示する
+ * @return {SpreadsheetApp.Sheet} - 画像オブジェクト
+ */
+function createImageFromBlob_(fileId, fileName, hasLog){
+
+  if(hasLog){
+    console.info(`createImageFromBlob_を実行中`)
+    console.info(`01_spreadsheetに記載`);
+  }
+
+  const imageBlob = DriveApp.getFileById(fileId).getBlob();
+  const contentType = imageBlob.getContentType();
+  const base64 = Utilities.base64Encode(imageBlob.getBytes());
+  const imageStr = "data:" + contentType + ";base64, " + base64;
+
+  const image = SpreadsheetApp.newCellImage()
+    .setSourceUrl(imageStr)
+    .setAltTextTitle(fileName)
+    .setAltTextDescription("-")
+    .build();
+
+  return image;
 }
 
 

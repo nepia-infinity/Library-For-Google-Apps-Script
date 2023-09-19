@@ -481,6 +481,7 @@ function getImageFiles_(folderUrl) {
   //ファイル名を連番順にSORTする
   values.sort((previous, current) => previous[0] < current[0] ? -1:1);
   console.log(values);
+  console.log(`${values.length} 件`);
 
   return values
 
