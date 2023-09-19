@@ -199,8 +199,8 @@ function getActiveCell(sheet){
  * @param  {string} query - 見出し行に使用されている単語
  * @return {number}
  */
-function getHeaderRow(values, query){
-  console.info(`getHeaderRow()を実行中`);
+function getHeadersRow(values, query){
+  console.info(`getHeadersRow()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
   const index = values.findIndex(row => row.includes(query));
