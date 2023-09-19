@@ -1252,13 +1252,13 @@ function getItemCounts(array, items){
  * 類似する関数としてconvertToSingleColumn()がある
  * 
  * @param  {Object.<string | number>} info - オブジェクト 
- * { sheetUrl:  'https://...', stringRange: 'A2:D45', queryColumnIndex: 0,  resultColumnIndex: 1 }
+ * オブジェクトの指定例 { sheetUrl:  'https://...', stringRange: 'A2:D45', queryColumnIndex: 0,  resultColumnIndex: 1 }
  * @return {Array.<Array.<string>>}
  * 
  */
 function convertSheetDataToQueryResults(info){
 
-  console.info(`convertEmailToString()を実行中`);
+  console.info(`convertSheetDataToQueryResults()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
   const sheet  = getActiveSheetByUrl(info.sheetUrl);
