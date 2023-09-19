@@ -1242,3 +1242,36 @@ function getItemCounts(array, items){
   console.log(counts);
   return counts;
 }
+
+
+
+/**
+ * スプレッドシートの指定範囲から2次元配列を取得し、名前 -> メールアドレスのように一致する別の値に変換し、新たな2次元配列を作成
+ * [['A', 'B', 'C'], ['D', 'E', 'F']] -> [['A, B, C'], ['D, E, F']]
+ * 
+ * 類似する関数としてconvertToSingleColumn()がある
+ * 
+ * @param  {Object.<string | number>} info - オブジェクト 
+ * { sheetUrl:  'https://...', stringRange: 'A2:D45', queryColumnIndex: 0,  resultColumnIndex: 1 }
+ * @return {Array.<Array.<string>>}
+ * 
+ */
+function convertSheetDataToQueryResults(info){
+
+  console.info(`convertEmailToString()を実行中`);
+  console.info(`01_spreadsheetに記載`);
+
+  const sheet  = getActiveSheetByUrl(info.sheetUrl);
+  const range  = getRange(sheet, info.stringRange);
+  const values = range.getDisplayValues();
+  console.log(values);
+
+  const newValues = values.map(row => {
+    const array = row.map(query => findDataByQuery(info.sheetUrl, query, info.queryColumnIndex, info.resultColumnIndex));
+    return [array.join(',')];
+  });
+
+  console.log(newValues);
+  return result
+
+}
