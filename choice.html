@@ -31,17 +31,13 @@
         <select>
           <option value="" name="placeholder">--Please choose an option--</option>
           <script>
-            const array     = ['予定名を編集する', '詳細欄を編集する', '日時を編集する', '出席者を追加する'];
-            const selectBox = document.getElementById('item-select-box');
-
-            array.forEach(item => {
-              document.write(`<option value="${item}">${item}</option>`);
-            });
-
+            const array     = [ '日時を編集する', '詳細欄を編集する', '予定名を編集する', '出席者を追加する' ];
+            for(let i = 0; i < array.length; i++){
+              document.write('<option value="' + array[i] + '">' + array[i] + '</option>');
+            }
           </script>
         </select>
         <button type="submit" onclick="google.script.run.editEvents(this.parentNode, 0)">確定する</button>
-
       </form>
     </div>
   </body>
