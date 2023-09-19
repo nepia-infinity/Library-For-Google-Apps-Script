@@ -9,12 +9,13 @@
  * 
  */
 function getSheetByUrl(url, keyWord) {
+
+  console.info(`getSheetByUrl()を実行中`);
+  console.info(sheetInfoArray);
+
   const spreadsheet    = SpreadsheetApp.openByUrl(url);
   const sheets         = spreadsheet.getSheets();
   const sheetInfoArray = url.split('#gid=');
-
-  console.log(`getSheetByUrl()を実行中`);
-  console.log(sheetInfoArray);
 
   //シートIDを、文字列から数値に変換する
   const sheetId = Number(sheetInfoArray[1]);
@@ -200,6 +201,7 @@ function getActiveCell(sheet){
  * @return {number}
  */
 function getHeadersRow(values, query){
+
   console.info(`getHeadersRow()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
@@ -317,10 +319,11 @@ function convertValuesToObjects(values, columnIndex, keys) {
  * @return {string}
  */
 function showPrompt(title, sample) {
+
   console.info(`showPrompt()を実行中`);
   console.info(`01_spreadsheetに記載`);
   
-  const ui = (SpreadsheetApp.getUi() || DocumentApp.getUi());
+  const ui = (SpreadsheetApp.getUi() || DocumentApp.getUi() || SlidesApp.getUi());
   const response = ui.prompt(title, sample, ui.ButtonSet.OK);
   const input    = response.getResponseText();
 
@@ -428,21 +431,22 @@ function getFilteredValues(values, ...params){
  * オブジェクトの中から引数に指定したkeyのみを取り出す
  * 
  * @param  {Array.<Object.<srting | number>>} values - [{id: 'jp123', name: 'nobita'}, {id: 'jp456', name: 'shizuka'}]
- * @param  {string} theArgs - 取り出したいオブジェクトのkeyをいくつでも指定可
+ * @param  {string} params - 取り出したいオブジェクトのkeyをいくつでも指定可
  * @retrun {Array.<Object.<srting | number>>}
  * 
  */
-function reduceObjectKeys(values, ...theArgs){
+function reduceObjectKeys(values, ...params){
 
   console.info(`reduceObjectKeys()を実行中`);
   console.info(`01_spreadsheetに記載`);
-  console.log(`valuesから　${theArgs}　の${theArgs.length}つを取り出す`);
+
+  console.log(`valuesから　${params}　の${params.length}つを取り出す`);
   console.log(values);
 
   const reduced = values.reduce((accumulator, current) => {
     const obj = {};
-    theArgs.map(arg => {
-      obj[`${arg}`] = current[arg];
+    params.map(param => {
+      obj[`${param}`] = current[param];
 
     });
     console.log(obj);
