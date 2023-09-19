@@ -447,7 +447,7 @@ function editEvents(object, rowIndex){
   console.info(`02_calenderに記載`);
 
   //FIXME: google.script.run.editEvents()の引数に2個指定することが出来ない模様
-  //引数にrowIndexが定義されていない、undefinedであれば0を代入する
+  //引数にrowIndexがundefinedであれば0を代入する
   rowIndex = rowIndex ? rowIndex : 0;
 
   // 引数 'object' の型によって条件分岐して文字列に変換する
