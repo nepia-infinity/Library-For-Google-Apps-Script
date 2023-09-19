@@ -1141,7 +1141,7 @@ function rotateValues(values) {
  */
 function buildObjectFromPairs(headers, keys, array) {
 
-  console.info(`buildObjectFromArray()を実行中`);
+  console.info(`buildObjectFromPairs()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
   const object = keys.reduce((accumulator, key, index) => {
