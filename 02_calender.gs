@@ -220,7 +220,9 @@ function registerEvents(sheeturl, rowIndex, calId) {
  * スプレッドシートの登録ステータスに応じて登録処理を進める関数
  * 
  * @param  {Array.<string|date>} row - 1次元配列
- * @param  {number} index - 処理番号
+ * @param  {Obeject.<number>} column - 列を特定するために必要なオブジェクト
+ * @param  {string} calId - カレンダーID
+ * @return {string} Meet URL
  * 
  */
 function registerEventIfNotRegistered_(row, column, calId) {
