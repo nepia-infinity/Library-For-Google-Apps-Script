@@ -379,6 +379,7 @@ function deleteEvents(query, calId) {
 }
 
 
+
 /**
  * eventIdと削除予定のイベントを含んだオブジェクトを返す
  * 
@@ -403,7 +404,7 @@ function getEventsByQuery_(query, calId){
   const eventIdArray = cal.getEvents(startDate, endDate)
     .filter(event => event.getTitle().includes(query))
     .map((event, index) => {
-      string += `${index + 1}. ${event.getTitle()}　　${formatDate(event.getStartTime(), 'yyyy/MM/dd (E) HH:mm')}\n`;
+      string += `${index + 1}. ${event.getTitle()}  ${formatDate(event.getStartTime(), 'yyyy/MM/dd (E) HH:mm')}\n`;
       return event.getId();
     });
 
