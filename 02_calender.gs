@@ -190,7 +190,7 @@ function registerEvents(sheeturl, rowIndex, calId) {
 
   const sheet  = getSheetByUrl(sheeturl);
   const values = sheet.getDataRange().getValues();
-  const column = getHeader_(values, rowIndex);
+  const column = getHeaders_(values, rowIndex);
 
   // 3番目の引数、calIdが無かった場合、自分のカレンダーIDを使用する
   calId = calId ? calId : CalendarApp.getDefaultCalendar().getId();
@@ -263,9 +263,9 @@ function registerEventIfNotRegistered_(row, column, calId) {
  * @return {Object.<number>}
  * 
  */
-function getHeader_(values, rowIndex){
+function getHeaders_(values, rowIndex){
 
-  console.info(`getHeader_()を実行中`);
+  console.info(`getHeaders_()を実行中`);
   console.info(`02_calenderに記載`);
 
   const header = values[rowIndex];
@@ -465,7 +465,7 @@ function editEvents(object, rowIndex){
   //シート上を走査して、編集対象のイベントIDを取得する
   const sheet  = SpreadsheetApp.getActiveSheet();
   const values = sheet.getDataRange().getValues();
-  const column = getHeader_(values, rowIndex);
+  const column = getHeaders_(values, rowIndex);
 
   let count = 0;
 

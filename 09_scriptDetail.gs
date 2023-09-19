@@ -23,7 +23,7 @@ function onEdit(){
   const values = sheet.getDataRange().getValues();
   const activeCell = getActiveCell(sheet);
 
-  let column = generateHeaderIndex(values, 0);
+  let column = generateHeadersIndex(values, 0);
   column     = modifyObject(column);
 
   const today = formatDate(new Date(), 'yyyy/MM/dd');

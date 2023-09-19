@@ -218,7 +218,7 @@ function getHeaderRow(values, query){
 
 /**
  * 引数で渡されたオブジェクトの値をindexOfの結果に差し替える
- * 類似する関数として、generateHeaderIndexがある
+ * 類似する関数として、generateHeadersIndexがある
  * 
  * @param  {Array.<Array.<string|number>>} values - 2次元配列
  * @param  {number} rowIndex - 見出し行の位置をindexで指定　1行目の場合は0を指定
@@ -254,9 +254,9 @@ function replaceHeaderValues(values, rowIndex, targetColumn) {
  * @param  {Array.<string>} keys - オブジェクトのkeyを格納した1次元配列 (例)　['name', 'url']
  * @return {Object.<number>} 
  */
-function generateHeaderIndex(values, rowIndex, keys){
+function generateHeadersIndex(values, rowIndex, keys){
   
-  console.info(`generateHeaderIndex()を実行中`);
+  console.info(`generateHeadersIndex()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
   const header = keys || values[rowIndex];
