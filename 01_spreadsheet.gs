@@ -1278,10 +1278,11 @@ function getItemCounts(array, items){
  * 
  * @param  {Object.<string | number>} info - オブジェクト 
  * オブジェクトの指定例 { sheetUrl:  'https://...', stringRange: 'A2:D45', queryColumnIndex: 0,  resultColumnIndex: 1 }
+ * @param  {Array.<string>} additionalInfo - 例えば、メールアドレスなど
  * @return {Array.<Array.<string>>}
  * 
  */
-function convertSheetDataToQueryResults(info){
+function convertSheetDataToQueryResults(info, ...additionalInfo){
 
   console.info(`convertSheetDataToQueryResults()を実行中`);
   console.info(`01_spreadsheetに記載`);
@@ -1292,6 +1293,7 @@ function convertSheetDataToQueryResults(info){
   console.log(values);
 
   const newValues = values.map(row => {
+    // （例） 名前 -> メールアドレス
     const array = row.map(query => findDataByQuery(info.sheetUrl, query, info.queryColumnIndex, info.resultColumnIndex));
     return [array.join(',')];
   });
