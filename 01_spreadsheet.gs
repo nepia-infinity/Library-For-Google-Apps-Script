@@ -1109,18 +1109,18 @@ function rotateValues(values) {
 /**
  * ペアとなるkeyとvalueの配列のペアから、欲しい列のみのcolumnIndexを取得する関数
  * 
- * @param {Array.<string>} header - ヘッダー行、1次元配列
+ * @param {Array.<string>} headers - ヘッダー行、1次元配列
  * @param {Array.<string>} keys - オブジェクトのキーとなる文字列が格納された配列 ['id', 'name', 'url']
  * @param {Array.<string>} array - オブジェクトのキーとなる文字列が格納された配列 ['ID', '名前', 'URL']
  * @return {Object.<string>}
  */
-function buildObjectFromPairs(header, keys, array) {
+function buildObjectFromPairs(headers, keys, array) {
 
   console.info(`buildObjectFromArray()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
   const object = keys.reduce((accumulator, key, index) => {
-    const result = header.indexOf(array[index]);
+    const result = headers.indexOf(array[index]);
     result !== -1 ? accumulator[key] = result : false;
     return accumulator;
   }, {});
