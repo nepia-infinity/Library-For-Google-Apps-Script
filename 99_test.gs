@@ -596,5 +596,19 @@ function test_replaceStringWithSheetValue(){
 
 
 
+/**
+ * info { stringRange: 'A2:D45', queryColumnIndex: 0,  resultColumnIndex: 1 }
+ * 
+ */
+function test_convertEmailToString(info){
 
+  const range  = getRange(sheet, info);
+  const values = range.getDisplayValues();
+  console.log(values);
+
+  //findDataByQuery(referenceSheetUrl)
+
+  return result
+
+}
 

@@ -223,7 +223,7 @@ function getHeaderRow(values, query){
  * @param  {Array.<Array.<string|number>>} values - 2次元配列
  * @param  {number} rowIndex - 見出し行の位置をindexで指定　1行目の場合は0を指定
  * @param  {Object.<string>} targetColumn - 例 {id: 'ID', name: '名前', branch: '所属先'};
- * @return {Object.<number>} 
+ * @return {Object.<number>} {id: 0, name: 1, branch: 2};
  */
 function replaceHeaderValues(values, rowIndex, targetColumn) {
 
@@ -282,7 +282,6 @@ function generateHeaderIndex(values, rowIndex, keys){
  * @return {Array.<Object.<string|number>>}
  * 
  */
-
 function convertValuesToObjects(values, columnIndex, keys) {
 
   console.info(`convertValuesToObjects()を実行中`);
@@ -801,21 +800,21 @@ function sortInsideArray(array, key){
 /**
  * スプレッドシートの2次元配列内のデータを検索し、一致した行かつ指定した列の情報を返す
  * 
- * @param  {number} url - スプレッドシートのURL
- * @param  {number} queryColumnIndex - 照合したい列
+ * @param  {string} url - スプレッドシートのURL
  * @param  {string} query - 検索する文字列
- * @param  {number} targetColumnIndex - データを取得したい列
+ * @param  {number} queryColumnIndex - 照合したい列
+ * @param  {number} resultColumnIndex - データを取得したい列
  * @return {string} 取得したいデータ 
  * 
  */
-function findDataByQuery(url, queryColumnIndex, query, targetColumnIndex) {
+function findDataByQuery(url, query, queryColumnIndex, resultColumnIndex) {
 
   console.info(`findDataByQuery()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
   const values   = getValues(url);
   const foundRow = values.find(row => row[queryColumnIndex] === query);
-  const result   = foundRow ? foundRow[targetColumnIndex] : null;
+  const result   = foundRow ? foundRow[resultColumnIndex] : null;
   
   console.log(`query: ${query} result: ${result}`);
   (result === null || result === undefined) ? console.log("データが見つかりませんでした") : null;
