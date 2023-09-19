@@ -597,3 +597,10 @@ function test_replaceStringWithSheetValue(){
   // nepia_infinity.replaceStringWithSheetValue(template, values, '{name}', '{url}');
   replaceStringWithSheetValue(template, values, '{name}', '{url}');
 }
+
+
+function test_getHeadersRow(){
+  const url    = 'https://docs.google.com/spreadsheets/d/1JfPF1KQss6nMA4fHyGvNyAVnaE4zGG80aVx3qKhx4Ow/edit#gid=1404123830';
+  const values = getValues(url);
+  getHeadersRow(values, 'URL');
+}

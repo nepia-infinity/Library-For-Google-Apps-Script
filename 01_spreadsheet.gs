@@ -1,6 +1,6 @@
 /**
  * SpreadsheetのURLからsheetオブジェクトを取得する。
- * シート名が取得したい場合は、2番目の引数に、'sheetName' と指定する
+ * シート名を取得したい場合は、2番目の引数に、'sheetName' と指定する
  * トリガー設定可能 getSheets()を使用しているため、実行時間が掛かる。
  * 
  * @param  {string} url - スプレッドシートのURL
@@ -17,7 +17,7 @@ function getSheetByUrl(url, keyWord) {
   const sheets         = spreadsheet.getSheets();
   const sheetInfoArray = url.split('#gid=');
 
-  console.info(sheetInfoArray);
+  console.log(sheetInfoArray);
 
   //シートIDを、文字列から数値に変換する
   const sheetId = Number(sheetInfoArray[1]);
@@ -94,7 +94,7 @@ function getRange(sheet, info) {
 
   if (info && typeof info !== 'string') {
 
-    // info.row が falsy（例: undefined, null, 0, false など）の場合ゼロが設定されます。
+    // info.row が falsy（例: undefined, null, 0, false など）の場合ゼロを設定
     const offset = {
       row: info.row ? info.row - 1 : 0,
       column: info.column ? info.column - 1 : 0,
