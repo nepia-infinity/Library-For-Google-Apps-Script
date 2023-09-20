@@ -73,26 +73,20 @@ function findLargestNumber(array){
  * ハイフンなしの携帯電話番号を、ハイフンありで返す関数
  * 
  * @param  {string | number} original - 携帯電話の文字列 '09012345678'
- * @param  {string} log - 省略可 - 実行中の関数名を表示する
+ * @param  {boolean} hasLog - 省略可 - 実行中の関数名を表示する
  * @return {string} ハイフンありの携帯電話 '090-1234-5678'
  * 
  */
-function convertCellPhoneNumber(original, log) {
+function convertCellPhoneNumber(original, hasLog) {
 
-  if(log){
+  if(hasLog){
     console.info(`getCellPhoneNumber()を実行中`);
     console.info('08_otherに記載');
   }
 
   // 数値型だったら文字列化し、文字列だったら引数をそのまま使用する
-  const originalString = typeof original === 'number' ? String(original) : original;
-  let cellPhoneNumber;
-
-  if (originalString.length < 11) {
-    cellPhoneNumber = `0${sliceStringNumber_(originalString, 2)}`;
-  } else {
-    cellPhoneNumber = sliceStringNumber_(originalString, 3);
-  }
+  const originalString  = typeof original === 'number' ? String(original) : original;
+  const cellPhoneNumber = (originalString.length < 11) ? `0${sliceStringNumber_(originalString, 2)}` : sliceStringNumber_(originalString, 3);
 
   console.warn(`成形後：${cellPhoneNumber}`);
   return cellPhoneNumber
