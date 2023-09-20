@@ -19,7 +19,6 @@ function generateNumbers(start, end) {
 
 
 
-
 /**
  * ランダムな値を返す
  * @param  {number} end - 最大数値
@@ -65,7 +64,6 @@ function findLargestNumber(array){
   console.log(`配列内の最大数値は、${result}です`);
   return result
 }
-
 
 
 
@@ -123,10 +121,8 @@ function sliceStringNumber_(string, quantity, log) {
 
 
 
-
 /**
  * 全角数字を半角数字に置換するため2次元配列を作成する
- * 
  * 
  */
 function generateTwoByteRegularExpression(){
@@ -150,24 +146,26 @@ function generateTwoByteRegularExpression(){
 
 
 
-
 /**
- * 全角のアルファベットと半角のアルファベットの置換用の2次元配列を作成
  * 
+ * 全角のアルファベットと半角のアルファベットの置換用の2次元配列を作成
+ * @param  {boolean} hasLog - 実行中の関数を表示する
+ * @return {Array.<Array.<string>>}
  * 
  */
-function generateTwoByteAlphabetValues_(){
+function generateTwoByteAlphabetValues_(hasLog){
+
+  if(hasLog){
+    console.info(`generateTwoByteAlphabetValues_()を実行中`);
+    console.info('08_otherに記載');
+  }
+
   const twoByteAlphabet  = Array.from({length: 26}, (_, i) => String.fromCharCode('ａ'.charCodeAt(0) + i));
   const halfSizeAlphabet = Array.from({length: 26}, (_, i) => String.fromCharCode('a'.charCodeAt(0) + i));
 
-  // console.log(twoByteAlphabet);
-  // console.log(halfSizeAlphabet);
+  const lists = twoByteAlphabet.map((alphabet, i) => [new RegExp(alphabet, 'g'), halfSizeAlphabet[i]]);
+  console.log(lists);
 
-  const lists = twoByteAlphabet.map(
-    (alphabet, i) => [new RegExp(alphabet, 'g'), halfSizeAlphabet[i]]
-  );
-
-  //console.log(lists);
   return lists;
 }
 
