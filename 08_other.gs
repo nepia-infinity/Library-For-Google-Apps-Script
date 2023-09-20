@@ -125,22 +125,22 @@ function sliceStringNumber_(string, quantity, log) {
 
 
 /**
- * 半角英数字の置換用2次元配列を作成する
+ * 全角数字を半角数字に置換するため2次元配列を作成する
  * 
  * 
  */
 function generateTwoByteRegularExpression(){
-  const twoByteCharacter  = '０１２３４５６７８９';
-  const halfSizeCharacter = '0123456789';
+  const twoByteCharacter  = '０１２３４５６７８９'; //全角
+  const halfSizeCharacter = '0123456789'; //半角
   const list = twoByteCharacter.split('');
 
   console.info(`generateTwoByteRegularExpression()を実行中`);
   console.info('08_otherに記載');
 
-  const lists = list.map(
-    (string, i) => [new RegExp(string, 'g'), halfSizeCharacter[i]]
-  );
+  // 全角数字を半角数字に置換するため2次元配列を作成する
+  const lists = list.map((string, i) => [new RegExp(string, 'g'), halfSizeCharacter[i]]);
 
+  // 全角数字置換用に加えて、アルファベットも置換できるように既存の配列に加える
   const newValues = generateTwoByteAlphabetValues_();
   lists.push(...newValues);
 
