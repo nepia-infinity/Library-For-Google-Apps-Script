@@ -38,16 +38,14 @@ function getSlidesContents(url) {
  * 
  */
 function getSpeakerNotes(url){
-  const presentation = SlidesApp.openByUrl(url);  
-  const slides = presentation.getSlides();
-  let array    = [];
-  
-  slides.forEach((slide, index) => {
-    const count = index + 1;
-    array.push([count, slide.getNotesPage().getSpeakerNotesShape().getText().asString()]);
+  const presentation = SlidesApp.openByUrl(url);
+  const slides = presentation.getSlides();  
+  const values = slides.map((slide, index) => {
+    return [index + 1, slide.getNotesPage().getSpeakerNotesShape().getText().asString()];
   });
 
-  console.log(array);
+  console.log(values);
+  return values
 }
 
 
@@ -75,8 +73,8 @@ function convertSlidesToJpg(folderUrl) {
   const folder   = DriveApp.getFolderById(folderId);
   console.log(`folderName: ${folder.getName()}`);
 
-  slides.forEach(slide => {
-    count += 1;
+  slides.forEach((slide, index) => {
+    const count = index + 1;
     const slideNumber = ('0' + count).slice(-2);
     createImgeFromSlide_(folder, presentation, slide.getObjectId(), slideNumber);
   });
