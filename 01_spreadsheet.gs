@@ -1331,7 +1331,7 @@ function splitAddressColumn(url, rowIndex, columnIndex){
   console.info(`01_spreadsheetに記載`);
 
   const values = getValues(url);
-  values.splice(rowIndex, columnIndex);
+  values.splice(rowIndex, 1);
 
   // 全角数字を半角数字に直す変換リストを生成
   const twoBiteConvertLists = generateTwoByteRegularExpression();
@@ -1345,7 +1345,7 @@ function splitAddressColumn(url, rowIndex, columnIndex){
   console.log(lists);
 
   // 住所からアパート名を抽出する
-  const addressArray = generateArray(values, rowIndex);
+  const addressArray = generateArray(values, columnIndex);
   const newValues    = addressArray.map(original =>{
     const result     = original.match(/[ァ-ンヴー].*|[A-Za-z].*/);
     const apartmentName = (result !== null)
