@@ -1312,3 +1312,51 @@ function convertSheetDataToQueryResults(info, ...additionalInfo){
   return result
 
 }
+
+
+
+/**
+ * 住所からアパート名を抽出し、列を分けた新しい配列を作成する
+ * FIXME: 虎ノ門など、鎌ヶ谷など、一部の漢字がカタカナと誤判定されてしまうケースがある
+ * 
+ * @param  {string} url - スプレッドシートのURL
+ * @param  {number} rowIndex - ヘッダー行の位置（1行目の場合は0と指定）
+ * @param  {number} columnIndex - 住所が記載されている列の位置（1列目の場合は0と指定）
+ * @return {Array.<Array.<string>>}
+ * 
+ */
+function splitAddressColumn(url, rowIndex, columnIndex){
+
+  console.info(`splitAddressColumn()を実行中`);
+  console.info(`01_spreadsheetに記載`);
+
+  const values = getValues(url);
+  values.splice(rowIndex, columnIndex);
+
+  // 全角数字を半角数字に直す変換リストを生成
+  const twoBiteConvertLists = generateTwoByteRegularExpression();
+  let lists = [
+    [/.*(市|区|町|村)/, ''],
+    [/[0-9]{1,4}-[0-9]{1,4}-[0-9]{1,4}/, '']
+  ];
+
+  // 既存の変換リストと結合させる
+  lists = lists.concat(twoBiteConvertLists);
+  console.log(lists);
+
+  // 住所からアパート名を抽出する
+  const addressArray = generateArray(values, rowIndex);
+  const newValues    = addressArray.map(original =>{
+    const result     = original.match(/[ァ-ンヴー].*|[A-Za-z].*/);
+    const apartmentName = (result !== null)
+    ? lists.reduce((accumulator, current) => accumulator.replace(...current), result[0])
+    : '';
+
+    // アパート名を抜いた住所
+    const address = (apartmentName) ? original.replace(apartmentName, '') : original
+    return [address, apartmentName];
+  });
+
+  console.log(newValues);
+  return newValues
+}

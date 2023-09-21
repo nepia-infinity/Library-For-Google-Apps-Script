@@ -124,8 +124,11 @@ function sliceStringNumber_(string, quantity, log) {
 /**
  * 全角数字を半角数字に置換するため2次元配列を作成する
  * 
+ * @param  {boolean} isCombined - アルファベットの正規表現と統合するかどうか
+ * @return {Array.<Array.<string>>} [/置換対象の文字列/, '置換後の文字列']
+ * 
  */
-function generateTwoByteRegularExpression(){
+function generateTwoByteRegularExpression(isCombined){
   const twoByteCharacter  = '０１２３４５６７８９'; //全角
   const halfSizeCharacter = '0123456789'; //半角
   const list = twoByteCharacter.split('');
@@ -137,9 +140,11 @@ function generateTwoByteRegularExpression(){
   const lists = list.map((string, i) => [new RegExp(string, 'g'), halfSizeCharacter[i]]);
 
   // 全角数字置換用に加えて、アルファベットも置換できるように既存の配列に加える
-  const newValues = generateTwoByteAlphabetValues_();
-  lists.push(...newValues);
-
+  if(isCombined){
+    const newValues = generateTwoByteAlphabetValues_();
+    lists.push(...newValues);
+  }
+  
   console.log(lists);
   return lists
 }
