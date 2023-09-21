@@ -24,6 +24,7 @@ function onEdit(){
 
   if(sheet.getSheetId() !== sheetId){
     console.warn(`処理対象シートではないので処理を中断します`);
+    console.log(`${sheet.getSheetId()} !== ${sheetId}`);
     return
   }
 
