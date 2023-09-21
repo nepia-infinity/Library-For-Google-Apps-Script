@@ -138,7 +138,7 @@ function getLastRowWithText(values, columnIndex){
   let lastRow = arrayWithBlank.length;
 
   // 値があった段階で処理を中断する
-  for(let i = arrayWithBlank.length - 1; i >= 0; i--){
+  for(let i = lastRow - 1; i >= 0; i--){
     if(arrayWithBlank[i]) break;
     lastRow--;
   }
