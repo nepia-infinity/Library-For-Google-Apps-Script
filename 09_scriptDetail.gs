@@ -18,8 +18,8 @@ function showScriptId(){
  * 
  */
 function onEdit(){
-  const url     = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=1416056032';
-  const sheetId = Number(url.match('#gid=')[1]);
+  const url     = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=0';
+  const sheetId = Number(url.split('#gid=')[1]);
   const sheet   = SpreadsheetApp.getActiveSheet();
 
   if(sheet.getSheetId() !== sheetId){
