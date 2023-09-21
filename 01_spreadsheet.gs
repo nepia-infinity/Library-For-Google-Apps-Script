@@ -1317,6 +1317,7 @@ function convertSheetDataToQueryResults(info, ...additionalInfo){
 
 /**
  * 住所からアパート名を抽出し、列を分けた新しい配列を作成する
+ * 必要に応じて、insertNewSheetやsetValuesと組み合わせるといいかも
  * FIXME: 虎ノ門など、鎌ヶ谷など、一部の漢字がカタカナと誤判定されてしまうケースがある
  * 
  * @param  {string} url - スプレッドシートのURL
@@ -1344,17 +1345,19 @@ function splitAddressColumn(url, rowIndex, columnIndex){
   lists = lists.concat(twoBiteConvertLists);
   console.log(lists);
 
-  // 住所からアパート名を抽出する
+  // 2次元配列から住所のみの1次元配列を作成
   const addressArray = generateArray(values, columnIndex);
-  const newValues    = addressArray.map(original =>{
-    const result     = original.match(/[ァ-ンヴー].*|[A-Za-z].*/);
+
+  // 住所からアパート名を抽出する
+  const newValues = addressArray.map(original =>{
+    const result = original.match(/[ァ-ンヴー].*|[A-Za-z].*/);
     const apartmentName = (result !== null)
     ? lists.reduce((accumulator, current) => accumulator.replace(...current), result[0])
     : '';
 
     // アパート名を抜いた住所
     const address = (apartmentName) ? original.replace(apartmentName, '') : original
-    return [address, apartmentName];
+    return [original, address, apartmentName];
   });
 
   console.log(newValues);
