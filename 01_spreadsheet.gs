@@ -3,19 +3,19 @@
  * シート名を取得したい場合は、2番目の引数に、'sheetName' と指定する
  * トリガー設定可能 getSheets()を使用しているため、実行時間が掛かる。
  * 
- * @param  {string} url - スプレッドシートのURL
+ * @param  {string} sheetUrl - スプレッドシートのURL
  * @param  {string} keyWord - 引数の省略可。'sheetName' と指定する
  * @return {SpreadsheetApp.Sheet|string} オブジェクトかシート名を返す。
  * 
  */
-function getSheetByUrl(url, keyWord) {
+function getSheetByUrl(sheetUrl, keyWord) {
 
   console.info(`getSheetByUrl()を実行中`);
   console.info(`01_spreadsheetに記載`);
   
-  const spreadsheet    = SpreadsheetApp.openByUrl(url);
+  const spreadsheet    = SpreadsheetApp.openByUrl(sheetUrl);
   const sheets         = spreadsheet.getSheets();
-  const sheetInfoArray = url.split('#gid=');
+  const sheetInfoArray = sheetUrl.split('#gid=');
 
   console.log(sheetInfoArray);
 
@@ -44,18 +44,18 @@ function getSheetByUrl(url, keyWord) {
  * シート名を取得したい場合は、2番目の引数に、'sheetName' と指定する
  * FIXME: アクティブなシートを元に処理をするため、トリガー設定は不向き
  * 
- * @param  {string} targetSheetUrl - スプレッドシートのURL
+ * @param  {string} sheetUrl - スプレッドシートのURL
  * @param  {string} string - 引数の省略可　'sheetName' と指定する
  * @return {SpreadsheetApp.Sheet|string} オブジェクトかシート名を返す。
  * 
  */
-function getActiveSheetByUrl(targetSheetUrl, string) {
+function getActiveSheetByUrl(sheetUrl, string) {
 
   console.info(`getActiveSheetByUrl()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
   const activeSheet    = SpreadsheetApp.getActiveSheet();
-  const sheetInfoArray = targetSheetUrl.split('#gid='); //['https....', 'sheetId(typeof string)'];
+  const sheetInfoArray = sheetUrl.split('#gid='); //['https....', 'sheetId(typeof string)'];
 
   console.log(sheetInfoArray);
 
@@ -344,16 +344,16 @@ function showPrompt(title, sample) {
 /**
  * シートの表示内容を2次元配列で取得する
  * 
- * @param  {string} url - スプレッドシートのURL
+ * @param  {string} sheetUrl - スプレッドシートのURL
  * @return {Array.<Array.<string|number>>} values - 2次元配列
  * 
  */
-function getValues(url) {
+function getValues(sheetUrl) {
 
   console.info(`getValues()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
-  const sheet  = getSheetByUrl(url);
+  const sheet  = getSheetByUrl(sheetUrl);
   const values = sheet.getDataRange().getValues();
   console.log(values);
   
@@ -547,14 +547,14 @@ function removeDuplicates(array){
  * 検索ワード、行、列、範囲などの情報を連想配列で返す
  * 全てのシートが検索対象
  * 
- * @param  {string} url - スプレッドシートのURL
+ * @param  {string} sheetUrl - スプレッドシートのURL
  * @param  {string} query - スプレッドシートで検索したい単語
  * @param  {string} sheetName - 検索したいシートの名前　検索対象を絞りたい場合に使用
  * @return {Array.<Object.<srting | number>>} 
  */
-function createTextFinder(url, query, sheetName){
+function createTextFinder(sheetUrl, query, sheetName){
 
-  const spreadsheet = SpreadsheetApp.openByUrl(url);
+  const spreadsheet = SpreadsheetApp.openByUrl(sheetUrl);
   let finder;
 
   if(sheetName){
@@ -660,19 +660,19 @@ function selectNewValues(existingRecords, newValues, columnIndex){
   console.log(`selectNewValues() 関数を実行中`);
   console.log(`01_spreadsheet に記載中`);
 
-  const result  = [];
-  const newData = [...newValues]; // スプレッド演算子を使って、newValuesをコピー
-  newData.shift();
+  // スプレッド演算子を使って、ヘッダー行を除いてnewValuesをコピー
+  const newData = [_, ...newValues];
 
-  newData.forEach(row => {
+  // シートに記載のIDなどの1次元配列と比較して、一致しないIDを転記対象とみなす
+  const results = newData.map(row => {
     if (existingRecords.indexOf(row[columnIndex]) === -1) {
-      console.log(`${newValue[columnIndex]} は新しい値です。転記対象です。`);
-      result.push(row);
+      console.warn(`${newValue[columnIndex]} は新しい値です。転記対象です。`);
+      return [row];
     }
   });
 
-  console.log(result);
-  return result;
+  console.log(results);
+  return results;
 }
 
 
@@ -1365,6 +1365,7 @@ function splitAddressColumn(url, rowIndex, columnIndex){
 }
 
 
+
 /**
  * 金融機関コード（4桁） or 支店名コード（3桁）になるように '0'で字詰めする
  * 
@@ -1374,7 +1375,7 @@ function splitAddressColumn(url, rowIndex, columnIndex){
  * @return {Array.<Array.<string>>} 
  * 
  */
-function formatBankCode(url, columnIndex, isBankCode) {
+function formatBankCode(url, columnIndex, isBankCode){
 
   console.info(`formatBankCode()を実行中`);
   console.info(`01_spreadsheetに記載`);
