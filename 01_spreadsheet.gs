@@ -1363,3 +1363,35 @@ function splitAddressColumn(url, rowIndex, columnIndex){
   console.log(newValues);
   return newValues
 }
+
+
+/**
+ * 金融機関コード（4桁） or 支店名コード（3桁）になるように '0'で字詰めする
+ * 
+ * @param  {string} url - スプレッドシートのURL
+ * @param  {number} columnIndex - 金融機関コードが記されている列
+ * @param  {boolean} isBankCode - 金融機関コードかどうか、falseの場合は支店名コード
+ * @return {Array.<Array.<string>>} 
+ * 
+ */
+function formatBankCode(url, columnIndex, isBankCode) {
+
+  console.info(`formatBankCode()を実行中`);
+  console.info(`01_spreadsheetに記載`);
+
+  const values = getValues(url);
+  const array  = generateArray(values, columnIndex);
+
+  // 金融機関コード4桁 or 支店名コードの3桁になるように0で字詰めをする
+  const targetLength    = (isBankCode) ? 4 : 3;
+  const convertBankCode = (number => String(number).padStart(targetLength, '0'));
+
+  const formatedArray = array.map(code => {
+    const formatedCode = (typeof code === 'number') ? convertBankCode(code) : code
+    return [formatedCode];
+  });
+
+  console.log(formatedArray);
+  return formatedArray
+
+}
