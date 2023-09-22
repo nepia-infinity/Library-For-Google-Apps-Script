@@ -4,11 +4,11 @@
  * トリガー設定可能 getSheets()を使用しているため、実行時間が掛かる。
  * 
  * @param  {string} sheetUrl - スプレッドシートのURL
- * @param  {string} keyWord - 引数の省略可。'sheetName' と指定する
+ * @param  {string} string - 引数の省略可。'sheetName' と指定する
  * @return {SpreadsheetApp.Sheet|string} オブジェクトかシート名を返す。
  * 
  */
-function getSheetByUrl(sheetUrl, keyWord) {
+function getSheetByUrl(sheetUrl, string) {
 
   console.info(`getSheetByUrl()を実行中`);
   console.info(`01_spreadsheetに記載`);
@@ -23,12 +23,12 @@ function getSheetByUrl(sheetUrl, keyWord) {
   const sheetId = Number(sheetInfoArray[1]);
 
   for(const sheet of sheets){
-    if(sheet.getSheetId() === sheetId && !keyWord){
+    if(sheet.getSheetId() === sheetId && !string){
       console.log(`sheetId: ${sheetId} typeof: ${typeof sheetId}`);
       console.log(`sheetName: ${sheet.getName()}`);
       return sheet
 
-    }else if(sheet.getSheetId() === sheetId && keyWord === 'sheetName'){
+    }else if(sheet.getSheetId() === sheetId && string === 'sheetName'){
       const sheetName = sheet.getName();
       console.log(`sheetName: ${sheetName} typeof: ${typeof sheetId}`);
       return sheetName
@@ -683,32 +683,32 @@ function selectNewValues(existingRecords, newValues, columnIndex){
  * 残余引数については下記のページを参照
  * https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Functions/rest_parameters
  * 
- * @param  {string} url - スプレッドシートのURL
+ * @param  {string} sheetUrl - スプレッドシートのURL
  * @param  {number} rowIndex - 見出し行の配列番号
  * @param  {Object.<string>} columnNames - 見出し行に使用されている項目名をオブジェクトで指定　　（例）{name: '氏名', url: 'URL'}
  * @param  {string} params - 検索クエリ複数可　（例）　active,　合格など残余引数として指定できる
  * @return {string} 生成されたHTML文字列
  * 
  */
-function generateNameWithUrl(url, rowIndex, columnNames, ...params) {
+function generateNameWithUrl(sheetUrl, rowIndex, columnNames, ...params) {
 
   console.info(`generateNameWithUrl()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
   // ヘッダー行を削除する
-  const values   = getValues(url);
+  const values   = getValues(sheetUrl);
   const filtered = getFilteredValues(values, params);
   console.log(filtered);
   console.log(`該当件数：　${filtered.length} 件`);
   
   // 引数で渡されたオブジェクトの値をindexOfの結果に差し替える
-  const columnIndex = replaceHeadersValues(values, rowIndex, columnNames);
-  console.log(columnIndex);
+  const column = replaceHeadersValues(values, rowIndex, columnNames);
+  console.log(column);
 
   // HTMLを生成
   const listItems = filtered.map(row => {
-    const name = getLastName(row[columnIndex.name]);
-    const link = row[columnIndex.url];
+    const name = getLastName(row[column.name]);
+    const link = row[column.url];
     return `<li><a href="${link}">${name}さん</a></li>`;
   });
 
@@ -806,19 +806,19 @@ function sortInsideArray(array, key){
 /**
  * スプレッドシートの2次元配列内のデータを検索し、一致した行かつ指定した列の情報を返す
  * 
- * @param  {string} url - スプレッドシートのURL
+ * @param  {string} sheetUrl - スプレッドシートのURL
  * @param  {string} query - 検索する文字列
  * @param  {number} queryColumnIndex - 照合したい列
  * @param  {number} resultColumnIndex - データを取得したい列
  * @return {string} 取得したいデータ 
  * 
  */
-function findDataByQuery(url, query, queryColumnIndex, resultColumnIndex) {
+function findDataByQuery(sheetUrl, query, queryColumnIndex, resultColumnIndex) {
 
   console.info(`findDataByQuery()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
-  const values   = getValues(url);
+  const values   = getValues(sheetUrl);
   const foundRow = values.find(row => row[queryColumnIndex] === query);
   const result   = foundRow ? foundRow[resultColumnIndex] : null;
   
@@ -833,16 +833,16 @@ function findDataByQuery(url, query, queryColumnIndex, resultColumnIndex) {
 /**
  * 複数の列の値を1つのセルに結合します。
  * 
- * @param  {number} url - スプレッドシートのURL
+ * @param  {number} sheetUrl - スプレッドシートのURL
  * @return {Array.<Array><string>>} 2次元配列
  * 
  */
-function combineColumnToSingleCell(url){
+function combineColumnToSingleCell(sheetUrl){
 
   console.log(`combineColumnToSingleCell()を実行中`);
   console.log(`01_spreadsheetに記載`);
 
-  const values    = getValues(url);
+  const values    = getValues(sheetUrl);
   const header    = values.shift();
   const newValues = values.map(row => {
     const newRow = row.reduce((acc, value, index) => {
