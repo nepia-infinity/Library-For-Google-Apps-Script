@@ -1397,6 +1397,32 @@ function formatBankCode(sheetUrl, columnIndex, isBankCode){
 }
 
 
+function stepwiseVlookupColumnInsert(sheetUrl, rowIndex, column) {
+
+  // 数式を挿入したい行を取得
+  const activeSheet = SpreadsheetApp.getActiveSheet();
+  const activeCell  = getActiveCell(activeSheet);
+  const activeRange = activeSheet.getRange(activeCell.range);
+
+  // VLOOKUPの検索値が記載されている行を取得　（例）　A2
+  const queryRow = activeRange.offset(0, -1).getA1Notation(); 
+  console.warn(`VLOOKUP 検索値が記載されているセル: ${queryRow}`);
+
+  // VLOOKUPで取得したい値が含まれている列を取得
+  const sheetName    = getSheetByUrl(sheetUrl, 'sheetName');
+  const results      = createTextFinder(sheetUrl, column.result, sheetName);
+  const resultColumn = results[0].column;
+  console.log(`VLOOKUP 取得したい値が含まれている列: ${resultColumn}`);
+
+  // VLOOKUP関数の参照範囲を取得
+  const rangeString = getReferenceRange_(sheetUrl, rowIndex, column);
+  const formula     = `IFERROR(VLOOKUP(${queryRow},${rangeString}, ${resultColumn}, 0),"")`;
+  console.log(`formula: ${formula}`);
+
+  activeRange.setFormula(formula);
+}
+
+
 
 /**
  * VLOOKUPの参照範囲をURLから取得する　
