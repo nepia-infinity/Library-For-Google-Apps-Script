@@ -1447,7 +1447,7 @@ function getReferenceRange_(sheetUrl, rowIndex, column){
   // 絶対参照の$を付与する
   const rangeString = range.getA1Notation()
   .replace(/([A-Z]+)(\d+):([A-Z]+)(\d+)/g, (match, col1, row1, col2, row2) => {
-    return `$${col1}$${row1}:$${col2}$${row2}`
+    return `${sheetName}!$${col1}$${row1}:$${col2}$${row2}`;
   });
 
   console.log(`参照範囲: ${rangeString}`);
