@@ -631,7 +631,7 @@ function selectColumns(values, column, ...queries) {
 function modifyObject(original) {
 
   console.info(`modifyObject()を実行中`);
-  console.ifno(`01_spreadsheetに記載`);
+  console.info(`01_spreadsheetに記載`);
 
   const object = Object.keys(original).reduce((accumulator, key) => (
     {...accumulator, [key]: original[key] += 1} 
@@ -1394,4 +1394,36 @@ function formatBankCode(sheetUrl, columnIndex, isBankCode){
   console.log(formatedArray);
   return formatedArray
 
+}
+
+
+
+/**
+ * VLOOKUPの参照範囲をURLから生成する
+ * 
+ * startColumn -> VLOOKUPの参照範囲の開始列
+ * targetColumn　-> VLOOKUPの参照範囲のうち取得したい列
+ * 
+ * @param  {string} sheetUrl - シートのURL
+ * @param  {number} rowIndex - ヘッダー行の位置
+ * @param  {Object.<string>} column - startColumn, targetColumnを含むオブジェクト
+ * @return {string}
+ * 
+ */
+function getReferenceRange_(sheetUrl, rowIndex, column){
+  const sheetName = getSheetByUrl(sheetUrl, 'sheetName');
+  const sheet     = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName); 
+  const replaced  = replaceHeadersValues(sheet.getDataRange().getValues(), rowIndex, column);
+  const info      = modifyObject(replaced);
+  const range     = sheet.getRange(1, info.startColumn, sheet.getLastRow(), sheet.getLastColumn());
+
+  // 絶対参照の$を付与する
+  const rangeString = range.getA1Notation()
+  .replace(/([A-Z]+)(\d+):([A-Z]+)(\d+)/g, (match, col1, row1, col2, row2) => {
+    return `$${col1}$${row1}:$${col2}$${row2}`
+  });
+
+  console.log(`参照範囲: ${rangeString}`);
+  
+  return rangeString
 }
