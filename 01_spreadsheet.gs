@@ -1409,10 +1409,11 @@ function formatBankCode(sheetUrl, columnIndex, isBankCode){
  * @param  {string} sheetUrl - シートのURL
  * @param  {number} rowIndex - ヘッダー行の位置
  * @param  {Object.<string>} column - query, resultを含むオブジェクト
+ * @param  {number} incrementalLength - 繰り返す回数
  * @return {string}
  * 
  */
-function stepwiseVlookupColumnInsert(sheetUrl, rowIndex, column){
+function stepwiseVlookupColumnInsert(sheetUrl, rowIndex, column, incrementalLength){
 
   console.info(`stepwiseVlookupColumnInsert()を実行中`);
   console.info(`01_spreadsheetに記載`);
@@ -1426,11 +1427,19 @@ function stepwiseVlookupColumnInsert(sheetUrl, rowIndex, column){
   const headerTitles = getheaderTitles(sheetUrl, rowIndex);
 
   // VLOOKUP関数の数式を生成
-  const formula = generateVlookupFormula_(activeRange, sheetUrl, rowIndex, column);
-  activeRange
-  .setFormula(formula)
-  .setNote(headerTitles);
+  const original = generateVlookupFormula_(activeRange, sheetUrl, rowIndex, column);
+  let newFormula = '';
 
+  for(let i = 0; i <= incrementalLength; i++){
+    newFormula = i !== 0 ? incrementColumnInFormula(newFormula) : original;
+    const targetRange = i !== 0 ? activeRange.offset(0, i) : activeRange;
+
+    targetRange
+    .setFormula(newFormula)
+    .setNote(headerTitles);
+
+    console.log(`targetRange.getA1Notation(): ${targetRange.getA1Notation()}`);
+  }
 }
 
 
@@ -1462,7 +1471,7 @@ function generateVlookupFormula_(activeRange, sheetUrl, rowIndex, column){
 
   // VLOOKUP関数の参照範囲を取得
   const rangeString = getReferenceRange_(sheetUrl, rowIndex, column);
-  const formula     = `IFERROR(VLOOKUP($${queryRow},${rangeString},${resultColumn},0),"")`;
+  const formula     = `=IFERROR(VLOOKUP($${queryRow},${rangeString},${resultColumn},0),"")`;
   console.log(`formula: ${formula}`);
 
   return formula
@@ -1533,8 +1542,10 @@ function getheaderTitles(sheetUrl, rowIndex){
 
 
 /**
- * =IFERROR(VLOOKUP($A2,'DB'!$A$1:$C$1001,3,0),"")
- * =IFERROR(VLOOKUP($A2,'DB'!$A$1:$C$1001,4,0),"")
+ * 数式内の列を1つずつ足していく
+ * 
+ * (実行前) =IFERROR(VLOOKUP($A2,'DB'!$A$1:$C$1001,3,0),"")
+ * （実行後） 　=IFERROR(VLOOKUP($A2,'DB'!$A$1:$C$1001,4,0),"")
  * 
  * @param  {string} formula - VLOOKUPの数式
  * @return {string}
@@ -1545,7 +1556,7 @@ function incrementColumnInFormula(formula){
   console.info(`incrementColumnInFormula()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
-  const result  = formula.match(/(\d+),0\),""\)/);
+  const result = formula.match(/(\d+),0\),""\)/);
   console.log(result);
 
   const replaced = result[1];
@@ -1555,5 +1566,5 @@ function incrementColumnInFormula(formula){
   const newFormula = formula.replace(result[0], `${incrementalColumn},0),"")`);
   console.warn(`${newFormula}`);
 
-  return incrementalColumn
+  return newFormula
 }
