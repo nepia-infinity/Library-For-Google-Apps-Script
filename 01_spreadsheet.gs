@@ -915,13 +915,13 @@ function createImageFromBlob_(fileId, fileName, hasLog){
     console.info(`01_spreadsheetに記載`);
   }
 
-  const imageBlob = DriveApp.getFileById(fileId).getBlob();
+  const imageBlob   = DriveApp.getFileById(fileId).getBlob();
   const contentType = imageBlob.getContentType();
-  const base64 = Utilities.base64Encode(imageBlob.getBytes());
-  const imageStr = "data:" + contentType + ";base64, " + base64;
+  const base64      = Utilities.base64Encode(imageBlob.getBytes());
+  const imageString = "data:" + contentType + ";base64, " + base64;
 
   const image = SpreadsheetApp.newCellImage()
-    .setSourceUrl(imageStr)
+    .setSourceUrl(imageString)
     .setAltTextTitle(fileName)
     .setAltTextDescription("-")
     .build();
@@ -1326,12 +1326,12 @@ function convertSheetDataToQueryResults(info, ...additionalInfo){
  * @return {Array.<Array.<string>>}
  * 
  */
-function splitAddressColumn(url, rowIndex, columnIndex){
+function splitAddressColumn(sheetUrl, rowIndex, columnIndex){
 
   console.info(`splitAddressColumn()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
-  const values = getValues(url);
+  const values = getValues(sheetUrl);
   values.splice(rowIndex, 1);
 
   // 全角数字を半角数字に直す変換リストを生成
@@ -1369,18 +1369,18 @@ function splitAddressColumn(url, rowIndex, columnIndex){
 /**
  * 金融機関コード（4桁） or 支店名コード（3桁）になるように '0'で字詰めする
  * 
- * @param  {string} url - スプレッドシートのURL
+ * @param  {string} sheetUrl - スプレッドシートのURL
  * @param  {number} columnIndex - 金融機関コードが記されている列
  * @param  {boolean} isBankCode - 金融機関コードかどうか、falseの場合は支店名コード
  * @return {Array.<Array.<string>>} 
  * 
  */
-function formatBankCode(url, columnIndex, isBankCode){
+function formatBankCode(sheetUrl, columnIndex, isBankCode){
 
   console.info(`formatBankCode()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
-  const values = getValues(url);
+  const values = getValues(sheetUrl);
   const array  = generateArray(values, columnIndex);
 
   // 金融機関コード4桁 or 支店名コードの3桁になるように0で字詰めをする
