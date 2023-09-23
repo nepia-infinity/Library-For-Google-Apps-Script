@@ -1399,7 +1399,8 @@ function formatBankCode(sheetUrl, columnIndex, isBankCode){
 
 
 /**
- * VLOOKUPの参照範囲をURLから生成する
+ * VLOOKUPの参照範囲をURLから取得する　
+ * (例)$A$2:$F$1000
  * 
  * startColumn -> VLOOKUPの参照範囲の開始列
  * targetColumn　-> VLOOKUPの参照範囲のうち取得したい列
