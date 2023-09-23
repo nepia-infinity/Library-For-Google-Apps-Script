@@ -85,12 +85,12 @@ function test_getActiveCell(){
  * ヘッダー行をオブジェクトで取得する
  * 
  */
-function test_replaceHeaderValues(){
+function test_replaceHeadersValues(){
   const url    = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=618215393';
   const sheet  = SpreadsheetApp.openByUrl(url).getSheetByName('test');
   const values = sheet.getDataRange().getValues();
   const column = {id: 'ID', name: '名前', branch: '部署', address: '住所'};
-  replaceHeaderValues(values, 0, column);
+  replaceHeadersValues(values, 0, column);
 
 }
 
@@ -101,11 +101,11 @@ function test_replaceHeaderValues(){
  * ヘッダー行をオブジェクトで取得する
  * 
  */
-function test_generateHeaderIndex(){
+function test_generateHeadersIndex(){
   const url    = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=0';
   const sheet  = SpreadsheetApp.openByUrl(url).getSheetByName('ScriptDetail');
   const values = sheet.getDataRange().getValues();
-  generateHeaderIndex(values, 0);
+  generateHeadersIndex(values, 0);
 
 }
 

@@ -173,7 +173,6 @@ function guestList_(guests, creators) {
 
 
 
-
 /**
  * シートの値に基づいて予定を登録するスクリプト
  * 3番目の引数、calIdについては省略した場合、自分のカレンダーに予定が登録される
@@ -545,7 +544,7 @@ function getInfoByEventId(eventId, calId){
 
 /**
  * 予定の日時を更新する
- * @param  {Object.<date>}
+ * @param  {Object.<date>} info - 開始時刻、終了時刻を含むオブジェクト
  * 
  */
 function updateEventDateTime(info){
