@@ -22,7 +22,6 @@ function extractText(string, reg, ...params){
 
 
 
-
 /**
  * 氏名からスペースの前の苗字を取得します。
  * @param  {string} fullName - 氏名
