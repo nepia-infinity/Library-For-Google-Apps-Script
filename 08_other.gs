@@ -9,6 +9,9 @@
  */
 function generateNumbers(start, end) {
 
+  console.info('generateNumbers()を実行中');
+  console.info('08_otherに記載');
+
   const array = Array.from({length: end}, (_, index) => start + index);
   console.info('generateNumbers()を実行中');
   console.info('08_otherに記載');
@@ -26,6 +29,7 @@ function generateNumbers(start, end) {
  * 
  */
 function getRandomNumber(end) {
+
   console.info('getRandomNumber()を実行中');
   console.info('08_otherに記載');
 
@@ -44,6 +48,7 @@ function getRandomNumber(end) {
  * @return {number} 
  */
 function findLargestNumber(array){
+
   console.info('findLargestNumber()を実行中');
   console.info('08_otherに記載');
 
