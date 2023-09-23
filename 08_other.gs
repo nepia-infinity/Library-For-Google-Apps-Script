@@ -134,9 +134,9 @@ function sliceStringNumber_(string, quantity, hasLog) {
  * @return {Array.<Array.<string>>} [/置換対象の文字列/, '置換後の文字列']
  * 
  */
-function generateTwoByteRegularExpression(isCombined){
+function generateTwoByteRegex(isCombined){
 
-  console.info(`generateTwoByteRegularExpression()を実行中`);
+  console.info(`generateTwoByteRegex()を実行中`);
   console.info('08_otherに記載');
 
   const twoByteCharacter  = '０１２３４５６７８９'; //全角

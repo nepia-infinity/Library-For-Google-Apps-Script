@@ -1,14 +1,3 @@
-/** 
- * 最終更新日　2023/09/16
- * 
- * @param  {string} 
- * @param  {number}  
- * @param  {Array.<Array.<string>} 
- * @param  {Object.<number>} 
- * @return {SpreadsheetApp.Sheet|string} 
- * 
- */
-
 /**
  * スプレッドシートのURLからsheetオブジェクトを取得する
  * 
