@@ -630,14 +630,13 @@ function selectColumns(values, column, ...queries) {
 
 function modifyObject(original) {
 
-  console.log(`modifyObject()を実行中`);
-  console.log(`01_spreadsheetに記載`);
+  console.info(`modifyObject()を実行中`);
+  console.ifno(`01_spreadsheetに記載`);
 
   const object = Object.keys(original).reduce((accumulator, key) => (
     {...accumulator, [key]: original[key] += 1} 
   ),{});
 
-  console.log(original);
   console.log(object);
   return object
 }
