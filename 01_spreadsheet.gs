@@ -1407,7 +1407,7 @@ function formatBankCode(sheetUrl, columnIndex, isBankCode){
  * 
  * @param  {string} sheetUrl - シートのURL
  * @param  {number} rowIndex - ヘッダー行の位置
- * @param  {Object.<string>} column - startColumn, targetColumnを含むオブジェクト
+ * @param  {Object.<string>} column - query, resultを含むオブジェクト
  * @return {string}
  * 
  */
@@ -1416,7 +1416,7 @@ function getReferenceRange_(sheetUrl, rowIndex, column){
   const sheet     = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName); 
   const replaced  = replaceHeadersValues(sheet.getDataRange().getValues(), rowIndex, column);
   const info      = modifyObject(replaced);
-  const range     = sheet.getRange(1, info.startColumn, sheet.getLastRow(), sheet.getLastColumn());
+  const range     = sheet.getRange(1, info.query, sheet.getLastRow(), sheet.getLastColumn());
 
   // 絶対参照の$を付与する
   const rangeString = range.getA1Notation()
