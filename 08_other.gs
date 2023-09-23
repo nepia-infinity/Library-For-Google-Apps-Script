@@ -102,13 +102,14 @@ function convertCellPhoneNumber(original, hasLog) {
  * 
  * @param  {string} string - 携帯電話の文字列を生成する
  * @param  {number} quantity - 文字をスライスする量
- * @param  {number} log - 実行中の関数名を表示する
+ * @param  {boolean} hasLog - 実行中の関数名を表示する
  * @return {string}
  * 
  */
-function sliceStringNumber_(string, quantity, log) {
-  if(log){
-    console.info(`generateCellPhoneNumber_()を実行中`);
+function sliceStringNumber_(string, quantity, hasLog) {
+
+  if(hasLog){
+    console.info(`sliceStringNumber_()を実行中`);
     console.info('08_otherに記載');
   }
   
@@ -134,24 +135,25 @@ function sliceStringNumber_(string, quantity, log) {
  * 
  */
 function generateTwoByteRegularExpression(isCombined){
-  const twoByteCharacter  = '０１２３４５６７８９'; //全角
-  const halfSizeCharacter = '0123456789'; //半角
-  const list = twoByteCharacter.split('');
 
   console.info(`generateTwoByteRegularExpression()を実行中`);
   console.info('08_otherに記載');
 
+  const twoByteCharacter  = '０１２３４５６７８９'; //全角
+  const halfSizeCharacter = '0123456789'; //半角
+  const list = twoByteCharacter.split('');
+
   // 全角数字を半角数字に置換するため2次元配列を作成する
-  const lists = list.map((string, i) => [new RegExp(string, 'g'), halfSizeCharacter[i]]);
+  const regexList = list.map((string, i) => [new RegExp(string, 'g'), halfSizeCharacter[i]]);
 
   // 全角数字置換用に加えて、アルファベットも置換できるように既存の配列に加える
   if(isCombined){
     const newValues = generateTwoByteAlphabetValues_();
-    lists.push(...newValues);
+    regexList.push(...newValues);
   }
   
-  console.log(lists);
-  return lists
+  console.log(regexList);
+  return regexList
 }
 
 
