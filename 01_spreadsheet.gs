@@ -1433,10 +1433,12 @@ function stepwiseVlookupColumnInsert(sheetUrl, rowIndex, column, incrementalLeng
   for(let i = 0; i <= incrementalLength; i++){
     newFormula = i !== 0 ? incrementColumnInFormula(newFormula) : original;
     const targetRange = i !== 0 ? activeRange.offset(0, i) : activeRange;
+    const destinationRange = activeSheet.getRange(targetRange.getRow(), targetRange.getColumn(), activeSheet.getLastRow(), 1);
 
     targetRange
     .setFormula(newFormula)
-    .setNote(headerTitles);
+    .setNote(headerTitles)
+    .copyTo(destinationRange, SpreadsheetApp.CopyPasteType.PASTE_FORMULA, false);
 
     console.log(`targetRange.getA1Notation(): ${targetRange.getA1Notation()}`);
   }
