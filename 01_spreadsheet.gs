@@ -1397,12 +1397,33 @@ function formatBankCode(sheetUrl, columnIndex, isBankCode){
 }
 
 
-function stepwiseVlookupColumnInsert(sheetUrl, rowIndex, column) {
+
+
+function stepwiseVlookupColumnInsert(sheetUrl, rowIndex, column){
 
   // 数式を挿入したい行を取得
   const activeSheet = SpreadsheetApp.getActiveSheet();
   const activeCell  = getActiveCell(activeSheet);
   const activeRange = activeSheet.getRange(activeCell.range);
+
+  // VLOOKUP関数の数式を生成
+  const formula = generateVlookupFormula_(activeRange, sheetUrl, rowIndex, column);
+  activeRange.setFormula(formula);
+}
+
+
+
+/**
+ * VLOOKUP関数の数式を生成する
+ * 
+ * @param  {SpreadsheetApp.Range} activeRange - アクティブなセル
+ * @param  {string} sheetUrl - シートのURL
+ * @param  {number} rowIndex - ヘッダー行の位置
+ * @param  {Object.<string>} column - query, resultを含むオブジェクト
+ * @return {string}
+ * 
+ */
+function generateVlookupFormula_(activeRange, sheetUrl, rowIndex, column){
 
   // VLOOKUPの検索値が記載されている行を取得　（例）　A2
   const queryRow = activeRange.offset(0, -1).getA1Notation(); 
@@ -1416,10 +1437,11 @@ function stepwiseVlookupColumnInsert(sheetUrl, rowIndex, column) {
 
   // VLOOKUP関数の参照範囲を取得
   const rangeString = getReferenceRange_(sheetUrl, rowIndex, column);
-  const formula     = `IFERROR(VLOOKUP(${queryRow},${rangeString}, ${resultColumn}, 0),"")`;
+  const formula     = `IFERROR(VLOOKUP(${queryRow},${rangeString},${resultColumn},0),"")`;
   console.log(`formula: ${formula}`);
 
-  activeRange.setFormula(formula);
+  return formula
+
 }
 
 
