@@ -637,7 +637,7 @@ function modifyObject(original) {
     {...accumulator, [key]: original[key] += 1} 
   ),{});
 
-  console.log(object);
+  console.warn(object);
   return object
 }
 
