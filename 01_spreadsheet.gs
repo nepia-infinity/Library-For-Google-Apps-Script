@@ -1401,6 +1401,11 @@ function formatBankCode(sheetUrl, columnIndex, isBankCode){
 /**
  * アクティブなセルにVLOOKUP関数を挿入する
  * 
+ * generateVlookupFormula VLOOKUP関数を生成
+ * getReferenceRange 　　　　　　　　　　URLからVLOOKUPの参照範囲を取得
+ * getheaderTitles        参照範囲のヘッダー行の値をひとつずつ取り出してメモに貼り付ける
+ * getIncrementalColumn　　　　　　値を1ずつ増やしていく
+ * 
  * @param  {string} sheetUrl - シートのURL
  * @param  {number} rowIndex - ヘッダー行の位置
  * @param  {Object.<string>} column - query, resultを含むオブジェクト
@@ -1426,8 +1431,6 @@ function stepwiseVlookupColumnInsert(sheetUrl, rowIndex, column){
   .setFormula(formula)
   .setNote(headerTitles);
 
-  // 1ずつVLOOKUP関数の列をインクリメンタルさせる
-  const incrementalColumn = getIncrementalColumn_(formula);
 }
 
 
@@ -1451,7 +1454,7 @@ function generateVlookupFormula_(activeRange, sheetUrl, rowIndex, column){
   const queryRow = activeRange.offset(0, -1).getA1Notation(); 
   console.warn(`VLOOKUP 検索値が記載されているセル: ${queryRow}`);
 
-  // VLOOKUPで取得したい値が含まれている列を取得
+   // VLOOKUPで取得したい値が含まれている列を取得
   const sheetName    = getSheetByUrl(sheetUrl, 'sheetName');
   const results      = createTextFinder(sheetUrl, column.result, sheetName);
   const resultColumn = results[0].column;
@@ -1472,8 +1475,8 @@ function generateVlookupFormula_(activeRange, sheetUrl, rowIndex, column){
  * VLOOKUPの参照範囲をURLから取得する　
  * (例)$A$2:$F$1000
  * 
- * startColumn -> VLOOKUPの参照範囲の開始列
- * targetColumn　-> VLOOKUPの参照範囲のうち取得したい列
+ * query 　-> VLOOKUPの参照範囲の開始列
+ * result　-> VLOOKUPの参照範囲のうち取得したい列
  * 
  * @param  {string} sheetUrl - シートのURL
  * @param  {number} rowIndex - ヘッダー行の位置
@@ -1495,7 +1498,7 @@ function getReferenceRange_(sheetUrl, rowIndex, column){
   // 絶対参照の$を付与する
   const rangeString = range.getA1Notation()
   .replace(/([A-Z]+)(\d+):([A-Z]+)(\d+)/g, (match, col1, row1, col2, row2) => {
-    return `${sheetName}!$${col1}$${row1}:$${col2}$${row2}`;
+    return `'${sheetName}'!$${col1}$${row1}:$${col2}$${row2}`;
   });
 
   console.log(`参照範囲: ${rangeString}`);
@@ -1513,6 +1516,10 @@ function getReferenceRange_(sheetUrl, rowIndex, column){
  * @return {string}
  */
 function getheaderTitles(sheetUrl, rowIndex){
+
+  console.info(`getheaderTitles()を実行中`);
+  console.info(`01_spreadsheetに記載`);
+
   const values  = getValues(sheetUrl);
   const headers = values[rowIndex];
 
@@ -1526,21 +1533,27 @@ function getheaderTitles(sheetUrl, rowIndex){
 
 
 /**
+ * =IFERROR(VLOOKUP($A2,'DB'!$A$1:$C$1001,3,0),"")
+ * =IFERROR(VLOOKUP($A2,'DB'!$A$1:$C$1001,4,0),"")
  * 
- * VLOOKUPの関数の数式からインクリメントする列を取得
- * 
- * @param  {string} formula - VLOOKUPの関数の数式
- * @return {number}
+ * @param  {string} formula - VLOOKUPの数式
+ * @return {string}
  * 
  */
-function getIncrementalColumn_(formula){
-  
-  const result = formula.match(/[1-9]{1,2},0\),""\)/);
+function incrementColumnInFormula(formula){
+
+  console.info(`incrementColumnInFormula()を実行中`);
+  console.info(`01_spreadsheetに記載`);
+
+  const result  = formula.match(/(\d+),0\),""\)/);
   console.log(result);
 
-  const replaced = result[0].replace(/,.*/, '');
-  const incrementalColumn = Number(replaced);
+  const replaced = result[1];
+  const incrementalColumn = Number(replaced) + 1;
   console.log(`VLOOKUPの列: ${incrementalColumn} typeof: ${typeof incrementalColumn}`);
+
+  const newFormula = formula.replace(result[0], `${incrementalColumn},0),"")`);
+  console.warn(`${newFormula}`);
 
   return incrementalColumn
 }
