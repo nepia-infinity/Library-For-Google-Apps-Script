@@ -1431,7 +1431,7 @@ function stepwiseVlookupColumnInsert(sheetUrl, rowIndex, column, incrementalLeng
   let newFormula = '';
 
   for(let i = 0; i <= incrementalLength; i++){
-    newFormula = i !== 0 ? incrementColumnInFormula(newFormula) : original;
+    newFormula = i !== 0 ? incrementColumnInFormula_(newFormula) : original;
     const targetRange = i !== 0 ? activeRange.offset(0, i) : activeRange;
     const destinationRange = activeSheet.getRange(targetRange.getRow(), targetRange.getColumn(), activeSheet.getLastRow(), 1);
 
@@ -1553,9 +1553,9 @@ function getheaderTitles(sheetUrl, rowIndex){
  * @return {string}
  * 
  */
-function incrementColumnInFormula(formula){
+function incrementColumnInFormula_(formula){
 
-  console.info(`incrementColumnInFormula()を実行中`);
+  console.info(`incrementColumnInFormula_()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
   const result = formula.match(/(\d+),0\),""\)/);
