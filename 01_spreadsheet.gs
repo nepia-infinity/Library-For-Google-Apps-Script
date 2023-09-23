@@ -1401,10 +1401,10 @@ function formatBankCode(sheetUrl, columnIndex, isBankCode){
 /**
  * アクティブなセルにVLOOKUP関数を挿入する
  * 
- * generateVlookupFormula VLOOKUP関数を生成
- * getReferenceRange 　　　　　　　　　　URLからVLOOKUPの参照範囲を取得
- * getheaderTitles        参照範囲のヘッダー行の値をひとつずつ取り出してメモに貼り付ける
- * getIncrementalColumn　　　　　　値を1ずつ増やしていく
+ * generateVlookupFormula    VLOOKUP関数を生成
+ * getReferenceRange 　　　　　　　　　　   URLからVLOOKUPの参照範囲を取得
+ * getheaderTitles           参照範囲のヘッダー行の値をひとつずつ取り出してメモに貼り付ける
+ * incrementColumnInFormula　　　　　値を1ずつ増やしていく
  * 
  * @param  {string} sheetUrl - シートのURL
  * @param  {number} rowIndex - ヘッダー行の位置
@@ -1521,6 +1521,7 @@ function getReferenceRange_(sheetUrl, rowIndex, column){
 
 /**
  * ヘッダー行の値と、順番を文字列で取得する
+ * VLOOKUPの対象列確認用に、setNoteなどと一緒に使用すると便利
  * 
  * @param  {string} sheetUrl - シートのURL
  * @param  {number} rowIndex - ヘッダー行の位置
