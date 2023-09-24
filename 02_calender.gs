@@ -599,6 +599,10 @@ function isHoliday(date){
  * 
  */
 function getHolidays_(){
+
+  console.info(`getHolidays_()を実行中`);
+  console.info(`02_calenderに記載`);
+
   const cal = CalendarApp.getCalendarById('ja.japanese#holiday@group.v.calendar.google.com');
   const startDate = new Date();
   const endDate   = new Date();
