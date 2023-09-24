@@ -6,6 +6,7 @@
  * @param  {string} reg -  正規表現
  * @param  {Array.<string>} string - 残余引数で何個でも指定可、　置換対象の文字列
  * @return {string}
+ * 
  */
 function extractText(string, reg, ...params){
 
@@ -23,10 +24,12 @@ function extractText(string, reg, ...params){
 
 
 /**
- * 氏名からスペースの前の苗字を取得します。
+ * 氏名からスペースの前の苗字を取得する
+ * 
  * @param  {string} fullName - 氏名
  * @param  {boolean} hasLog - 実行中の関数名を表示するかどうか
  * @return {string} 苗字
+ * 
  */
 function getLastName(fullName, hasLog){
 
@@ -52,10 +55,12 @@ function getLastName(fullName, hasLog){
 
 
 /**
- * 3文字の苗字を取得します。
+ * 3文字の苗字を取得する
+ * 
  * @param  {string} fullName - 氏名
  * @param  {boolean} hasLog - 省略可　実行中の関数名を表示するかどうか
  * @return {string} 3文字の苗字
+ * 
  */
 function getShortenedLastName(fullName, hasLog) {
 
