@@ -24,8 +24,8 @@ function formatDate(date, format, hasLog){
 }
 
 
+
 /**
- * 
  * 今日を起点として、対象日までの日付と曜日の2次元配列として返す
  * 
  * @param  {sting} string - '2023/04/29'のように 'yyyy/MM/dd' 形式で指定する
@@ -65,7 +65,6 @@ function generateDateStringValues(string) {
     return [];
   }
 }
-
 
 
 
@@ -278,6 +277,7 @@ function assignHeaderKeys_(values, rowIndex){
 }
 
 
+
 /**
  * Google Meet付きで予定を登録し、Meet URLを返す
  * 
@@ -316,14 +316,15 @@ function createEventWithMeetUrl_(object) {
 }
 
 
+
 /**
  * 'attendees': [{'email': 'lpage@example.com'},{'email': 'sbrin@example.com'}],
  * registerEventsWithMeetUrl_()内で、上記のように指定すると出席者を登録する事が出来る
  *
  * @param  {string} string - 'aiueo@sample.com, abc@sample.com'
  * @return {Array.<Object.<string>}
+ * 
  */
-
 function generateAttendees_(string){
 
   console.info(`generateAttendees_()を実行中`);
@@ -337,7 +338,6 @@ function generateAttendees_(string){
 
 
 /**
- * 
  * 予定を削除する、削除前にはアラートが表示される
  * 
  * @param {string} query - 削除したい予定のタイトル　省略可。省略した場合はプロンプトに入力する
@@ -422,7 +422,6 @@ function getEventsByQuery_(query, calId){
 
 
 /**
- * 
  * 予定を編集するスクリプトを起動する画面を表示する
  * FIXME: ライブラリ経由だとHTMLのformタグの内容が受け取れない 値がnullになる模様
  * 
@@ -438,6 +437,7 @@ function showEditEventsLauncher() {
 
 /**
  * choice.htmlで選択した内容を受け取って、編集内容を分岐させる
+ * 
  * @param  {Object.<string>} object - 選択肢の内容　以下4つ
  * (例)予定名を編集する, 詳細欄を編集する, 日時を編集する, 出席者を追加する
  * 
@@ -513,6 +513,8 @@ function editEvents(object, rowIndex){
 
 
 /**
+ * イベントIDから予定名、日時などの詳細を取得する
+ * 
  * @param  {string} eventId - イベントID、UI操作だと確認不可
  * @param  {string} calId - 予定の登録先、通常はメールアドレスなど
  * @return {Object.<string>}　予定の詳細
@@ -544,6 +546,7 @@ function getInfoByEventId(eventId, calId){
 
 /**
  * 予定の日時を更新する
+ * 
  * @param  {Object.<date>} info - 開始時刻、終了時刻を含むオブジェクト
  * 
  */
@@ -558,6 +561,3 @@ function updateEventDateTime(info){
 
   info.event.setTime(startTime, endTime);
 }
-
-
-
