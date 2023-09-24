@@ -5,6 +5,7 @@
  * @param  {string} folderUrl - GoogleドライブのフォルダのURL
  * @param  {string} query - 検索したいファイル名、省略可
  * @return {Array.<Array.<string>>}
+ * 
  */
 function getFilesValues(folderUrl, query) {
   console.info('getFilesValues()を実行中');
@@ -37,13 +38,13 @@ function getFilesValues(folderUrl, query) {
 
 
 
-
 /**
  * GoogleドライブのURLからフォルダIDを抽出する
  * 
  * @param  {string} folderUrl - GoogleドライブのフォルダのURL
  * @param  {boolean} hasLog - 省略可。定義されている場合のみ、実行中の関数名を表記する
  * @return {string}
+ * 
  */
 function getFolderId(folderUrl, hasLog){
 
@@ -73,6 +74,7 @@ function getFolderId(folderUrl, hasLog){
  * @param  {string} folderUrl - GoogleドライブのフォルダのURL
  * @param  {string} accountId - ファイルを譲渡したいアカウントID
  * @return {Array.<Array.<string>>}
+ * 
  */
 function transferOwnership(folderUrl, accountId){
 
@@ -105,6 +107,7 @@ function transferOwnership(folderUrl, accountId){
  * @param  {string} folderUrl - GoogleドライブのフォルダのURL
  * @param  {string} log - 省略可　引数が定義されている場合のみ実行中の関数名を表示する
  * @return {Object.<Object.<string>>}
+ * 
  */
 function getDriveFiles(folderUrl, log){
 
@@ -121,8 +124,6 @@ function getDriveFiles(folderUrl, log){
 
   return files
 }
-
-
 
 /*
 共有範囲
@@ -190,6 +191,7 @@ function grantEditPermissionToFolder(folderUrl, users, role){
  * @param  {string} folderUrl - GoogleドライブのフォルダのURL
  * @param  {Array.<string>} newFolderNameList - 1次元配列　この配列に格納された値がフォルダ名となる
  * @return {Array.<string>} innerFolderNameList - 1次元配列　さらに内側にフォルダを作成する場合に指定する
+ * 
  */
 function createFolders(folderUrl, newFolderNameList, innerFolderNameList) {
 
@@ -293,7 +295,6 @@ function generateUrlWithSheetOptions_(sheet, stringRange, isGridLines){
 
 
 /**
- * 
  * スプレッドシート、ドキュメント、スライドからPDFファイルを作成
  * 
  * @param  {string} targetUrl - FetchするURL
@@ -314,7 +315,6 @@ function createPdfFile_(targetUrl, folderUrl, fileName){
   const folderId = getFolderId(folderUrl);
   DriveApp.getFolderById(folderId).createFile(blob);
 }
-
 
 
 
@@ -429,6 +429,7 @@ function renameFilesWithConfirmation_(values, maxLength){
  * 
  * @param  {string} folderUrl - フォルダのURL
  * @return {string} string - ファイル一覧のHTMLタグ
+ * 
  */
 function getFileNameWithUrl(folderUrl){
 
@@ -494,6 +495,7 @@ function getImageFiles_(folderUrl) {
  * 
  * @param  {string} fileName - ファイル名
  * @return {string} 
+ * 
  */
 function getExtensionFromFileName_(fileName){
 
@@ -505,7 +507,6 @@ function getExtensionFromFileName_(fileName){
 
   return match ? match[0].toLowerCase() : null;
 }
-
 
 
 
@@ -542,4 +543,3 @@ function getFileId(fileUrl) {
   // ファイルIDが見つからない場合は null を返す
   return null;
 }
-
