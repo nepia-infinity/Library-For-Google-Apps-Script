@@ -584,9 +584,10 @@ function isHoliday(date){
   const targetDate = formatDate(date, 'yyyy/MM/dd');
   const values     = getHolidays_();
   const holidays   = generateArray(values, 1); 
-  const foundIndex = holidays.findIndex(holiday => holiday === targetDate); 
+  const foundIndex = holidays.findIndex(holiday => holiday === targetDate);
 
-  console.log(`今日の日付： ${targetDate}は、${values[foundIndex][0]}で祝日です`);
+  (foundIndex !== -1) ? console.log(`今日の日付： ${targetDate}は、${values[foundIndex][0]}で祝日です`)
+  : console.log(`今日の日付： ${targetDate}は、祝日ではありません`);
   return foundIndex !== -1;
 
 }
