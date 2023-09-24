@@ -551,6 +551,10 @@ function getInfoByEventId(eventId, calId){
  * 
  */
 function updateEventDateTime(info){
+
+  console.info(`updateEventDateTime()を実行中`);
+  console.info(`02_calenderに記載`);
+
   const startTime = new Date(info.date);
   startTime.setHours(info.start.getHours());
   startTime.setMinutes(info.start.getMinutes());
@@ -560,4 +564,62 @@ function updateEventDateTime(info){
   endTime.setMinutes(info.end.getMinutes());
 
   info.event.setTime(startTime, endTime);
+}
+
+
+
+/**
+ * 祝日かどうかを判定する
+ * 
+ * @param  {string|date} date - 文字列かデイトオブジェクト
+ * @return {boolean}
+ * 
+ */
+function isHoliday(date){
+
+  console.info(`isHoliday()を実行中`);
+  console.info(`02_calenderに記載`);
+
+  date = typeof date === 'string' ? date = new Date(date) : date;
+  const targetDate = formatDate(date, 'yyyy/MM/dd');
+  const values     = getHolidays_();
+  const holidays   = generateArray(values, 1); 
+  const foundIndex = holidays.findIndex(holiday => holiday === targetDate); 
+
+  console.log(`今日の日付： ${targetDate}は、${values[foundIndex][0]}で祝日です`);
+  return foundIndex !== -1;
+
+}
+
+
+
+/**
+ * 祝日カレンダーから祝日名、日付、曜日を取得する
+ * 
+ */
+function getHolidays_(){
+  const cal = CalendarApp.getCalendarById('ja.japanese#holiday@group.v.calendar.google.com');
+  const startDate = new Date();
+  const endDate   = new Date();
+  endDate.setFullYear(endDate.getFullYear()+1);
+
+  const dayOfWeek = '日月火水木金土';
+  const daysArray = dayOfWeek.split('');
+  const day = (number) => {
+    return daysArray[number];
+  }
+
+  const events = cal.getEvents(startDate, endDate).map(event => ({
+    title: event.getTitle(),
+    date:  Utilities.formatDate(event.getStartTime(), 'JST', 'yyyy/MM/dd'),
+    day:   day(event.getStartTime().getDay())
+    })
+  );
+
+  const keys   = Object.keys(events[0]);
+  const values = events.map(event => keys.map(key => event[key]));
+  values.unshift(['祝日名', '日付', '曜日']);
+
+  console.log(values);
+  return values
 }
