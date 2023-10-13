@@ -52,16 +52,16 @@ function findLargestNumber(array){
   console.info('findLargestNumber()を実行中');
   console.info('08_otherに記載');
 
-  const result = array.reduce((accumulator, currentValue) => {
-    if(accumulator > currentValue){
+  const result = array.reduce((accumulator, current) => {
+    if(accumulator > current){
       //accumulatorに格納された値が、現在値よりも大きい
-      console.log(`accumulator: ${accumulator} > currentValue: ${currentValue}`);
+      console.log(`accumulator: ${accumulator} > current: ${current}`);
       return accumulator;
 
     } else {
       //accumulatorに格納された値が、現在値よりも小さい
-      //console.log(`accumulator: ${accumulator} < currentValue: ${currentValue}`)
-      return currentValue;
+      //console.log(`accumulator: ${accumulator} < current: ${current}`)
+      return current;
       
     }
   });

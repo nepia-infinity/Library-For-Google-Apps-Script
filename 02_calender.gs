@@ -382,7 +382,8 @@ function deleteEvents(query, calId) {
 
 
 /**
- * eventIdと削除予定のイベントを含んだオブジェクトを返す
+ * 引数に指定した文字列が含まれる予定のみを取得する
+ * 対象は1か月間
  * 
  * @param  {string} query - 削除したいカレンダーの予定名
  * @param  {string} calId - カレンダーID
