@@ -1574,7 +1574,6 @@ function incrementColumnInFormula_(formula){
 
 
 
-
 /**
  * 
  * 
@@ -1582,7 +1581,7 @@ function incrementColumnInFormula_(formula){
  */
 function convertKanaCharacters(text) {
   const sheetUrl = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=1358147510';
-  const values   = nepia_infinity.getValues(sheetUrl);
+  const values   = getValues(sheetUrl);
 
   if(text.match(/[ぁ-ん]/) !== null){
     // console.log(`"${text}" は、ひらがなです`);
@@ -1593,6 +1592,7 @@ function convertKanaCharacters(text) {
     return swapCharacters_(values, 0, text, 1);
   }
 }
+
 
 
 /**
