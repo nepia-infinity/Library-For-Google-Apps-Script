@@ -1571,3 +1571,47 @@ function incrementColumnInFormula_(formula){
 
   return newFormula
 }
+
+
+
+
+/**
+ * 
+ * 
+ * 
+ */
+function convertKanaCharacters(text) {
+  const sheetUrl = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=1358147510';
+  const values   = nepia_infinity.getValues(sheetUrl);
+
+  if(text.match(/[ぁ-ん]/) !== null){
+    // console.log(`"${text}" は、ひらがなです`);
+    return swapCharacters_(values, 1, text, 0);
+
+  }else if(text.match(/[ァ-ヴー・]/) !== null){
+    // console.log(`"${text}" は、カタカナです`);
+    return swapCharacters_(values, 0, text, 1);
+  }
+}
+
+
+/**
+ * 
+ * 
+ * 
+ */
+function swapCharacters_(values, queryColumnIndex, text, resultColumnIndex){
+  let newText = '';
+
+  for(let i = 0; i < text.length; i++){
+    const query  = text[i];
+    const pairs  = values.find(row => row[queryColumnIndex] === query);
+    const target = pairs[resultColumnIndex];
+
+    newText += target;
+  };
+
+  console.log(`変換後の文字列：${newText}`);
+  return newText
+  
+}
