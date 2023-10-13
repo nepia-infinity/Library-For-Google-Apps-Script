@@ -76,7 +76,7 @@ function findLargestNumber(array){
  * ハイフンなしの携帯電話番号を、ハイフンありで返す関数
  * 
  * @param  {string | number} original - 携帯電話の文字列 '09012345678'
- * @param  {boolean} hasLog - 省略可 - 実行中の関数名を表示する
+ * @param  {boolean} hasLog - 省略可・実行中の関数名を表示する
  * @return {string} ハイフンありの携帯電話 '090-1234-5678'
  * 
  */

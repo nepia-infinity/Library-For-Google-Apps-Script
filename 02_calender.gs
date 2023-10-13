@@ -629,3 +629,38 @@ function getHolidays_(){
   console.log(values);
   return values
 }
+
+
+/**
+ * 検索クエリでカレンダーを検索し、一致する予定を取得する
+ * 
+ * @param  {string} stringDate - yyyy/MM/dd形式の日付 （例）2023/10/01
+ * @param  {number} period - 期間・3か月の場合は3と指定
+ * @param  {number} query - 検索クエリ
+ * @return {Object.<string|date>}
+ * 
+ */
+function getEventsByQuery(stringDate, period, query, calId){
+  const cal       = calId ? CalendarApp.getCalendarById(calId) : CalendarApp.getDefaultCalendar();
+  const startTime = new Date(stringDate);
+  const endTime   = new Date();
+  endTime.setMonth(endTime.getMonth() + period);
+
+  const events = cal.getEvents(startTime, endTime, {search: query})
+  .filter(event => event.getTitle().includes(query))
+  .map(event => ({
+    title:       event.getTitle(),
+    date:        formatDate(event.getStartTime(), 'yyyy/MM/dd'),
+    day:         convertDay(event.getStartTime().getDay()),
+    start:       formatDate(event.getStartTime(), 'HH:mm'),
+    end:         formatDate(event.getEndTime(), 'HH:mm'),
+    description: event.getDescription(),
+    guests:      guestList_(event.getGuestList(), event.getCreators())
+  }));
+
+  console.log(events);
+  console.log(`検索対象期間：${period}ヶ月`);
+  console.log(`${formatDate(startTime, 'yyyy/MM/dd')} - ${formatDate(endTime, 'yyyy/MM/dd')}`);
+
+  return events
+}
