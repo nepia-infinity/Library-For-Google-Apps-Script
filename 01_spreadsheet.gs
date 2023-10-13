@@ -1402,9 +1402,9 @@ function formatBankCode(sheetUrl, columnIndex, isBankCode){
  * アクティブなセルにVLOOKUP関数を挿入する
  * 
  * generateVlookupFormula    VLOOKUP関数を生成
- * getReferenceRange 　　　　　　　　　　   URLからVLOOKUPの参照範囲を取得
- * getheaderTitles           参照範囲のヘッダー行の値をひとつずつ取り出してメモに貼り付ける
- * incrementColumnInFormula　　　　　値を1ずつ増やしていく
+ * getReferenceRange 　　　　　URLからVLOOKUPの参照範囲を取得
+ * getHeaderTitles           参照範囲のヘッダー行の値をひとつずつ取り出してメモに貼り付ける
+ * incrementColumnInFormula　値を1ずつ増やしていく
  * 
  * @param  {string} sheetUrl - シートのURL
  * @param  {number} rowIndex - ヘッダー行の位置
@@ -1424,7 +1424,7 @@ function stepwiseVlookupColumnInsert(sheetUrl, rowIndex, column, incrementalLeng
   const activeRange = activeSheet.getRange(activeCell.range);
 
   // 見出し行の値を取得する
-  const headerTitles = getheaderTitles(sheetUrl, rowIndex);
+  const headerTitles = getHeaderTitles(sheetUrl, rowIndex);
 
   // VLOOKUP関数の数式を生成
   const original = generateVlookupFormula_(activeRange, sheetUrl, rowIndex, column);
@@ -1527,9 +1527,9 @@ function getReferenceRange_(sheetUrl, rowIndex, column){
  * @param  {number} rowIndex - ヘッダー行の位置
  * @return {string}
  */
-function getheaderTitles(sheetUrl, rowIndex){
+function getHeaderTitles(sheetUrl, rowIndex){
 
-  console.info(`getheaderTitles()を実行中`);
+  console.info(`getHeaderTitles()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
   const values  = getValues(sheetUrl);
@@ -1545,10 +1545,10 @@ function getheaderTitles(sheetUrl, rowIndex){
 
 
 /**
- * 数式内の列を1つずつ足していく
+ * 数式内の参照する列を1つずつ足していく
  * 
  * (実行前) =IFERROR(VLOOKUP($A2,'DB'!$A$1:$C$1001,3,0),"")
- * （実行後） 　=IFERROR(VLOOKUP($A2,'DB'!$A$1:$C$1001,4,0),"")
+ * (実行後) =IFERROR(VLOOKUP($A2,'DB'!$A$1:$C$1001,4,0),"")
  * 
  * @param  {string} formula - VLOOKUPの数式
  * @return {string}
