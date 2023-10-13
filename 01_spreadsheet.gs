@@ -1590,10 +1590,10 @@ function convertKanaCharacters(text) {
   const values   = getValues(sheetUrl);
 
   if(text.match(/[ぁ-ん]/) !== null){
-    return swapCharacters_(values, 1, text, 0);
+    return swapCharacters_(values, text,1, 0);
 
   }else if(text.match(/[ァ-ヴー・]/) !== null){
-    return swapCharacters_(values, 0, text, 1);
+    return swapCharacters_(values, text, 0, 1);
   }
 }
 
@@ -1610,7 +1610,7 @@ function convertKanaCharacters(text) {
  * 
  */
 function swapCharacters_(values, text, queryColumnIndex, resultColumnIndex){
-  const array  = text.split('');
+  const array  = text.split(',');
   let newArray = array.map(char => {
     const pairs = values.find(row => row[queryColumnIndex] === char);
     return pairs ? pairs[resultColumnIndex] : char;
