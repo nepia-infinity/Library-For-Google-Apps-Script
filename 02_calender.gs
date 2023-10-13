@@ -352,7 +352,7 @@ function deleteEvents(query, calId) {
   if(!query) query = showPrompt('削除したい予定名を入力してください', '（例）：テスト');
 
   // 削除対象の予定情報を取得し、eventIdArray を作成
-  const events = getEventsByQuery_(query, calId);
+  const events = getEventsByTitle_(query, calId);
 
   // ダイアログを表示してユーザーに確認を求める
   const ui = SpreadsheetApp.getUi();
@@ -389,9 +389,9 @@ function deleteEvents(query, calId) {
  * @return {Object.<Array.<string> | string>}
  * 
  */
-function getEventsByQuery_(query, calId){
+function getEventsByTitle_(query, calId){
 
-  console.info(`getEventsByQuery_()を実行中`);
+  console.info(`()を実行中`);
   console.info(`02_calenderに記載`);
 
   const cal       = calId ? CalendarApp.getCalendarById(calId) : CalendarApp.getDefaultCalendar();

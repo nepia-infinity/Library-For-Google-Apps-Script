@@ -1586,6 +1586,10 @@ function incrementColumnInFormula_(formula){
  * 
  */
 function convertKanaCharacters(text) {
+
+  console.info(`convertKanaCharacters()を実行中`);
+  console.info(`01_spreadsheetに記載`);
+
   const sheetUrl = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=1358147510';
   const values   = getValues(sheetUrl);
 
@@ -1606,10 +1610,17 @@ function convertKanaCharacters(text) {
  * @param  {number} text - 置換対象の文字列
  * @param  {string} queryColumnIndex - 該当データがあるかどうかを検索する列
  * @param  {number} resultColumnIndex - データを取得したい列
+ * @param  {boolean} hasLog - 実行中の関数を表示するかどうか
  * @return {string} 取得したいデータ 
  * 
  */
-function swapCharacters_(values, text, queryColumnIndex, resultColumnIndex){
+function swapCharacters_(values, text, queryColumnIndex, resultColumnIndex, hasLog){
+
+  if(hasLog){
+    console.info(`swapCharacters_()を実行中`);
+    console.info(`01_spreadsheetに記載`);
+  }
+
   const array  = text.split(',');
   let newArray = array.map(char => {
     const pairs = values.find(row => row[queryColumnIndex] === char); //　['ア', 'あ']
