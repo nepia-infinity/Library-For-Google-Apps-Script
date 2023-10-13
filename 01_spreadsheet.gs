@@ -1576,7 +1576,13 @@ function incrementColumnInFormula_(formula){
 
 /**
  * 
+ * カタカナ -> ひらがな
+ * ひらがな -> カタカナ
  * 
+ * いずれかに変換する関数
+ * 
+ * @param  {string} text - 人の名前など
+ * @return {string} 
  * 
  */
 function convertKanaCharacters(text) {
@@ -1584,11 +1590,9 @@ function convertKanaCharacters(text) {
   const values   = getValues(sheetUrl);
 
   if(text.match(/[ぁ-ん]/) !== null){
-    // console.log(`"${text}" は、ひらがなです`);
     return swapCharacters_(values, 1, text, 0);
 
   }else if(text.match(/[ァ-ヴー・]/) !== null){
-    // console.log(`"${text}" は、カタカナです`);
     return swapCharacters_(values, 0, text, 1);
   }
 }
@@ -1596,22 +1600,24 @@ function convertKanaCharacters(text) {
 
 
 /**
+ * スプレッドシートの2次元配列内のデータを検索し、一致した行かつ指定した列の情報を返す
  * 
- * 
+ * @param  {string} values - カタカナ変換表の2次元配列
+ * @param  {number} text - 置換対象の文字列
+ * @param  {string} queryColumnIndex - 該当データがあるかどうかを検索する列
+ * @param  {number} resultColumnIndex - データを取得したい列
+ * @return {string} 取得したいデータ 
  * 
  */
-function swapCharacters_(values, queryColumnIndex, text, resultColumnIndex){
-  let newText = '';
+function swapCharacters_(values, text, queryColumnIndex, resultColumnIndex){
+  const array  = text.split('');
+  let newArray = array.map(char => {
+    const pairs = values.find(row => row[queryColumnIndex] === char);
+    return pairs ? pairs[resultColumnIndex] : char;
+  });
 
-  for(let i = 0; i < text.length; i++){
-    const query  = text[i];
-    const pairs  = values.find(row => row[queryColumnIndex] === query);
-    const target = pairs[resultColumnIndex];
-
-    newText += target;
-  };
+  const newText = newArray.join('');
 
   console.log(`変換後の文字列：${newText}`);
   return newText
-  
 }
