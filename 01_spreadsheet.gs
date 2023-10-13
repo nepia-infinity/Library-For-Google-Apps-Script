@@ -1579,7 +1579,7 @@ function incrementColumnInFormula_(formula){
  * カタカナ -> ひらがな
  * ひらがな -> カタカナ
  * 
- * いずれかに変換する関数
+ * いずれかに変換する関数、EXCELでいうところのPHONETIC関数と同じような挙動
  * 
  * @param  {string} text - 人の名前など
  * @return {string} 
@@ -1590,7 +1590,7 @@ function convertKanaCharacters(text) {
   const values   = getValues(sheetUrl);
 
   if(text.match(/[ぁ-ん]/) !== null){
-    return swapCharacters_(values, text,1, 0);
+    return swapCharacters_(values, text, 1, 0);
 
   }else if(text.match(/[ァ-ヴー・]/) !== null){
     return swapCharacters_(values, text, 0, 1);
@@ -1612,7 +1612,7 @@ function convertKanaCharacters(text) {
 function swapCharacters_(values, text, queryColumnIndex, resultColumnIndex){
   const array  = text.split(',');
   let newArray = array.map(char => {
-    const pairs = values.find(row => row[queryColumnIndex] === char);
+    const pairs = values.find(row => row[queryColumnIndex] === char); //　['ア', 'あ']
     return pairs ? pairs[resultColumnIndex] : char;
   });
 
