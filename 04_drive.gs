@@ -8,6 +8,7 @@
  * 
  */
 function getFilesValues(folderUrl, query) {
+  
   console.info('getFilesValues()を実行中');
   console.info('04_driveに記載');
 
@@ -105,13 +106,13 @@ function transferOwnership(folderUrl, accountId){
  * Googleドライブの特定フォルダ内のファイルを取得する
  * 
  * @param  {string} folderUrl - GoogleドライブのフォルダのURL
- * @param  {string} log - 省略可　引数が定義されている場合のみ実行中の関数名を表示する
+ * @param  {boolean} hasLog - 省略可　引数が定義されている場合のみ実行中の関数名を表示する
  * @return {Object.<Object.<string>>}
  * 
  */
-function getDriveFiles(folderUrl, log){
+function getDriveFiles(folderUrl, hasLog){
 
-  if(log){
+  if(hasLog){
     console.info('getDriveFiles()を実行中');
     console.info('04_driveに記載');
   }
@@ -231,6 +232,10 @@ function createFolders(folderUrl, newFolderNameList, innerFolderNameList) {
  * 
  */
 function convertSheetToPdf(sheetUrl, stringRange, folderUrl, isGridLines){
+
+  console.info('convertSheetToPdf()を実行中');
+  console.info('04_driveに記載');
+
   const sheet    = getSheetByUrl(sheetUrl);
   const today    = formatDate(new Date(), 'yyyy_MMdd_HH:mm');
   const fileName = `${sheet.getName()}_${today}`;
@@ -253,6 +258,7 @@ function convertSheetToPdf(sheetUrl, stringRange, folderUrl, isGridLines){
  * 
  */
 function generateUrlWithSheetOptions_(sheet, stringRange, isGridLines){
+
   console.info('generateUrlWithSheetOptions_()を実行中');
   console.info('04_driveに記載');
 
@@ -304,6 +310,10 @@ function generateUrlWithSheetOptions_(sheet, stringRange, isGridLines){
  * 
  */
 function createPdfFile_(targetUrl, folderUrl, fileName){
+
+  console.info('createPdfFile_()を実行中');
+  console.info('04_driveに記載');
+
   const token    = ScriptApp.getOAuthToken();
   const response = UrlFetchApp.fetch(targetUrl, {
     headers: {
@@ -517,27 +527,26 @@ function getExtensionFromFileName_(fileName){
  * @return {string} ファイルIDを返す
  * 
  */
+/**
+ * ドキュメントかシートのURLからファイルIDを返す
+ * 
+ * @param  {string} fileUrl - ドキュメントかシートのURL
+ * @return {string} ファイルIDを返す
+ * 
+ */
 function getFileId(fileUrl) {
-
+  
   console.info('getFileId()を実行中');
   console.info('04_driveに記載');
 
-  // スプレッドシートURLの場合
-  const spreadsheetMatch = fileUrl.match(/\/spreadsheets\/d\/([\w-]+)\//);
-  if (spreadsheetMatch && spreadsheetMatch[1]) {
-    const fileId = spreadsheetMatch[1];
-    console.log(`シートのURL: ${fileUrl}`);
-    console.log(`ファイルID : ${fileId}`);
-    return fileId
-  }
+  // スプレッドシートURLとドキュメントURLの両方をチェック
+  const match = fileUrl.match(/\/(spreadsheets|document)\/d\/([\w-]+)\//);
+  if (match && match[2]) {
+    const fileId = match[2];
+    console.log(`URL: ${fileUrl}`);
+    console.log(`ファイル名: ${file.getName()}, ファイルID: ${fileId}`);
 
-  // ドキュメントURLの場合
-  const documentMatch = fileUrl.match(/\/document\/d\/([\w-]+)\//);
-  if (documentMatch && documentMatch[1]) {
-    const fileId = documentMatch[1];
-    console.log(`ドキュメントのURL: ${fileUrl}`);
-    console.log(`ファイルID :     ${fileId}`);
-    return fileId
+    return fileId;
   }
 
   // ファイルIDが見つからない場合は null を返す
