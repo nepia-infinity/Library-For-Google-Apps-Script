@@ -1593,10 +1593,10 @@ function convertKanaCharacters(text) {
   const sheetUrl = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=1358147510';
   const values   = getValues(sheetUrl);
 
-  if(text.match(/[ぁ-ん]/) !== null){
+  if(text.match(/[ぁ-んー].*/) !== null){
     return swapCharacters_(values, text, 1, 0); // ['ア', 'あ']
 
-  }else if(text.match(/[ァ-ヴー・]/) !== null){
+  }else if(text.match(/[ァ-ンヴー].*/) !== null){
     return swapCharacters_(values, text, 0, 1); // ['ア', 'あ']
   }
 }
@@ -1621,13 +1621,13 @@ function swapCharacters_(values, text, queryColumnIndex, resultColumnIndex, hasL
     console.info(`01_spreadsheetに記載`);
   }
 
-  const array    = text.split(',');
+  const array    = text.split('');
   const newArray = array.map(char => {
     const pairs = values.find(row => row[queryColumnIndex] === char); //　['ア', 'あ']
     return pairs ? pairs[resultColumnIndex] : char;
   });
 
-  const newText = newArray.join(',');
+  const newText = newArray.join('');
 
   console.log(`変換後の文字列：${newText}`);
   return newText
