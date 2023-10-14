@@ -544,7 +544,7 @@ function getFileId(fileUrl) {
   if (match && match[2]) {
     const fileId = match[2];
     console.log(`URL: ${fileUrl}`);
-    console.log(`ファイル名: ${file.getName()}, ファイルID: ${fileId}`);
+    console.log(`ファイル名: ${DriveApp.getFileById(fileId).getName()}, ファイルID: ${fileId}`);
 
     return fileId;
   }
