@@ -543,8 +543,10 @@ function getFileId(fileUrl) {
   const match = fileUrl.match(/\/(spreadsheets|document)\/d\/([\w-]+)\//);
   if (match && match[2]) {
     const fileId = match[2];
+    
     console.log(`URL: ${fileUrl}`);
-    console.log(`ファイル名: ${DriveApp.getFileById(fileId).getName()}, ファイルID: ${fileId}`);
+    console.log(`ファイルID: ${fileId}`);
+    console.log(`ファイル名: ${DriveApp.getFileById(fileId).getName()}`);
 
     return fileId;
   }
