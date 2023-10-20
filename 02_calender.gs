@@ -641,6 +641,10 @@ function getHolidays_(){
  * 
  */
 function getEventsByQuery(stringDate, period, query, calId){
+
+  console.info(`getEventsByQuery()を実行中`);
+  console.info(`02_calenderに記載`);
+
   const cal       = calId ? CalendarApp.getCalendarById(calId) : CalendarApp.getDefaultCalendar();
   const startTime = new Date(stringDate);
   const endTime   = new Date();
@@ -676,6 +680,10 @@ function getEventsByQuery(stringDate, period, query, calId){
  * 
  */
 function generateFormattedDate(offset, format){
+
+  console.info(`generateFormattedDate()を実行中`);
+  console.info(`02_calenderに記載`);
+
   const date = new Date();
   date.setDate(date.getDate() + offset);
   
