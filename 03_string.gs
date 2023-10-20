@@ -110,25 +110,3 @@ function createMonthlyDataNames(prefix, maxMonths, suffix) {
   return list
 
 }
-
-
-
-/**
- * 指定した日付を文字列で返す
- * 
- * @param  {number} offset - 今日を起点に何日後かを進めるか、　-1の場合、昨日の日付になる
- * @param  {string} format - yyyy/MM/dd HH:mmなど日付のフォーマット
- * @return {string}
- * 
- */
-function generateFormattedDate(offset, format){
-  const date = new Date();
-  date.setDate(date.getDate() + offset);
-  
-  const formattedDate = !format ? Utilities.formatDate(date, 'JST', 'yyyy/MM/dd'):
-  Utilities.formatDate(date, 'JST', format)
-
-  console.log(`対象日の日付：${formattedDate}`);
-  return formattedDate
-
-}
