@@ -660,7 +660,7 @@ function selectNewValues(existingRecords, newValues, columnIndex){
   console.log(`01_spreadsheet に記載中`);
 
   // スプレッド演算子を使って、ヘッダー行を除いてnewValuesをコピー
-  const newData = [, ...newValues];
+  const newData = [...newValues.slice(1)];
 
   // シートに記載のIDなどの1次元配列と比較して、一致しないIDを転記対象とみなす
   const results = newData.map(row => {
