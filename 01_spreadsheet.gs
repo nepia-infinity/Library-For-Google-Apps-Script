@@ -668,7 +668,7 @@ function selectNewValues(existingRecords, newValues, columnIndex){
       console.warn(`${row[columnIndex]} は新しい値です。転記対象です。`);
       return row;
     }
-  }).filter(element => element);
+  }).filter(element => element !== undefined);
 
   console.log(results);
   return results;
