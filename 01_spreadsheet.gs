@@ -665,7 +665,7 @@ function selectNewValues(existingRecords, newValues, columnIndex){
   // シートに記載のIDなどの1次元配列と比較して、一致しないIDを転記対象とみなす
   const results = newData.map(row => {
     if (existingRecords.indexOf(row[columnIndex]) === -1) {
-      console.warn(`${selectNewValues[columnIndex]} は新しい値です。転記対象です。`);
+      console.warn(`${row[columnIndex]} は新しい値です。転記対象です。`);
       return row;
     }
   });
