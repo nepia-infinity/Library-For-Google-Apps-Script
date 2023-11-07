@@ -439,7 +439,10 @@ function showEditEventsLauncher() {
 /**
  * choice.htmlで選択した内容を受け取って、編集内容を分岐させる
  * 
- * @param  {Object.<string>} object - 選択肢の内容　以下4つ
+ * @param  {Object.<string>} object - 選択肢
+ * @param  {number} rowIndex - ヘッダー行の位置
+ * 
+ * 選択肢の内容 以下4通り
  * (例)予定名を編集する, 詳細欄を編集する, 日時を編集する, 出席者を追加する
  * 
  */
