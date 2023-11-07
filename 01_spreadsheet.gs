@@ -659,11 +659,8 @@ function selectNewValues(existingRecords, newValues, columnIndex){
   console.log(`selectNewValues() 関数を実行中`);
   console.log(`01_spreadsheet に記載中`);
 
-  // スプレッド演算子を使って、ヘッダー行を除いてnewValuesをコピー
-  const newData = [...newValues.slice(1)];
-
   // シートに記載のIDなどの1次元配列と比較して、一致しないIDを転記対象とみなす
-  const results = newData.map(row => {
+  const results = newValues.map(row => {
     if (existingRecords.indexOf(row[columnIndex]) === -1) {
       console.warn(`${row[columnIndex]} は新しい値です。転記対象です。`);
       return row;
