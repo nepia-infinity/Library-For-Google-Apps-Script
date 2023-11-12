@@ -421,17 +421,22 @@ function test_getCellPhoneNumber(){
 }
 
 
+
 /**スライドの内容を取得 */
 function test_getSlidesContents(){
   const url = 'https://docs.google.com/presentation/d/11uXs1bln84lhx9lPMPEeQBQw4ei5O6zdR-dYUtEuyCI/edit#slide=id.gc6f8954bc_0_53';
   getSlidesContents(url);
 }
 
+
+
 /**イベントIDから予定の詳細を取得する */
 function test_getInfoByEventId(){
   const eventId = 'ektieo6tv8g0cmrjauea4ni3k8';
   getInfoByEventId(eventId);
 }
+
+
 
 /**月次のデータを作成する */
 function test_createMonthlyDataNames(){
@@ -453,6 +458,7 @@ function test_UnshiftGuests() {
 }
 
 
+
 /**予定を編集する */
 function test_editEvents(){
   editEvents('日時を編集する', 0);
@@ -460,9 +466,11 @@ function test_editEvents(){
 }
 
 
+
 function test_showEditEventsLauncher(){
   showEditEventsLauncher();
 }
+
 
 
 /**予定の作成者を取得する */
@@ -473,10 +481,14 @@ function test_getCreator(){
   console.log(event.getCreators()[0], typeof event.getCreators()[0]);
 }
 
+
+
 /**日付の配列を作成する */
 function test_generateStringDate(){
   generateDateStringValues('2023/08/10');
 }
+
+
 
 /**編集権限を付与する */
 function test_grantEditPermissionToFolder(){
@@ -484,10 +496,12 @@ function test_grantEditPermissionToFolder(){
 }
 
 
+
 /**1から1000までの整数を生成 */
 function test_generateNumbersArray(){
   generateNumbers(1, 1000);
 }
+
 
 
 /**シートからPDFを作成 */
@@ -518,7 +532,6 @@ function test_renameAllFiles(){
   const folderUrl = 'https://drive.google.com/drive/folders/1z365po-hxBmUNg7MJXD1LEWBYSvqsi9y';
   renameAllFiles(folderUrl);
 }
-
 
 
 
@@ -579,6 +592,7 @@ function test_convertValuesToObjects(){
 }
 
 
+
 function test_replaceStringWithSheetValue(){
   const values      = [["John", "https://example.com"],["Tim", "https://example2.com"]];
   const template    = "こんにちは、{name}さん。URLは{url}です。";
@@ -586,6 +600,7 @@ function test_replaceStringWithSheetValue(){
   // nepia_infinity.replaceStringWithSheetValue(template, values, '{name}', '{url}');
   replaceStringWithSheetValue(template, values, '{name}', '{url}');
 }
+
 
 
 function test_getHeadersRow(){

@@ -451,7 +451,7 @@ function editEvents(object, rowIndex){
   console.info(`editEvents()を実行中`);
   console.info(`02_calenderに記載`);
 
-  //FIXME: google.script.run.editEvents()の引数に2個指定することが出来ない模様
+  //NOTICE: google.script.run.editEvents()の引数に2個指定することが出来ない模様
   //引数にrowIndexがundefinedであれば0を代入する
   rowIndex = rowIndex ? rowIndex : 0;
 
