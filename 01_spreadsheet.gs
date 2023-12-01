@@ -14,14 +14,20 @@ function getSheetByUrl(sheetUrl, string) {
 
   const spreadsheet = SpreadsheetApp.openByUrl(sheetUrl);
   const sheetId     = Number(sheetUrl.split('#gid=')[1]);
-  const sheet       = spreadsheet.getSheets().find(sheet => sheetId === sheet.getSheetId());
-  const sheetName   = sheet.getName();
 
-  console.log(`sheetId:${sheetId}, シート名:${sheetName}`);
-  (string === 'sheetName') ? console.warn(`型：　${typeof sheetName}`) : console.log(`型：　${typeof sheet}`);
+  try{
+    const sheet     = spreadsheet.getSheets().find(sheet => sheetId === sheet.getSheetId());
+    const sheetName = sheet.getName();
 
-  return (string === 'sheetName') ? sheetName : sheet
+    console.log(`sheetId:${sheetId}, シート名:${sheetName}`);
+    (string === 'sheetName') ? console.warn(`型:${typeof sheetName}`) : console.log(`型:${typeof sheet}`);
 
+    return (string === 'sheetName') ? sheetName : sheet
+
+  }catch{
+    console.warn(`エラーが発生しました。URLが正しくない可能性があります`);
+    return undefined
+  }
 }
 
 
