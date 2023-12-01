@@ -17,8 +17,7 @@ function getSheetByUrl(sheetUrl, string) {
   const sheet       = spreadsheet.getSheets().find(sheet => sheetId === sheet.getSheetId());
   const sheetName   = sheet.getName();
 
-  console.log(`sheetId:${sheetId}`);
-  console.log(`シート名:${sheetName}`);
+  console.log(`sheetId:${sheetId}, シート名:${sheetName}`);
   (string === 'sheetName') ? console.warn(`型：　${typeof sheetName}`) : console.log(`型：　${typeof sheet}`);
 
   return (string === 'sheetName') ? sheetName : sheet
