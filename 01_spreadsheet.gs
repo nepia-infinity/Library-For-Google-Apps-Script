@@ -25,7 +25,7 @@ function getSheetByUrl(sheetUrl, string) {
     return (string === 'sheetName') ? sheetName : sheet
 
   }catch{
-    console.warn(`エラーが発生しました。URLが正しくない可能性があります`);
+    console.warn(`エラーが発生しました。URLが正しくない可能性があります。`);
     return undefined
   }
 }
