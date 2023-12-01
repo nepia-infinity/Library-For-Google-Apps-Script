@@ -13,9 +13,10 @@ function getSheetByUrl(sheetUrl, string) {
   console.info(`01_spreadsheetに記載`);
 
   const spreadsheet = SpreadsheetApp.openByUrl(sheetUrl);
-  const sheetId     = Number(sheetUrl.split('#gid=')[1]);
 
+  // findメソッドで、対象のsheetが見つからない場合の処理
   try{
+    const sheetId   = Number(sheetUrl.split('#gid=')[1]);
     const sheet     = spreadsheet.getSheets().find(sheet => sheetId === sheet.getSheetId());
     const sheetName = sheet.getName();
 
