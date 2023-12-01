@@ -1,7 +1,6 @@
 /**
  * SpreadsheetのURLからsheetオブジェクトを取得する。
- * シート名を取得したい場合は、2番目の引数に、'sheetName' と指定する
- * トリガー設定可能 getSheets()を使用しているため、実行時間が掛かる。
+ * シート名を取得したい場合は、2番目の引数に、'sheetName' と指定する。
  * 
  * @param  {string} sheetUrl - スプレッドシートのURL
  * @param  {string} string - 引数の省略可。'sheetName' と指定する
@@ -10,31 +9,20 @@
  */
 function getSheetByUrl(sheetUrl, string) {
 
-  console.info(`getSheetByUrl()を実行中`);
+  console.info(`getSheetByUrl()　を実行中`);
   console.info(`01_spreadsheetに記載`);
-  
-  const spreadsheet    = SpreadsheetApp.openByUrl(sheetUrl);
-  const sheets         = spreadsheet.getSheets();
-  const sheetInfoArray = sheetUrl.split('#gid=');
 
-  console.log(sheetInfoArray);
+  const spreadsheet = SpreadsheetApp.openByUrl(sheetUrl);
+  const sheetId     = Number(sheetUrl.split('#gid=')[1]);
+  const sheet       = spreadsheet.getSheets().find(sheet => sheetId === sheet.getSheetId());
+  const sheetName   = sheet.getName();
 
-  //シートIDを、文字列から数値に変換する
-  const sheetId = Number(sheetInfoArray[1]);
+  console.log(`sheetId: ${sheetId}`);
+  console.log(`シート名：　${sheetName}`);
+  (string === 'sheetName') ? console.warn(`型：　${typeof sheetName}`) : console.log(`型：　${typeof sheet}`);
 
-  for(const sheet of sheets){
-    if(sheet.getSheetId() === sheetId && !string){
-      console.log(`sheetId: ${sheetId} typeof: ${typeof sheetId}`);
-      console.log(`sheetName: ${sheet.getName()}`);
-      return sheet
+  return (string === 'sheetName') ? sheetName : sheet
 
-    }else if(sheet.getSheetId() === sheetId && string === 'sheetName'){
-      const sheetName = sheet.getName();
-      console.log(`sheetName: ${sheetName} typeof: ${typeof sheetId}`);
-      return sheetName
-
-    }
-  }
 }
 
 
