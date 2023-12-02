@@ -51,17 +51,7 @@ function findLargestNumber(array){
   console.info('08_otherに記載');
 
   const result = array.reduce((accumulator, current) => {
-    if(accumulator > current){
-      //accumulatorに格納された値が、現在値よりも大きい
-      console.log(`accumulator: ${accumulator} > current: ${current}`);
-      return accumulator;
-
-    } else {
-      //accumulatorに格納された値が、現在値よりも小さい
-      //console.log(`accumulator: ${accumulator} < current: ${current}`)
-      return current;
-      
-    }
+    return accumulator > current ? accumulator : current;
   });
 
   console.log(`配列内の最大数値は、${result}です`);
