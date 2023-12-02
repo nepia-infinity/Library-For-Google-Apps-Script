@@ -8,6 +8,20 @@ function test_getSheetByUrl() {
   // getSheetByUrl(url, 'sheetName');
 }
 
+
+
+/**
+ * スプレッドシートのURLからsheetオブジェクトを取得する
+ * 
+ */
+function test_getActiveSheetByUrl() {
+  const url = 'https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=0';
+  getActiveSheetByUrl(url);
+  // getSheetByUrl(url, 'sheetName');
+}
+
+
+
 /**
  * Rangeオブジェクトを取得する
  * 
