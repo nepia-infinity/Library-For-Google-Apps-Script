@@ -16,7 +16,7 @@ function getSheetByUrl(sheetUrl, string) {
 
   // findメソッドで、対象のsheetが見つからない場合の処理
   try{
-    const sheetId   = Number(sheetUrl.split('#gid=')[1]);
+    const sheetId   = Number(sheetUrl.split('#gid=')[1]); //['https....', 'sheetId(typeof string)']
     const sheet     = spreadsheet.getSheets().find(sheet => sheetId === sheet.getSheetId());
     const sheetName = sheet.getName();
 
