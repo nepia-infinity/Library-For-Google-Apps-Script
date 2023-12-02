@@ -43,33 +43,20 @@ function getSheetByUrl(sheetUrl, string) {
  * @return {SpreadsheetApp.Sheet|string} オブジェクトかシート名を返す。
  * 
  */
-function getActiveSheetByUrl(sheetUrl, string) {
+function getActiveSheetByUrl(sheetUrl) {
 
   console.info(`getActiveSheetByUrl()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
-  const activeSheet    = SpreadsheetApp.getActiveSheet();
-  const sheetInfoArray = sheetUrl.split('#gid='); //['https....', 'sheetId(typeof string)'];
+  const activeSheet = SpreadsheetApp.getActiveSheet();
+  const sheetName   = activeSheet.getName();
+  const sheetId     = Number(sheetUrl.split('#gid=')[1]); //['https....', 'sheetId(typeof string)'];
 
-  console.log(sheetInfoArray);
+  console.log(`シート名:${sheetName}`);
 
-  // 前述のsheetIdが、型も含めて完全一致しない場合は処理を終了する
-  if(activeSheet.getSheetId() !== Number(sheetInfoArray[1])){
-    console.log(`シート名：${activeSheet.getName()}`);
-    console.warn(`処理対象のシートではないため、処理を終了します`);
-    return
+  return (activeSheet.getSheetId() === sheetId) ? activeSheet : sheetName
 
-  }else if(string === 'sheetName'){
-    const sheetName = activeSheet.getName();
-    console.warn(`シート名：${sheetName} 型：${typeof sheetName}`);
-    return sheetName;
-
-  }else{
-    console.log(`シート名：${activeSheet.getName()} 型：${typeof activeSheet}`);
-    return activeSheet
-  }
 }
-
 
 
 
