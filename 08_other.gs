@@ -13,8 +13,6 @@ function generateNumbers(start, end) {
   console.info('08_otherに記載');
 
   const array = Array.from({length: end}, (_, index) => start + index);
-  console.info('generateNumbers()を実行中');
-  console.info('08_otherに記載');
   console.log(array);
 
   return array
