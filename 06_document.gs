@@ -61,12 +61,14 @@ function modifyStrings(lists) {
  * 
  */
 function getDocContents(url) {
-  const document   = DocumentApp.openByUrl(url);
-  const body       = document.getBody();
-  const contents   = body.getText();
 
   console.info('getDocContents()を実行中');
   console.info('06_documentに記載');
+
+  const document = DocumentApp.openByUrl(url);
+  const body     = document.getBody();
+  const contents = body.getText();
+
   console.log(contents);
 
   return contents

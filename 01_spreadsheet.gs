@@ -9,7 +9,7 @@
  */
 function getSheetByUrl(sheetUrl, resultFormat) {
 
-  console.info(`getSheetByUrl()　を実行中`);
+  console.info(`getSheetByUrl()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
   // findメソッドで、対象のsheetが見つからない場合の処理
