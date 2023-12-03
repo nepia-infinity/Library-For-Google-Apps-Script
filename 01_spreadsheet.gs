@@ -50,10 +50,20 @@ function getActiveSheetByUrl(sheetUrl) {
   const activeSheet = SpreadsheetApp.getActiveSheet();
   const sheetId     = Number(sheetUrl.split('#gid=')[1]); //['https....', 'sheetId(typeof string)'];
 
-  console.log(`アクティブなシート名:${activeSheet.getName()}`);
+  if(activeSheet.getSheetId() === sheetId){
 
-  return (activeSheet.getSheetId() === sheetId) ? activeSheet : undefined
+    console.log(`アクティブなシート名:${activeSheet.getName()}`);
+    return activeSheet
 
+  }else{
+
+    const targetSheet = SpreadsheetApp.openByUrl(sheetUrl).getSheets()
+    .find(sheet => sheet.getSheetId() === sheetId);
+
+    console.log(`読み取っているシート名：${targetSheet.getName()}`);
+    return targetSheet
+
+  }
 }
 
 
@@ -308,14 +318,9 @@ function showPrompt(title, sample) {
   const response = ui.prompt(title, sample, ui.ButtonSet.OK);
   const input    = response.getResponseText();
 
-  if (response.getSelectedButton() === ui.Button.OK) {
-    console.log(`入力内容：${input}`);
-    
-  }else{
-    console.log('処理が中断されました。');
+  console.log(`入力内容：${input}`);
 
-  }
-  return input;
+  return (response.getSelectedButton() === ui.Button.OK) ? input : null
 }
 
 
