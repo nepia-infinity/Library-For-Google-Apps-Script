@@ -12,13 +12,12 @@ function getSheetByUrl(sheetUrl, string) {
   console.info(`getSheetByUrl()　を実行中`);
   console.info(`01_spreadsheetに記載`);
 
-  const spreadsheet = SpreadsheetApp.openByUrl(sheetUrl);
-
   // findメソッドで、対象のsheetが見つからない場合の処理
   try{
-    const sheetId   = Number(sheetUrl.split('#gid=')[1]); //['https....', 'sheetId(typeof string)']
-    const sheet     = spreadsheet.getSheets().find(sheet => sheetId === sheet.getSheetId());
-    const sheetName = sheet.getName();
+    const spreadsheet = SpreadsheetApp.openByUrl(sheetUrl);
+    const sheetId     = Number(sheetUrl.split('#gid=')[1]); //['https....', 'sheetId(typeof string)']
+    const sheet       = spreadsheet.getSheets().find(sheet => sheetId === sheet.getSheetId());
+    const sheetName   = sheet.getName();
 
     console.log(`sheetId:${sheetId}, シート名:${sheetName}`);
     (string === 'sheetName') ? console.warn(`型:${typeof sheetName}`) : console.log(`型:${typeof sheet}`);
