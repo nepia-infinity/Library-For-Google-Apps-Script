@@ -47,12 +47,12 @@ function getActiveSheetByUrl(sheetUrl) {
   console.info(`getActiveSheetByUrl()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
-  const sheet   = SpreadsheetApp.getActiveSheet();
-  const sheetId = Number(sheetUrl.split('#gid=')[1]); //['https....', 'sheetId(typeof string)'];
+  const activeSheet = SpreadsheetApp.getActiveSheet();
+  const sheetId     = Number(sheetUrl.split('#gid=')[1]); //['https....', 'sheetId(typeof string)'];
 
   console.log(`アクティブなシート名:${activeSheet.getName()}`);
 
-  return (sheet.getSheetId() === sheetId) ? sheet : undefined
+  return (activeSheet.getSheetId() === sheetId) ? activeSheet : undefined
 
 }
 
