@@ -47,13 +47,12 @@ function getActiveSheetByUrl(sheetUrl) {
   console.info(`getActiveSheetByUrl()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
-  const activeSheet = SpreadsheetApp.getActiveSheet();
-  const sheetName   = activeSheet.getName();
-  const sheetId     = Number(sheetUrl.split('#gid=')[1]); //['https....', 'sheetId(typeof string)'];
+  const sheet   = SpreadsheetApp.getActiveSheet();
+  const sheetId = Number(sheetUrl.split('#gid=')[1]); //['https....', 'sheetId(typeof string)'];
 
-  console.log(`シート名:${sheetName}`);
+  console.log(`アクティブなシート名:${activeSheet.getName()}`);
 
-  return (activeSheet.getSheetId() === sheetId) ? activeSheet : sheetName
+  return (sheet.getSheetId() === sheetId) ? sheet : undefined
 
 }
 
@@ -74,7 +73,7 @@ function getRange(sheet, info) {
 
   if (info && typeof info !== 'string') {
 
-    // info.row が falsy（例: undefined, null, 0, false など）の場合ゼロを設定
+    // info.row が false（例: undefined, null, 0, false など）の場合ゼロを設定
     const offset = {
       row: info.row ? info.row - 1 : 0,
       column: info.column ? info.column - 1 : 0,
