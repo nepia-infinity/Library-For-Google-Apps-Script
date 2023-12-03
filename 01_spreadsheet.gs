@@ -47,22 +47,16 @@ function getActiveSheetByUrl(sheetUrl) {
   console.info(`getActiveSheetByUrl()を実行中`);
   console.info(`01_spreadsheetに記載`);
 
-  const activeSheet = SpreadsheetApp.getActiveSheet();
-  const sheetId     = Number(sheetUrl.split('#gid=')[1]); //['https....', 'sheetId(typeof string)'];
+  // URLが正しいかどうかを確認
+  const sheetId = (!sheetUrl || !sheetUrl.includes('#gid=')) ? undefined : Number(sheetUrl.split('#gid=')[1])
 
-  if(activeSheet.getSheetId() === sheetId){
-
-    console.log(`アクティブなシート名:${activeSheet.getName()}`);
-    return activeSheet
-
-  }else{
-
-    const targetSheet = SpreadsheetApp.openByUrl(sheetUrl).getSheets()
-    .find(sheet => sheet.getSheetId() === sheetId);
-
-    console.log(`読み取っているシート名：${targetSheet.getName()}`);
+  try {
+    const targetSheet = SpreadsheetApp.openByUrl(sheetUrl).getSheets().find(sheet => sheet.getSheetId() === sheetId);
     return targetSheet
 
+  } catch (error) {
+    console.warn(`エラーが発生しました。スプレッドシートまたはシートが見つかりません：${error}`);
+    return undefined;
   }
 }
 
