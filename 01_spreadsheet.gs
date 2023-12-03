@@ -52,6 +52,7 @@ function getActiveSheetByUrl(sheetUrl) {
 
   try {
     const targetSheet = SpreadsheetApp.openByUrl(sheetUrl).getSheets().find(sheet => sheet.getSheetId() === sheetId);
+    targetSheet.activate();
     return targetSheet
 
   } catch (error) {
