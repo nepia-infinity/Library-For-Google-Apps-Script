@@ -518,10 +518,12 @@ function removeDuplicates(array){
 
   console.info(`removeDuplicates()を実行中`);
   console.info(`01_spreadsheetに記載`);
-  console.log(array);
 
   const newArray = Array.from(new Set(array));
+
+  console.log(array);
   console.log(newArray);
+  
   return newArray
 }
 
