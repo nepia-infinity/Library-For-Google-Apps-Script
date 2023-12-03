@@ -3,11 +3,11 @@
  * シート名を取得したい場合は、2番目の引数に、'sheetName' と指定する。
  * 
  * @param  {string} sheetUrl - スプレッドシートのURL
- * @param  {string} string - 引数の省略可。'sheetName' と指定する
+ * @param  {string} resultFormat - 引数の省略可。'sheetName' と指定する
  * @return {SpreadsheetApp.Sheet|string} オブジェクトかシート名を返す。
  * 
  */
-function getSheetByUrl(sheetUrl, string) {
+function getSheetByUrl(sheetUrl, resultFormat) {
 
   console.info(`getSheetByUrl()　を実行中`);
   console.info(`01_spreadsheetに記載`);
@@ -20,12 +20,12 @@ function getSheetByUrl(sheetUrl, string) {
     const sheetName   = sheet.getName();
 
     console.log(`sheetId:${sheetId}, シート名:${sheetName}`);
-    (string === 'sheetName') ? console.warn(`型:${typeof sheetName}`) : console.log(`型:${typeof sheet}`);
+    (resultFormat === 'sheetName') ? console.warn(`型:${typeof sheetName}`) : console.log(`型:${typeof sheet}`);
 
-    return (string === 'sheetName') ? sheetName : sheet
+    return (resultFormat === 'sheetName') ? sheetName : sheet
 
-  }catch{
-    console.warn(`エラーが発生しました。URLが正しくない可能性があります。`);
+  }catch(error){
+    console.warn(`エラーが発生しました。URLが正しくない可能性があります。${error}`);
     return undefined
   }
 }
@@ -370,12 +370,12 @@ function setValues(sheet, info, values, hasAlert) {
   if(hasAlert){
     const ui = SpreadsheetApp.getUi();
     const response = ui.alert(`転記範囲に間違いはありませんか？\n\n
-      シート名：　${sheet.getName()}
-      転記範囲：　${range.getA1Notation()}`, ui.ButtonSet.YES_NO
+      シート名：${sheet.getName()}
+      転記範囲：${range.getA1Notation()}`, ui.ButtonSet.YES_NO
     );
 
     if(response === ui.Button.NO){
-      console.log('“いいえ”　のボタンが押されました。');
+      console.log('“いいえ”のボタンが押されました。');
       ui.alert('処理が中断されました。');
       return;
     }
@@ -523,7 +523,7 @@ function removeDuplicates(array){
 
   console.log(array);
   console.log(newArray);
-  
+
   return newArray
 }
 
