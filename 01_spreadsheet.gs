@@ -49,9 +49,9 @@ function getActiveSheetByUrl(sheetUrl) {
 
   try {
     const sheetId     = Number(sheetUrl.split('#gid=')[1]);
-    const activeSheet = SpreadsheetApp.openByUrl(sheetUrl).getSheets().find(sheet => sheet.getSheetId() === sheetId);
-    activeSheet.activate();
-    return activeSheet
+    const targetSheet = SpreadsheetApp.openByUrl(sheetUrl).getSheets().find(sheet => sheet.getSheetId() === sheetId);
+    targetSheet.activate();
+    return targetSheet
 
   } catch (error) {
     console.warn(`エラーが発生しました。アクティブなシートを返します：${error}`);
