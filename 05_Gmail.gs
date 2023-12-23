@@ -34,7 +34,6 @@ function getGmailThread(query, quantity){
           text:    body,
           html:    message.getBody(),
         }
-
         values.push(Object.values(info));
       }
     }//for
