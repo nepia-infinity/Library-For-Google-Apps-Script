@@ -1610,3 +1610,36 @@ function swapCharacters_(values, text, queryColumnIndex, resultColumnIndex, hasL
   console.log(`変換後の文字列：${newText}`);
   return newText
 }
+
+
+
+/**
+ * valuesに含まれている日付をyyyy/MM/DD HH:MM形式で取得
+ * Gmailなどをシートに転記する際に使用
+ * 
+ * @param {SpreadsheetApp.sheet} sheet - シート
+ * @param {number} rowIndex - ヘッダー行の位置
+ * @param {string} query - カラム名
+ * 
+ */
+function formatDateInValues(sheet, rowIndex, query){
+
+  const values      = sheet.getDataRange().getValues().filter(row => row[0]);
+  const headers     = values[rowIndex];
+  const columnIndex = headers.indexOf(query);
+
+  if(columnIndex === -1){
+    console.warn(`query:${query}は存在しませんでした。`);
+    return
+  }
+
+  // 日付をyyyy/MM/dd HH:MM形式に変換する
+  const newValues = values.map((row) => {  
+    let newRow = [...row];
+    newRow[columnIndex]  = Utilities.formatDate(new Date(newRow[columnIndex]), 'JST', 'yyyy/MM/dd HH:mm');
+    return newRow;
+  });
+
+  console.log(newValues);
+  return newValues;
+}
