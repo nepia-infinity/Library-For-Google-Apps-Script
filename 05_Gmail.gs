@@ -28,7 +28,7 @@ function getGmailThread(query, quantity){
       // 件名もしくは内容に検索queryを含む場合のみ処理を進める
       if(body.includes(query) || subject.includes(query)){
         const info = {
-          date:    formatDate(message.getDate(), 'yyyy/MM/dd HH:mm'),
+          date:    formatDate(message.getDate(), 'yyyy/MM/dd HH:mm:ss'),
           from:    message.getFrom(),
           subject: subject,
           text:    body,

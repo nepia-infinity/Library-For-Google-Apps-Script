@@ -622,3 +622,15 @@ function test_getHeadersRow(){
   const values = getValues(url);
   getHeadersRow(values, 'URL');
 }
+
+
+
+function test_getWeekNumber(){
+  getWeekNumber_('2024/11/13'); 
+  getWeekNumber_(new Date());
+
+  convertWeekNumberToStrDate_(46);
+}
+
+
+

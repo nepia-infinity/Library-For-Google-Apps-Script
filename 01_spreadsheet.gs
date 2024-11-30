@@ -541,8 +541,14 @@ function createTextFinder(sheetUrl, query, sheetName){
   if(sheetName){
     // シート名が指定されている場合、指定したシートでテキスト検索を実行
     const sheet = spreadsheet.getSheetByName(sheetName);
-    finder = sheet.createTextFinder(query).useRegularExpression(true);
+    try{
+      finder = sheet.createTextFinder(query).useRegularExpression(true);
 
+    }catch(error){
+      // nullで返ってきた場合の処理
+      console.log(`該当する方はいらっしゃいませんでした。`);
+      return false
+    }
   }else{
     // シート名が指定されていない場合、全てのシートでテキスト検索を実行
     finder = spreadsheet.createTextFinder(query).useRegularExpression(true);

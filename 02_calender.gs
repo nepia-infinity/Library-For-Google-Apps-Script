@@ -697,3 +697,68 @@ function generateFormattedDate(offset, format){
   return formattedDate
 
 }
+
+
+
+/**
+ * 指定した日付が属する週番号を取得します。
+ *
+ * @param {Date|string} date - 週番号を取得したい日付。Dateオブジェクトまたはyyyy/MM/dd形式の文字列。
+ * @return {number} 指定した日付が属する週番号（年初からの週数）を返します。
+ */
+function getWeekNumber(date) {
+  let targetDate;
+
+  try {
+    if (typeof date === 'string') {
+      console.log(`引数で受け取った文字列：${date}`);
+      const [year, month, day] = date.split('/');
+      targetDate = new Date(year, month - 1, day);
+
+    } else if (date instanceof Date) {
+      targetDate = date;
+
+    }
+  } catch (error) {
+    throw new Error('入力は有効な yyyy/MM/dd形式の文字列か、Dateオブジェクトである必要があります。');
+  }
+
+  const year = date.getFullYear();
+  const startDate = new Date(year, 0, 1);
+  const dayOfYear = Math.floor((targetDate - startDate + (24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000));
+  const weekNumber = Math.ceil((dayOfYear + startDate.getDay()) / 7);
+  console.log(`weekNumber: ${weekNumber}`);
+
+  return weekNumber;
+}
+
+
+
+/**
+ * 指定された週番号に対応する日付を文字列で返します。
+ *
+ * @param {number} targetWeekNumber - 対象の週番号（1から始まる）。
+ * @return {string} 週番号に対応する日付の文字列（yyyy/MM/dd形式）。
+ *
+ */
+function convertWeekNumberToStrDate(targetWeekNumber) {
+  // 年の初日を取得（例：2024/01/01）
+  const currentYear = new Date().getFullYear();
+  const firstDayOfYear = new Date(currentYear, 0, 1);
+  const firstDayOfWeek = firstDayOfYear.getDay(); 
+  const offsetDays = firstDayOfWeek === 0 ? 0 : firstDayOfWeek;
+
+  // 指定週数から開始日を計算
+  const firstWeekStartDate = new Date(currentYear, 0, 1 - offsetDays);
+
+  // 1週目を除外するため、1を引く
+  const daysToAdd = (targetWeekNumber -1) * 7;
+  firstWeekStartDate.setDate(firstWeekStartDate.getDate() + daysToAdd);
+
+  // 計算結果を出力
+  const targetDateStr = Utilities.formatDate(firstWeekStartDate, 'JST', 'yyyy/MM/dd');
+  console.log(`${targetWeekNumber}週目： ${targetDateStr}`);
+
+  return targetDateStr
+
+}
