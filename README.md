@@ -7,3 +7,5 @@ https://note.com/nepia_infinity/n/n4320954a3851
 使用できる関数の一覧をスプレッドシートに記載しています。
 https://docs.google.com/spreadsheets/d/1ng3FcOMax4lbDhqg11UTYHvp6uILLdUFb4_yttI7cy0/edit#gid=0
 
+# Google Colab
+https://note.com/nepia_infinity/n/n71df2c1c99b2
